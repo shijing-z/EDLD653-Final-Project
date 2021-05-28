@@ -1,0 +1,151 @@
+---
+title: "EDLD3-final"
+author: "Raleigh Goodwin, Vinita Vader, Shijing Zhou"
+date: "4/21/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(tidyverse)
+library(purrr)
+```
+
+```{r}
+data1 = rio::import("dataCT.csv")
+
+#relevant variables retained
+data = data1 %>% 
+  select(Q1:Q15, TIPI1:familysize)
+
+data.ip =  data1 %>% 
+  select(TIPI1:TIPI10)
+
+```
+
+## Ipsatization - technique used in Personality Psychology for standardizing rows
+
+```{r}
+# Function 1: Selects only numeric columns
+
+just_num <- function(df) {
+  if(sum(purrr::map_lgl(df, is.numeric)) == 0) {
+    stop("No numeric columns.")
+  }
+    else{
+      df1 <- df[ , purrr::map_lgl(df, is.numeric)]
+      df1
+    }
+}
+
+# Function 2: Add ID column
+
+add_id <- function(df) {
+  df_id <- df %>% 
+    mutate(id = row_number())
+  df_id
+}
+
+# Function 3: Calculate rowwise means
+ #creates a vector for row means/means for every particpant's scores
+mean_row <- function(df){
+  
+ df_clean <- df %>% 
+   just_num() %>% 
+   add_id()
+  
+ output <- df_clean %>% 
+  pivot_longer(cols = !id, names_to = "col_names") %>% 
+  group_by(id) %>% 
+  mutate(means_rowwise = mean(value, na.rm = T),
+         value = value - means_rowwise) %>% 
+  pivot_wider(names_from = col_names, values_from = value) %>% 
+  select(id, !means_rowwise) %>% 
+   ungroup()
+
+  output
+}
+
+tmp <- mean_row(data.ip)
+names(tmp)[-1] <- paste0(names(tmp)[-1], "_ips")
+
+l <- list("ips" = tmp, "raw" = add_id(data.ip))
+str(l)
+
+extract_raw <- function(l) {
+  l[["raw"]]
+}
+extract_raw(l)
+
+pat <- "TIPI1_|TIPI1$"
+pull_var <- function(l, pat) {
+  # include a check, to make sure pat doesn't match multiple cols
+  # if so, throw an error
+  v_ips <- l$ips[ ,grepl(pat, names(l$ips)), drop = TRUE]
+  v_raw <- l$raw[ ,grepl(pat, names(l$raw)), drop = TRUE]
+  data.frame(transform = c(rep("ips", length(v_ips)),
+                           rep("identity", length(v_raw))),
+             value = c(v_ips, v_raw))
+}
+
+create_plot <- function(l, pat) {
+  ggplot(pull_var(l, pat), aes(value)) +
+  geom_density(aes(fill = transform))
+}
+View(pull_var(l, "TIPI1_|TIPI1$"))
+
+#make separate funcs for tasks below:-
+ #change the names of the cols for ipsatized data 
+ #left_join() #bind the two datasets - original +ipsatized 
+#names 
+
+
+#Code here onwards needs more refining
+#This should be a dataframe consisting of every participant's original score subtracted by the mean score
+  output = df %>% 
+            as_tibble() %>% 
+            mutate(map(row.mean, row.mean, `-`)) 
+  #This is trying to name the columns in output; so if original item was "q1" the ipsatized version is "q1.ips"; if 10 questions q1:q10, then 10 more cols q1.ips:q10.ips
+  colnames(output) = paste(names(df), ".ips", sep="")
+  return(output)
+
+
+names(data)
+data %>% 
+  select(TIPI1:TIPI10) %>% 
+mean_row() #Function works!
+
+```
+
+### Notes for the group - can be ignored for the peer review
+
+```{r}
+
+head(iris)
+d.f = iris %>% 
+  select(Sepal.Length:Petal.Width)#%>% 
+  mutate(mean.row = pmap_dbl(., function(...) mean(c(...))))
+
+
+#Func 1 = mean for each row - value [group_by, col id for each person]
+
+df %>% 
+  mutate(id = row_number()) %>% 
+  pivot_longer(cols = 1:ncol(df),names_to = "col_names") %>% 
+  group_by(id) %>% 
+  mutate(means_rowwise = mean(value, na.rm = T)) %>% 
+  pivot_wider(names_from = col_names, values_from = value) %>% 
+  select(id, !means_rowwise, means_rowwise)
+
+#Func 2 = subtract 'a value' from each of the cols/rows - func(df, value)
+#Func 3 = loops through rows and the value
+
+
+mean.deviation(df1)
+
+#Repeat the same as above but this time standardize it by dividing the score by sd of rows
+
+```
