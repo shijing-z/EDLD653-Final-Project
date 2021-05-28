@@ -1,70 +1,53 @@
 [
   {
     "path": "posts/2021-05-28-introduction-to-functional-programming/",
-    "title": "Introduction to Functional Programming",
-    "description": "A short description of the post.",
+    "title": "1. Introduction to Functional Programming",
+    "description": "A brief introduction to Functional Programming.",
     "author": [
       {
-        "name": "Nora Jones",
-        "url": "https://example.com/norajones"
+        "name": "Shijing Zhou",
+        "url": {}
       }
     ],
     "date": "2021-05-28",
     "categories": [],
     "contents": "\nDistill is a publication format for scientific and technical writing, native to the web.\nLearn more about using Distill at https://rstudio.github.io/distill.\n\n\n\n",
     "preview": {},
-    "last_modified": "2021-05-28T14:08:40-07:00",
+    "last_modified": "2021-05-28T14:42:36-07:00",
     "input_file": {}
   },
   {
     "path": "posts/2021-05-28-introduction-to-loops/",
-    "title": "Introduction to Loops",
-    "description": "A short description of the post.",
+    "title": "2. Introduction to Loops",
+    "description": "Using loops in R.",
     "author": [
       {
-        "name": "Nora Jones",
-        "url": "https://example.com/norajones"
+        "name": "Shijing Zhou",
+        "url": {}
       }
     ],
     "date": "2021-05-28",
     "categories": [],
     "contents": "\nDistill is a publication format for scientific and technical writing, native to the web.\nLearn more about using Distill at https://rstudio.github.io/distill.\n\n\n\n",
     "preview": {},
-    "last_modified": "2021-05-28T14:08:52-07:00",
+    "last_modified": "2021-05-28T14:41:17-07:00",
     "input_file": {}
   },
   {
     "path": "posts/2021-05-28-write-a-function/",
-    "title": "Write a Function!",
-    "description": "A short description of the post.",
+    "title": "3. Write a Function!",
+    "description": "Demonstration of how to write a function with personality research data.",
     "author": [
       {
-        "name": "Nora Jones",
-        "url": "https://example.com/norajones"
+        "name": "Raleigh Goodwin, Vinita Vader",
+        "url": {}
       }
     ],
     "date": "2021-05-28",
     "categories": [],
     "contents": "\nDistill is a publication format for scientific and technical writing, native to the web.\nLearn more about using Distill at https://rstudio.github.io/distill.\n\n\n\n",
     "preview": {},
-    "last_modified": "2021-05-28T14:24:42-07:00",
-    "input_file": {}
-  },
-  {
-    "path": "posts/welcome/",
-    "title": "Welcome to Functional Programming in R",
-    "description": "Welcome to our new blog, Functional Programming in R. We hope you enjoy \nreading what we have to say!",
-    "author": [
-      {
-        "name": "Raleigh Goodwin, Vinita Vader, Shijing Zhou",
-        "url": "https://github.com/raleighgoodwin/EDLD3-final-project.git"
-      }
-    ],
-    "date": "2021-05-28",
-    "categories": [],
-    "contents": "\n\n\n\n",
-    "preview": {},
-    "last_modified": "2021-05-28T14:10:53-07:00",
+    "last_modified": "2021-05-28T14:41:27-07:00",
     "input_file": {}
   }
 ]

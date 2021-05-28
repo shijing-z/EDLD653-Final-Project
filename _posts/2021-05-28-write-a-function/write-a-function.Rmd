@@ -1,10 +1,9 @@
 ---
-title: "Write a Function!"
+title: "3. Write a Function!"
 description: |
-  A short description of the post.
+  Demonstration of how to write a function with personality research data.
 author:
-  - name: Nora Jones
-    url: https://example.com/norajones
+  - name: Raleigh Goodwin, Vinita Vader
 date: 05-28-2021
 output:
   distill::distill_article:

@@ -1,10 +1,9 @@
 ---
-title: "Introduction to Loops"
+title: "2. Introduction to Loops"
 description: |
-  A short description of the post.
+  Using loops in R.
 author:
-  - name: Nora Jones
-    url: https://example.com/norajones
+  - name: Shijing Zhou
 date: 05-28-2021
 output:
   distill::distill_article:
