@@ -1,8 +1,8 @@
 [
   {
-    "path": "posts/welcome/",
-    "title": "Welcome to Functional Programming in R",
-    "description": "Welcome to our new blog, Functional Programming in R. We hope you enjoy \nreading what we have to say!",
+    "path": "posts/2021-05-28-introduction-to-functional-programming/",
+    "title": "Introduction to Functional Programming",
+    "description": "A short description of the post.",
     "author": [
       {
         "name": "Nora Jones",
@@ -11,9 +11,43 @@
     ],
     "date": "2021-05-28",
     "categories": [],
+    "contents": "\nDistill is a publication format for scientific and technical writing, native to the web.\nLearn more about using Distill at https://rstudio.github.io/distill.\n\n\n\n",
+    "preview": {},
+    "last_modified": "2021-05-28T14:08:40-07:00",
+    "input_file": {}
+  },
+  {
+    "path": "posts/2021-05-28-introduction-to-loops/",
+    "title": "Introduction to Loops",
+    "description": "A short description of the post.",
+    "author": [
+      {
+        "name": "Nora Jones",
+        "url": "https://example.com/norajones"
+      }
+    ],
+    "date": "2021-05-28",
+    "categories": [],
+    "contents": "\nDistill is a publication format for scientific and technical writing, native to the web.\nLearn more about using Distill at https://rstudio.github.io/distill.\n\n\n\n",
+    "preview": {},
+    "last_modified": "2021-05-28T14:08:52-07:00",
+    "input_file": {}
+  },
+  {
+    "path": "posts/welcome/",
+    "title": "Welcome to Functional Programming in R",
+    "description": "Welcome to our new blog, Functional Programming in R. We hope you enjoy \nreading what we have to say!",
+    "author": [
+      {
+        "name": "Raleigh Goodwin, Vinita Vader, Shijing Zhou",
+        "url": "https://github.com/raleighgoodwin/EDLD3-final-project.git"
+      }
+    ],
+    "date": "2021-05-28",
+    "categories": [],
     "contents": "\n\n\n\n",
     "preview": {},
-    "last_modified": "2021-05-28T13:56:20-07:00",
-    "input_file": {}
+    "last_modified": "2021-05-28T14:10:52-07:00",
+    "input_file": "welcome.utf8.md"
   }
 ]
