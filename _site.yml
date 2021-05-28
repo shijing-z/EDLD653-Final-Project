@@ -1,0 +1,12 @@
+name: "EDLD653-Final-Project"
+title: "Functional Programming in R"
+description: |
+  Functional Programming in R
+output_dir: "docs"
+navbar:
+  right:
+    - text: "Home"
+      href: index.html
+    - text: "About"
+      href: about.html
+output: distill::distill_article
