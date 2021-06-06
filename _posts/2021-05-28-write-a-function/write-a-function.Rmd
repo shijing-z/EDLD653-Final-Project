@@ -285,3 +285,8 @@ TIPI.item1 %>%
   theme_minimal()
 
 ```
+
+# Things to work on 
+1. Formatting - how to add links 
+2. Make sure the code chunks are visible 
+3. Plots - make them pretty, can add a vline for the mean, can change colors to a colorblind palette, can annotate 
