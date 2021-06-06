@@ -64,3 +64,35 @@ data %>%
 ```
 
 Now that we have our data imported let's start building functions.
+
+### Building Functions
+
+There are several ways in which one could go about building functions. The approach outlined here should be viewed as one of the several approaches to go about building functions.
+
+As you think about building a function, keep in mind the purpose of why you set to build a function in the first place. Your function will ideally solve a problem specific to your analysis or can also be used by others to carry out their analyses.
+
+Let's state the problem first - The difference between raw and ipsatized data has been studied to some extent leading to several debates amongst researchers questioning the utility of these methods. It is therefore important to look at correlations between the raw and ipsatized data.
+
+Now, that we understand the problem let's think about how our function could address this problem. Here are a sequence of questions which will help you think about the function you intend to build.
+
+Step 1 - What should my output look like?\
+Here we are looking for an output which is a list consisting of raw and transformed or ipsatized data.
+
+```{r eval=FALSE}
+
+ipsatize.MeanDev(dataframe)
+
+>list
+ $raw...
+ $ipsatize...
+```
+
+Step 2 - What is the broad outline for obtaining this output?\
+We can build a function for ipsatizing the data and one for then putting the ipsatized data with the raw data within a larger list. Great we have a broad plan! Let's break this down further.
+
+Step 3 - How do we build the functions specified in step 2?\
+We will focus on one function at a time. We are going to first build the ipsatize function. Let's break down the ipsatize function\
+i. What is the $name$ of the function? \
+We will call it `ipsatize.MeanDev` as the type of ipsatization this function will perform is Mean deviation. \
+ii. What will the the function \$do\$ ? \
+It will compute the means of the rows and subtract the mean from every score in the respective rows. In order to do this we will need an id column to calculate means for every row. This is slightly tricky but will be clear as we go along.

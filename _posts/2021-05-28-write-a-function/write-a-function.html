@@ -115,7 +115,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <!--/radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-resource-manifest">
-  {"type":"character","attributes":{},"value":["write-a-function_files/anchor-4.2.2/anchor.min.js","write-a-function_files/bowser-1.9.3/bowser.min.js","write-a-function_files/distill-2.2.21/template.v2.js","write-a-function_files/header-attrs-2.6/header-attrs.js","write-a-function_files/header-attrs-2.7/header-attrs.js","write-a-function_files/jquery-1.11.3/jquery.min.js","write-a-function_files/popper-2.6.0/popper.min.js","write-a-function_files/tippy-6.2.7/tippy-bundle.umd.min.js","write-a-function_files/tippy-6.2.7/tippy-light-border.css","write-a-function_files/tippy-6.2.7/tippy.css","write-a-function_files/tippy-6.2.7/tippy.umd.min.js","write-a-function_files/webcomponents-2.0.0/webcomponents.js"]}
+  {"type":"character","attributes":{},"value":["write-a-function_files/anchor-4.2.2/anchor.min.js","write-a-function_files/bowser-1.9.3/bowser.min.js","write-a-function_files/distill-2.2.21/template.v2.js","write-a-function_files/header-attrs-2.6/header-attrs.js","write-a-function_files/header-attrs-2.7/header-attrs.js","write-a-function_files/header-attrs-2.8/header-attrs.js","write-a-function_files/jquery-1.11.3/jquery.min.js","write-a-function_files/popper-2.6.0/popper.min.js","write-a-function_files/tippy-6.2.7/tippy-bundle.umd.min.js","write-a-function_files/tippy-6.2.7/tippy-light-border.css","write-a-function_files/tippy-6.2.7/tippy.css","write-a-function_files/tippy-6.2.7/tippy.umd.min.js","write-a-function_files/webcomponents-2.0.0/webcomponents.js"]}
   </script>
   <!--radix_placeholder_navigation_in_header-->
   <!--/radix_placeholder_navigation_in_header-->
@@ -1433,7 +1433,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   </script>
 
   <!--/radix_placeholder_distill-->
-  <script src="write-a-function_files/header-attrs-2.8/header-attrs.js"></script>
+  <script src="write-a-function_files/header-attrs-2.6/header-attrs.js"></script>
   <script src="write-a-function_files/jquery-1.11.3/jquery.min.js"></script>
   <script src="write-a-function_files/popper-2.6.0/popper.min.js"></script>
   <link href="write-a-function_files/tippy-6.2.7/tippy.css" rel="stylesheet" />
@@ -1454,7 +1454,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"3. Write a Function!","description":"Demonstration of how to write a function with personality research data.","authors":[{"author":"Raleigh Goodwin, Vinita Vader","authorURL":"#","affiliation":"&nbsp;","affiliationURL":"#","orcidID":""}],"publishedDate":"2021-05-28T00:00:00.000-07:00","citationText":"Vader, 2021"}
+{"title":"3. Write a Function!","description":"Demonstration of how to write a function with personality research data.","authors":[{"author":"Raleigh Goodwin, Vinita Vader","authorURL":"#","affiliation":"&nbsp;","affiliationURL":"#","orcidID":""}],"publishedDate":"2021-05-28T00:00:00.000+00:00","citationText":"Vader, 2021"}
 </script>
 
 <!--/radix_placeholder_front_matter-->
@@ -1491,7 +1491,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <p>1 = Disagree strongly 2 = Disagree moderately 3 = Disagree a little 4 = Neither agree nor disagree 5 = Agree a little 6 = Agree moderately 7 = Agree strongly</p>
 <p>We call the data using the <code>import</code> function from the <code>rio</code> package, setting the class of the data to “tibble”. This step helps to retain the data in a format which is more amenable with the data manipulation in <code>tidyverse</code> . We then look at the structure of the data which indicates that most of the column classes in this dataset are integers. We will retain the columns form TIPI1 to TIPI10 using the <code>select</code> function from <code>dplyr</code>. This package is loaded along with other packages in <code>tidyverse</code> . The <code>kable</code> function from the <code>knitr</code> package helps to format the data into a table and I am specifying 5 rows to be displayed in this table.</p>
 <div class="layout-chunk" data-layout="l-body">
-<pre><code>tibble [2,495 x 72] (S3: tbl_df/tbl/data.frame)
+<pre><code>tibble [2,495 × 72] (S3: tbl_df/tbl/data.frame)
  $ Q1          : int [1:2495] 5 5 2 5 5 1 4 5 1 1 ...
  $ Q2          : int [1:2495] 5 5 4 4 4 1 3 4 1 2 ...
  $ Q3          : int [1:2495] 3 5 1 1 1 1 3 3 1 1 ...
@@ -1571,6 +1571,24 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 [5] &quot;|     6|     6|     6|     1|     7|     5|     6|     5|     7|      7|&quot;</code></pre>
 </div>
 <p>Now that we have our data imported let’s start building functions.</p>
+<h3 id="building-functions">Building Functions</h3>
+<p>There are several ways in which one could go about building functions. The approach outlined here should be viewed as one of the several approaches to go about building functions.</p>
+<p>As you think about building a function, keep in mind the purpose of why you set to build a function in the first place. Your function will ideally solve a problem specific to your analysis or can also be used by others to carry out their analyses.</p>
+<p>Let’s state the problem first - The difference between raw and ipsatized data has been studied to some extent leading to several debates amongst researchers questioning the utility of these methods. It is therefore important to look at correlations between the raw and ipsatized data.</p>
+<p>Now, that we understand the problem let’s think about how our function could address this problem. Here are a sequence of questions which will help you think about the function you intend to build.</p>
+<p>Step 1 - What should my output look like?<br />
+Here we are looking for an output which is a list consisting of raw and transformed or ipsatized data.</p>
+<div class="layout-chunk" data-layout="l-body">
+
+</div>
+<p>Step 2 - What is the broad outline for obtaining this output?<br />
+We can build a function for ipsatizing the data and one for then putting the ipsatized data with the raw data within a larger list. Great we have a broad plan! Let’s break this down further.</p>
+<p>Step 3 - How do we build the functions specified in step 2?<br />
+We will focus on one function at a time. We are going to first build the ipsatize function. Let’s break down the ipsatize function<br />
+i. What is the <span class="math inline">\(name\)</span> of the function?<br />
+We will call it <code>ipsatize.MeanDev</code> as the type of ipsatization this function will perform is Mean deviation.<br />
+ii. What will the the function $do$ ?<br />
+It will compute the means of the rows and subtract the mean from every score in the respective rows. In order to do this we will need an id column to calculate means for every row. This is slightly tricky but will be clear as we go along.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
@@ -1579,6 +1597,15 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <div class="d-appendix">
 </div>
 
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
 
 <!--radix_placeholder_site_after_body-->
 <!--/radix_placeholder_site_after_body-->
