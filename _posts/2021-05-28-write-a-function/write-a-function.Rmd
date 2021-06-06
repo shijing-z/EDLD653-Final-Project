@@ -249,3 +249,39 @@ rename_ips = function(ipsatized_data){
 
 rename_ips(ipsatize.MD(data))
 ```
+
+All we need to do now is wrap up the ipsatized data and raw data within a list.
+
+```{r echo=TRUE}
+
+ipsatize.MeanDev = function(set){
+  
+  l <- list("ips" = rename_ips(ipsatize.MD(data)) ,                "raw" = data,
+            "correlation.matrix" = cor(rename_ips(ipsatize.MD(data)), data))
+  l
+}
+
+(ips.raw.data = ipsatize.MeanDev(data))
+```
+
+So now we have a list with the three dataframes. We can look at the correlations between raw and ipsatized data.
+
+```{r echo=TRUE}
+tibble(
+  diag(ips.raw.data$correlation.matrix), colnames(ips.raw.data$ips), colnames(ips.raw.data$raw)
+)
+```
+
+We can also plot raw and ipsatized data. For example, lets look at the item 1.
+
+```{r}
+
+TIPI.item1 = data.frame(ips.raw.data$raw$TIPI1, ips.raw.data$ips$TIPI1_ips)
+
+TIPI.item1 %>% 
+  ggplot()+
+   geom_density(aes(x=TIPI.item1[,1]), colour="red", fill = "red", alpha = .5) + 
+   geom_density(aes(x=TIPI.item1[,2]), colour="blue", fill = "blue", alpha = .5) +
+  theme_minimal()
+
+```

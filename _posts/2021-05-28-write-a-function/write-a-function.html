@@ -115,7 +115,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <!--/radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-resource-manifest">
-  {"type":"character","attributes":{},"value":["write-a-function_files/anchor-4.2.2/anchor.min.js","write-a-function_files/bowser-1.9.3/bowser.min.js","write-a-function_files/distill-2.2.21/template.v2.js","write-a-function_files/header-attrs-2.6/header-attrs.js","write-a-function_files/header-attrs-2.7/header-attrs.js","write-a-function_files/header-attrs-2.8/header-attrs.js","write-a-function_files/jquery-1.11.3/jquery.min.js","write-a-function_files/popper-2.6.0/popper.min.js","write-a-function_files/tippy-6.2.7/tippy-bundle.umd.min.js","write-a-function_files/tippy-6.2.7/tippy-light-border.css","write-a-function_files/tippy-6.2.7/tippy.css","write-a-function_files/tippy-6.2.7/tippy.umd.min.js","write-a-function_files/webcomponents-2.0.0/webcomponents.js"]}
+  {"type":"character","attributes":{},"value":["write-a-function_files/anchor-4.2.2/anchor.min.js","write-a-function_files/bowser-1.9.3/bowser.min.js","write-a-function_files/distill-2.2.21/template.v2.js","write-a-function_files/figure-html5/unnamed-chunk-17-1.png","write-a-function_files/header-attrs-2.6/header-attrs.js","write-a-function_files/header-attrs-2.7/header-attrs.js","write-a-function_files/header-attrs-2.8/header-attrs.js","write-a-function_files/jquery-1.11.3/jquery.min.js","write-a-function_files/popper-2.6.0/popper.min.js","write-a-function_files/tippy-6.2.7/tippy-bundle.umd.min.js","write-a-function_files/tippy-6.2.7/tippy-light-border.css","write-a-function_files/tippy-6.2.7/tippy.css","write-a-function_files/tippy-6.2.7/tippy.umd.min.js","write-a-function_files/webcomponents-2.0.0/webcomponents.js"]}
   </script>
   <!--radix_placeholder_navigation_in_header-->
   <!--/radix_placeholder_navigation_in_header-->
@@ -1757,7 +1757,114 @@ It will compute the means of the rows and subtract the mean from every score in 
 # … with 2,485 more rows, and 4 more variables: TIPI7_ips &lt;dbl&gt;,
 #   TIPI8_ips &lt;dbl&gt;, TIPI9_ips &lt;dbl&gt;, TIPI10_ips &lt;dbl&gt;</code></pre>
 </div>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<p>All we need to do now is wrap up the ipsatized data and raw data within a list.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>ipsatize.MeanDev</span> <span class='op'>=</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>set</span><span class='op'>)</span><span class='op'>{</span>
+  
+  <span class='va'>l</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>"ips"</span> <span class='op'>=</span> <span class='fu'>rename_ips</span><span class='op'>(</span><span class='fu'>ipsatize.MD</span><span class='op'>(</span><span class='va'>data</span><span class='op'>)</span><span class='op'>)</span> ,                <span class='st'>"raw"</span> <span class='op'>=</span> <span class='va'>data</span>,
+            <span class='st'>"correlation.matrix"</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/cor.html'>cor</a></span><span class='op'>(</span><span class='fu'>rename_ips</span><span class='op'>(</span><span class='fu'>ipsatize.MD</span><span class='op'>(</span><span class='va'>data</span><span class='op'>)</span><span class='op'>)</span>, <span class='va'>data</span><span class='op'>)</span><span class='op'>)</span>
+  <span class='va'>l</span>
+<span class='op'>}</span>
+
+<span class='op'>(</span><span class='va'>ips.raw.data</span> <span class='op'>=</span> <span class='fu'>ipsatize.MeanDev</span><span class='op'>(</span><span class='va'>data</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>$ips
+# A tibble: 2,495 x 10
+   TIPI1_ips TIPI2_ips TIPI3_ips TIPI4_ips TIPI5_ips TIPI6_ips
+       &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
+ 1     0.5      -1.5        1.5      -2.5      1.5       1.5  
+ 2     1.10      2.10       1.10      2.10     1.10     -1.9  
+ 3     0.4       0.4        0.4      -4.6      1.4      -0.600
+ 4     1         2          2         0        2         1    
+ 5    -3.10     -1.10       2.9      -2.10     1.9      -0.100
+ 6    -0.2      -2.2        1.8      -2.2      1.8       0.800
+ 7    -1.9       1.1        0.1      -1.9      1.1       2.1  
+ 8    -0.2       0.800      1.8      -2.2      2.8      -0.2  
+ 9    -0.300     0.7        1.7      -2.3     -0.300     0.7  
+10    -3.5       1.5       -1.5      -3.5      0.5       2.5  
+# … with 2,485 more rows, and 4 more variables: TIPI7_ips &lt;dbl&gt;,
+#   TIPI8_ips &lt;dbl&gt;, TIPI9_ips &lt;dbl&gt;, TIPI10_ips &lt;dbl&gt;
+
+$raw
+# A tibble: 2,495 x 10
+   TIPI1 TIPI2 TIPI3 TIPI4 TIPI5 TIPI6 TIPI7 TIPI8 TIPI9 TIPI10
+   &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt; &lt;int&gt;  &lt;int&gt;
+ 1     5     3     6     2     6     6     7     2     7      1
+ 2     6     7     6     7     6     3     7     5     1      1
+ 3     6     6     6     1     7     5     6     5     7      7
+ 4     6     7     7     5     7     6     5     1     5      1
+ 5     1     3     7     2     6     4     5     5     5      3
+ 6     4     2     6     2     6     5     6     3     6      2
+ 7     2     5     4     2     5     6     2     3     5      5
+ 8     4     5     6     2     7     4     5     5     3      1
+ 9     4     5     6     2     4     5     6     2     7      2
+10     1     6     3     1     5     7     6     5     7      4
+# … with 2,485 more rows
+
+$correlation.matrix
+                 TIPI1       TIPI2        TIPI3        TIPI4
+TIPI1_ips   0.95997515 -0.11340834  0.031167709 -0.244068520
+TIPI2_ips  -0.12071784  0.95428074 -0.167224238  0.148187176
+TIPI3_ips   0.02535938 -0.16688353  0.948872899 -0.298764735
+TIPI4_ips  -0.25970548  0.12817941 -0.307516250  0.962139678
+TIPI5_ips   0.15867518 -0.13509164 -0.005073157 -0.256663167
+TIPI6_ips  -0.68318241 -0.07328539 -0.024670231  0.073760081
+TIPI7_ips   0.19604318 -0.39102208  0.007475973 -0.008942264
+TIPI8_ips  -0.09883568  0.05362126 -0.550478491  0.158821663
+TIPI9_ips   0.06676858 -0.27632275  0.268938383 -0.690397982
+TIPI10_ips -0.22041641 -0.06129857 -0.108530999 -0.002177791
+                  TIPI5        TIPI6       TIPI7       TIPI8
+TIPI1_ips   0.173616771 -0.666541441  0.17044573 -0.08266381
+TIPI2_ips  -0.120651089 -0.038939637 -0.40327991  0.06565301
+TIPI3_ips   0.008668343  0.015568018 -0.02008034 -0.54989652
+TIPI4_ips  -0.255068624  0.091005873 -0.05008496  0.15131155
+TIPI5_ips   0.919218995 -0.203227013  0.02418945 -0.02356731
+TIPI6_ips  -0.227006085  0.953180313 -0.21528145 -0.08954131
+TIPI7_ips   0.073692208 -0.162399055  0.94923204 -0.08558253
+TIPI8_ips  -0.027066263 -0.067303304 -0.11907202  0.95695523
+TIPI9_ips   0.065543427 -0.009290563 -0.02889303 -0.33029253
+TIPI10_ips -0.376767840  0.040201343 -0.22884271 -0.10619799
+                 TIPI9       TIPI10
+TIPI1_ips   0.09172718 -0.187414036
+TIPI2_ips  -0.26483551 -0.031356832
+TIPI3_ips   0.29771049 -0.076414836
+TIPI4_ips  -0.68790076  0.007123348
+TIPI5_ips   0.08228079 -0.365950413
+TIPI6_ips  -0.02645471  0.029629981
+TIPI7_ips   0.01615832 -0.176200329
+TIPI8_ips  -0.32648284 -0.089488624
+TIPI9_ips   0.95761526 -0.057303325
+TIPI10_ips -0.06741043  0.941250723</code></pre>
+</div>
+<p>So now we have a list with the three dataframes. We can look at the correlations between raw and ipsatized data.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>tibble</span><span class='op'>(</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/diag.html'>diag</a></span><span class='op'>(</span><span class='va'>ips.raw.data</span><span class='op'>$</span><span class='va'>correlation.matrix</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>ips.raw.data</span><span class='op'>$</span><span class='va'>ips</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>ips.raw.data</span><span class='op'>$</span><span class='va'>raw</span><span class='op'>)</span>
+<span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 10 x 3
+   `diag(ips.raw.data$corre… `colnames(ips.raw.d… `colnames(ips.raw.d…
+                       &lt;dbl&gt; &lt;chr&gt;                &lt;chr&gt;               
+ 1                     0.960 TIPI1_ips            TIPI1               
+ 2                     0.954 TIPI2_ips            TIPI2               
+ 3                     0.949 TIPI3_ips            TIPI3               
+ 4                     0.962 TIPI4_ips            TIPI4               
+ 5                     0.919 TIPI5_ips            TIPI5               
+ 6                     0.953 TIPI6_ips            TIPI6               
+ 7                     0.949 TIPI7_ips            TIPI7               
+ 8                     0.957 TIPI8_ips            TIPI8               
+ 9                     0.958 TIPI9_ips            TIPI9               
+10                     0.941 TIPI10_ips           TIPI10              </code></pre>
+</div>
+<p>We can also plot raw and ipsatized data. For example, lets look at the item 1.</p>
+<div class="layout-chunk" data-layout="l-body">
+<p><img src="write-a-function_files/figure-html5/unnamed-chunk-17-1.png" width="624" /></p>
+</div>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
