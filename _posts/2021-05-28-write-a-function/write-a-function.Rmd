@@ -96,3 +96,110 @@ i. What is the $name$ of the function? \
 We will call it `ipsatize.MeanDev` as the type of ipsatization this function will perform is Mean deviation. \
 ii. What will the the function \$do\$ ? \
 It will compute the means of the rows and subtract the mean from every score in the respective rows. In order to do this we will need an id column to calculate means for every row. This is slightly tricky but will be clear as we go along.
+
+A good way of thinking about writing functions is to start with the data. We will try and add an id column to the data.
+
+We can use the `row_number` within mutate to create a new column.
+
+```{r}
+
+data %>% 
+  mutate(id = row_number()) %>% 
+  knitr::kable() %>% 
+  head(5)
+```
+
+That works! Now let's wrap this within a function. We will call it `add_id`
+
+```{r}
+
+add_id <- function(df) {
+  df_id <- df %>% 
+    mutate(id = row_number())
+  df_id
+}
+
+```
+
+Now let's check if it works.
+
+```{r}
+add_id(data)%>% 
+  knitr::kable() %>% 
+  head(5)
+
+```
+
+Perfect! Now the next part is figuring out how to add a column with the mean rows. One way of thinking about this is we have a id variable which can be used to group the data. We can then use `pivot_longer` and `pivot_wider` to format the data.
+
+```{r}
+data %>% 
+  add_id() %>% 
+  pivot_longer(cols = !id, names_to = "col_names")
+```
+
+We have a 10 rows (equal to 10 variables) dedicated to every row id in this dataframe. We can use `group_by` to compute the means within every group and find deviations for every score from the mean.
+
+```{r}
+data %>% 
+  add_id() %>% 
+  pivot_longer(cols = !id, names_to = "col_names") %>% 
+  group_by(id) %>% 
+  mutate(means_rowwise = mean(value, na.rm = T),
+         value = value - means_rowwise)
+```
+
+Now, we can use `pivot_wider` for reformatting the data to how it looked before.
+
+```{r}
+data %>% 
+  add_id() %>% 
+  pivot_longer(cols = !id, names_to = "col_names") %>% 
+  group_by(id) %>% 
+  mutate(means_rowwise = mean(value, na.rm = T),
+         value = value - means_rowwise) %>% 
+  pivot_wider(names_from = col_names, values_from = value) %>% 
+  select(id, !means_rowwise) %>% 
+   ungroup()
+```
+
+Now we can wrap this into a function
+
+```{r}
+ipsatize.MD <- function(df){
+  
+ df_clean <- df %>% 
+   just_num() %>% 
+   add_id()
+  
+ output <- df_clean %>% 
+  pivot_longer(cols = !id, names_to = "col_names") %>% 
+  group_by(id) %>% 
+  mutate(means_rowwise = mean(value, na.rm = T),
+         value = value - means_rowwise) %>% 
+  pivot_wider(names_from = col_names, values_from = value) %>% 
+  select(id, !means_rowwise) %>% 
+   ungroup()
+
+  output
+}
+
+ipsatize.MD(data)
+
+```
+
+This works! We can add constraints to which type of variables can be added in the dataframe. For this we can build a function which only selects numeric columns.
+
+```{r}
+
+just_num <- function(df) {
+  if(sum(purrr::map_lgl(df, is.numeric)) == 0) {
+    stop("No numeric columns.")
+  }
+    else{
+      df1 <- df[ , purrr::map_lgl(df, is.numeric)]
+      df1
+    }
+}
+```
+
