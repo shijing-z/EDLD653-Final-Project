@@ -13,7 +13,7 @@
     "categories": [],
     "contents": "\n\n\n\n",
     "preview": {},
-    "last_modified": "2021-05-29T01:16:51-07:00",
+    "last_modified": "2021-06-06T15:28:34-07:00",
     "input_file": {}
   },
   {
@@ -30,7 +30,7 @@
     "categories": [],
     "contents": "\n\n\n\n",
     "preview": {},
-    "last_modified": "2021-05-29T01:16:36-07:00",
+    "last_modified": "2021-06-06T15:28:34-07:00",
     "input_file": {}
   },
   {
@@ -45,9 +45,9 @@
     ],
     "date": "2021-05-28",
     "categories": [],
-    "contents": "\n\n\n\n",
+    "contents": "\nIntroduction:\nThis is a tutorial on using functional programming to solve specific problems in research. This tutorial addresses the issue of Ipsatization which consists of methods of data transformation used in Personality Psychology and Social Psychology research. Ipsatization transforms each participant’s ratings relative to their average response such that the total and the average of the participant’s scores across all items in the dataset are zero (or another constant for all people) (Greer and Dunlap, 1997) [https://psycnet.apa.org/record/1997-06270-006].\nPackages such as (multicon)[https://cran.r-project.org/web/packages/multicon/multicon.pdf] have built functions like ipsatize [https://rdrr.io/cran/multicon/man/ipsatize.html] which enable standardizing rows of the dataframes being studied. However it does not address the various types of ipsative scorings available for carrying out different transformations.\nAn important aspect of using data transformations involves understanding the relationship between raw data and transformed data. The purpose of the function built here will be to address this specific issue.\n\n\n\n",
     "preview": {},
-    "last_modified": "2021-05-29T01:16:44-07:00",
+    "last_modified": "2021-06-06T15:39:17-07:00",
     "input_file": {}
   }
 ]

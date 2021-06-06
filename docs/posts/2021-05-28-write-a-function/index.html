@@ -23,7 +23,6 @@
 pre > code.sourceCode { white-space: pre; position: relative; }
 pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
 pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
 code.sourceCode > span { color: inherit; text-decoration: inherit; }
 div.sourceCode { margin: 1em 0; }
 pre.sourceCode { margin: 0; }
@@ -117,7 +116,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <!--/radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-resource-manifest">
-  {"type":"character","attributes":{},"value":["write-a-function_files/anchor-4.2.2/anchor.min.js","write-a-function_files/bowser-1.9.3/bowser.min.js","write-a-function_files/distill-2.2.21/template.v2.js","write-a-function_files/header-attrs-2.7/header-attrs.js","write-a-function_files/jquery-1.11.3/jquery.min.js","write-a-function_files/popper-2.6.0/popper.min.js","write-a-function_files/tippy-6.2.7/tippy-bundle.umd.min.js","write-a-function_files/tippy-6.2.7/tippy-light-border.css","write-a-function_files/tippy-6.2.7/tippy.css","write-a-function_files/tippy-6.2.7/tippy.umd.min.js","write-a-function_files/webcomponents-2.0.0/webcomponents.js"]}
+  {"type":"character","attributes":{},"value":["write-a-function_files/anchor-4.2.2/anchor.min.js","write-a-function_files/bowser-1.9.3/bowser.min.js","write-a-function_files/distill-2.2.21/template.v2.js","write-a-function_files/header-attrs-2.6/header-attrs.js","write-a-function_files/header-attrs-2.7/header-attrs.js","write-a-function_files/jquery-1.11.3/jquery.min.js","write-a-function_files/popper-2.6.0/popper.min.js","write-a-function_files/tippy-6.2.7/tippy-bundle.umd.min.js","write-a-function_files/tippy-6.2.7/tippy-light-border.css","write-a-function_files/tippy-6.2.7/tippy.css","write-a-function_files/tippy-6.2.7/tippy.umd.min.js","write-a-function_files/webcomponents-2.0.0/webcomponents.js"]}
   </script>
   <!--radix_placeholder_navigation_in_header-->
 <meta name="distill:offset" content="../.."/>
@@ -2041,7 +2040,7 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 <!--/radix_placeholder_distill-->
-  <script src="../../site_libs/header-attrs-2.7/header-attrs.js"></script>
+  <script src="../../site_libs/header-attrs-2.6/header-attrs.js"></script>
   <script src="../../site_libs/jquery-1.11.3/jquery.min.js"></script>
   <script src="../../site_libs/popper-2.6.0/popper.min.js"></script>
   <link href="../../site_libs/tippy-6.2.7/tippy.css" rel="stylesheet" />
@@ -2098,6 +2097,10 @@ document.addEventListener('DOMContentLoaded', function() {
 </div>
 
 <div class="d-article">
+<h3 id="introduction">Introduction:</h3>
+<p>This is a tutorial on using functional programming to solve specific problems in research. This tutorial addresses the issue of Ipsatization which consists of methods of data transformation used in Personality Psychology and Social Psychology research. Ipsatization transforms each participant’s ratings relative to their average response such that the total and the average of the participant’s scores across all items in the dataset are zero (or another constant for all people) (Greer and Dunlap, 1997) [<a href="https://psycnet.apa.org/record/1997-06270-006" class="uri">https://psycnet.apa.org/record/1997-06270-006</a>].</p>
+<p>Packages such as (<code>multicon)[https://cran.r-project.org/web/packages/multicon/multicon.pdf]</code> have built functions like <code>ipsatize</code> [<a href="https://rdrr.io/cran/multicon/man/ipsatize.html" class="uri">https://rdrr.io/cran/multicon/man/ipsatize.html</a>] which enable standardizing rows of the dataframes being studied. However it does not address the various types of ipsative scorings available for carrying out different transformations.</p>
+<p>An important aspect of using data transformations involves understanding the relationship between raw data and transformed data. The purpose of the function built here will be to address this specific issue.</p>
 <div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
