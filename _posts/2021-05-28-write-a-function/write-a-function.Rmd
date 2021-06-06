@@ -168,11 +168,10 @@ Now we can wrap this into a function
 ```{r}
 ipsatize.MD <- function(df){
   
- df_clean <- df %>% 
-   just_num() %>% 
+ dfid <- df %>% 
    add_id()
   
- output <- df_clean %>% 
+ output <- dfid %>% 
   pivot_longer(cols = !id, names_to = "col_names") %>% 
   group_by(id) %>% 
   mutate(means_rowwise = mean(value, na.rm = T),
@@ -203,3 +202,13 @@ just_num <- function(df) {
 }
 ```
 
+In the above function, we specify that if the sum of all possible numeric columns in a dataframe is 0, we stop the loop and throw an error message else return the dataframe. This will ensure that all the columns in the dataframe we are working with are numeric. We are using `map_lgl` from the `purrr` package which maps the `is.numeric` function to every column in th edataframe.
+
+Let's give this function a try. We know that the dataframe "data" has all columns of class numeric whereas "file.data" does not.
+
+```{r}
+ncol(just_num(file.data)) == (ncol(file.data))
+ncol(just_num(data)) == (ncol(data))
+```
+
+This works!
