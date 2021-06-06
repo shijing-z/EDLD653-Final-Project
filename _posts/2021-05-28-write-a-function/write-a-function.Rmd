@@ -212,3 +212,40 @@ ncol(just_num(data)) == (ncol(data))
 ```
 
 This works!
+
+Now we can add this to the main function.
+
+```{r echo=TRUE}
+
+ipsatize.MD <- function(df){
+  
+ df_clean <- df %>% 
+   just_num() %>% 
+   add_id()
+  
+ output <- df_clean %>% 
+  pivot_longer(cols = !id, names_to = "col_names") %>% 
+  group_by(id) %>% 
+  mutate(means_rowwise = mean(value, na.rm = T),
+         value = value - means_rowwise) %>% 
+  pivot_wider(names_from = col_names, values_from = value) %>% 
+  select(id, !means_rowwise) %>% 
+   ungroup() %>% 
+   select(-id)
+
+  output
+}
+
+ipsatize.MD(data)
+```
+
+A closer look will tell you that we could benefit from renaming the column names of the ips dataframe within the list. The `paste` function can be helpful to do this.
+
+```{r echo=TRUE}
+rename_ips = function(ipsatized_data){
+  names(ipsatized_data) <- paste0(names(ipsatized_data), "_ips")
+  return(ipsatized_data)
+}
+
+rename_ips(ipsatize.MD(data))
+```
