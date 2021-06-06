@@ -24,4 +24,43 @@ Packages such as (`multicon)[https://cran.r-project.org/web/packages/multicon/mu
 An important aspect of using data transformations involves understanding the relationship between raw data and transformed data. The purpose of the function built here will be to address this specific issue.
 
 
+### Data used for this study  
 
+We will use the following libraries for this tutorial. Loading the entire library may not be always necessary especially if you intend to use it only once. The following list consists of all libraries used in this tutorial. Those which only need loading once will be used where the function is being called.
+
+```{r}
+library(tidyverse) #for data manipulation
+library(purrr) #for building functions
+#library(rio) #for calling data
+#library(knitr) #for formatting data into tables
+```
+
+For this tutorial we will be using the Ten Item Personality Inventory (TIPI; Gosling, S. D., Rentfrow, P. J., & Swann, W. B., Jr., 2003)[<https://psycnet.apa.org/record/2003-09807-003>]. This is a brief measure of the Big Five Personality Domains (Goldberg, 1993)[<https://psycnet.apa.org/record/1993-17546-001>].
+
+The TIPI items were rated "I see myself as:" \_\_\_\_\_ such that
+
+1 = Disagree strongly
+2 = Disagree moderately
+3 = Disagree a little
+4 = Neither agree nor disagree
+5 = Agree a little
+6 = Agree moderately
+7 = Agree strongly
+
+We call the data using the `import` function from the `rio` package, setting the class of the data to "tibble". This step helps to retain the data in a format which is more amenable with the data manipulation in `tidyverse` . We then look at the structure of the data which indicates that most of the column classes in this dataset are integers. We will retain the columns form TIPI1 to TIPI10 using the `select` function from `dplyr`. This package is loaded along with other packages in `tidyverse` . The `kable` function from the `knitr` package helps to format the data into a table and I am specifying 5 rows to be displayed in this table.
+
+```{r}
+file.data = rio::import(here::here("content/dataCT.csv"), setclass = "tibble")
+str(file.data)
+
+#TIPI variables retained
+data = file.data %>% 
+  select(TIPI1:TIPI10)
+
+data %>% 
+  knitr::kable() %>% 
+  head(5)
+
+```
+
+Now that we have our data imported let's start building functions.
