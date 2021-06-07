@@ -2109,14 +2109,21 @@ document.addEventListener('DOMContentLoaded', function() {
 <pre class="sourceCode r"><code class="sourceCode r"><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='op'>)</span>
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='http://purrr.tidyverse.org'>purrr</a></span><span class='op'>)</span>
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/leeper/rio'>rio</a></span><span class='op'>)</span> <span class='co'># optional</span>
-<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://here.r-lib.org/'>here</a></span><span class='op'>)</span> <span class='co'># optional</span>
+<span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://here.r-lib.org/'>here</a></span><span class='op'>)</span> <span class='co'>#optional</span>
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://yihui.org/knitr/'>knitr</a></span><span class='op'>)</span> <span class='co'>#optional</span>
 </code></pre>
 </div>
 </div>
 <h1 id="about-the-data">About the Data</h1>
-<p>For this tutorial, we will be working with a dataset containing the Ten Item Personality Inventory (TIPI; <a href="https://psycnet.apa.org/record/2003-09807-003">Gosling, S. D., Rentfrow, P. J., &amp; Swann, W. B., Jr., 2003</a>). This is a brief measure of the Big Five Personality Domains (<a href="https://psycnet.apa.org/record/1993-17546-001">Goldberg, 1993</a>).!!!!!info about N and what variables are called etc!!!!!!</p>
-<p>The TIPI items were rated “I see myself as:” _____ such that !!!!format and edit next!!!!!! 1 = Disagree strongly 2 = Disagree moderately 3 = Disagree a little 4 = Neither agree nor disagree 5 = Agree a little 6 = Agree moderately 7 = Agree strongly</p>
+<p>For this tutorial, we will be working with a dataset containing the Ten Item Personality Inventory (TIPI; <a href="https://psycnet.apa.org/record/2003-09807-003">Gosling, S. D., Rentfrow, P. J., &amp; Swann, W. B., Jr., 2003</a>), a brief measure of the Big Five Personality Domains (<a href="https://psycnet.apa.org/record/1993-17546-001">Goldberg, 1993</a>). Each item asks respondents to rate themselves on attributes (e.g., extraverted, critical, anxious, calm, etc.) using a Likert scale ranging from 1 to 7, wherein:<br />
+<br />
+1 = Disagree strongly<br />
+2 = Disagree moderately<br />
+3 = Disagree a little<br />
+4 = Neither agree nor disagree<br />
+5 = Agree a little<br />
+6 = Agree moderately<br />
+7 = Agree strongly</p>
 <h3 id="importing-the-data">Importing the Data</h3>
 <p>When importing data, two important things to keep in mind are your working directory and reproducibility. Where you save your files can impact the ease at which you can call them; you’ll have the best luck saving data files of interest within the corresponding R Project. <code>rio</code>’s <code>import()</code> function provides an easy method for importing data files, including the ability to set the class of the data to tibble, which helps to retain the data in a format which is more amenable to data manipulation in <code>tidyverse</code>. To enhance reproducibility across different devices, we’ll use the <code>here()</code> function within the <a href="https://here.r-lib.org/"><code>here</code></a> package when specifying our file path.</p>
 <div class="layout-chunk" data-layout="l-body">

@@ -34,22 +34,23 @@ Before we get started, we need to load the libraries necessary to complete this 
 library(tidyverse)
 library(purrr)
 library(rio) # optional
-library(here) # optional
+library(here) #optional
 library(knitr) #optional
 ```
 
 # About the Data
 
-For this tutorial, we will be working with a dataset containing the Ten Item Personality Inventory (TIPI; [Gosling, S. D., Rentfrow, P. J., & Swann, W. B., Jr., 2003](https://psycnet.apa.org/record/2003-09807-003)). This is a brief measure of the Big Five Personality Domains ([Goldberg, 1993](https://psycnet.apa.org/record/1993-17546-001)).!!!!!info about N and what variables are called etc!!!!!!
+For this tutorial, we will be working with a dataset containing the Ten Item Personality Inventory (TIPI; [Gosling, S. D., Rentfrow, P. J., & Swann, W. B., Jr., 2003](https://psycnet.apa.org/record/2003-09807-003)), a brief measure of the Big Five Personality Domains ([Goldberg, 1993](https://psycnet.apa.org/record/1993-17546-001)). Each item asks respondents to rate themselves on attributes (e.g., extroverted, critical, anxious, calm, etc.) using a Likert scale ranging from 1 to 7, wherein:\
+\
+1 = "Disagree strongly"\
+2 = "Disagree moderately"\
+3 = "Disagree a little"\
+4 = "Neither agree nor disagree"\
+5 = "Agree a little"\
+6 = "Agree moderately"\
+7 = "Agree strongly"
 
-The TIPI items were rated "I see myself as:" \_\_\_\_\_ such that !!!!format and edit next!!!!!!
-1 = Disagree strongly
-2 = Disagree moderately
-3 = Disagree a little
-4 = Neither agree nor disagree
-5 = Agree a little
-6 = Agree moderately
-7 = Agree strongly
+This particular dataset contains observations from N=2495 individuals who completed, among many other measures, the 10 TIPI items in 2016. Other variables included the Generic Conspiracist Beliefs Scale ([Brotherton et al., 2013](https://www.frontiersin.org/articles/10.3389/fpsyg.2013.00279/full)), various response time metrics, a vocabulary validity check, and demographics.
 
 ### Importing the Data
 
@@ -85,39 +86,76 @@ There are several ways in which one could go about building functions. The appro
 
 As you think about building a function, keep in mind the purpose of why you set to build a function in the first place. Your function will ideally solve a problem specific to your analysis or can also be used by others to carry out their analyses.
 
-Let's state the problem first - The difference between raw and ipsatized data has been studied to some extent leading to several debates amongst researchers questioning the utility of these methods. It is therefore important to look at correlations between the raw and ipsatized data.
+Let's state the problem first: The difference between raw and ipsatized data has been studied to some extent leading to several debates amongst researchers questioning the utility of these methods. It is therefore important to look at correlations between the raw and ipsatized data.
 
-Now that we understand the problem let's think about how our function could address this problem. Here are a sequence of questions which will help you think about the function you intend to build.
+Now that we understand the problem, let's think about how our function could address this problem. Here are a sequence of questions which will help you think about the function you intend to build.
 
-Step 1: What should my output look like?\
-Here we are looking for an output which is a list consisting of raw and transformed or ipsatized data.
+__What is the goal of this function?__\
+What do we need this function to do? For the current tutorial, we are writing a function that ipsatizes any dataset, meaning that it will compute the means of the rows and subtract the mean from every score in the respective rows. Ideally, it will produce output in the form of a list containing the raw and transformed (i.e., ipsatized) data.
 
 ```{r eval=FALSE}
-ipsatize.MeanDev(dataframe)
+ipsatize.MeanDev(dataframe) # Raleigh edit: I'm not sure what's going on in this chunk
 
 >list
  $raw...
  $ipsatize...
 ```
 
-Step 2: What is the broad outline for obtaining this output?\
-We can build a function for ipsatizing the data and one for then putting the ipsatized data with the raw data within a larger list. Great we have a broad plan! Let's break this down further.
+__How can we achieve this goal for a specific dataset?__\
+As we learned in previous posts, when taking a functional programming approach to this problem, we should first attempt to solve it within a specific case. Once we've done so, we can then consider generalizing to a function. For this tutorial, we will be solving the problem first with the TIPI dataset, and then we can apply that solution to build the final function.
 
-Step 3: How do we build the functions specified in step 2?\
-We will focus on one function at a time. We are going to first build the ipsatize function. Let's break down the ipsatize function\
-i. What is the $name$ of the function? \
-We will call it `ipsatize.MeanDev` as the type of ipsatization this function will perform is Mean deviation. \
-ii. What will the the function \$do\$ ? \
-It will compute the means of the rows and subtract the mean from every score in the respective rows. In order to do this we will need an id column to calculate means for every row. This is slightly tricky but will be clear as we go along.
+__How can we break the function's goal into smaller tasks?__\
+Most likely, we aren't just going to be writing one function in this tutorial. Ideally, a function should complete exactly one task; therefore, when we are attempting to build a function to complete a complicated task like ipsatization, we will need to write multiple simple functions and combine them. Thus, it can be helpful to first outline and think through each step of the process and eventually create a function for each step.
 
-A good way of thinking about writing functions is to start with the data. We will try and add an id column to the data.
+### Step 1: Creating an ID column
 
-We can use the `row_number` within mutate to create a new column.
+To ipsatize the data, we need to calculate each participant's mean response to the TIPI scale items and then subtract each response by that mean. This means we need to be able to conduct these operations by row rather than by column. One of the easier ways to do this is to use `pivot_longer()` to transform the data into a "longer" format. 
+
+First, though, we need to create an ID for each participant that can then be used to identify their responses once the data is transformed.
 
 ```{r}
-data %>% 
-  mutate(id = row_number()) %>%
-  head(n = 5) %>% 
+data_id <- data %>% 
+  mutate(id = c(1:nrow(data))) # Create ID column
+
+data_id %>% 
+  head(n = 5) %>% # Take a look at the first 5 rows of the resulting dataframe
+  knitr::kable() # Format the output table neatly
+```
+
+Now that we have an ID variable that can be used to identify each participant's responses, we can figure out how to create a column that calculates the mean of each rows using `pivot_longer()`.
+
+```{r}
+data_long <- data_id %>% 
+  pivot_longer(cols = !id, names_to = "item", values_to = "response")
+
+data_long %>% 
+  head(n = 15) %>% 
+  knitr::kable()
+```
+
+Instead of participants' responses being organized by row, all responses are now contained in one column and can be identified using the corresponding ID and Item values. We can use `tidyverse`'s `group_by()` function to group this dataframe by participant ID and then compute 1) the mean for each group and 2) the difference between each response and the mean of its group.
+
+```{r}
+data_long <- data_long %>% 
+  group_by(id) %>% # Group by participant ID
+  mutate(mean_row = mean(response, na.rm = TRUE), # Calculate participant mean
+         deviation = response - mean_row) # Calculate individual response deviation from mean
+
+data_long %>% 
+  head(n = 15) %>% 
+  knitr::kable()
+```
+
+Now, we can use `pivot_wider()` to transform the data back to its original format.
+
+```{r}
+data_wide <- data_long %>% 
+  pivot_wider(names_from = item, values_from = deviation) %>% # something is going wrong here
+  select(id, !mean_row) %>% 
+   ungroup()
+
+data_wide %>% 
+  head(n = 15) %>% 
   knitr::kable()
 ```
 
@@ -139,38 +177,13 @@ add_id(data)%>%
   knitr::kable()
 ```
 
-Perfect! Now the next part is figuring out how to add a column with the mean rows. One way of thinking about this is we have a id variable which can be used to group the data. We can then use `pivot_longer` and `pivot_wider` to format the data.
 
-```{r}
-data %>% 
-  add_id() %>% 
-  pivot_longer(cols = !id, names_to = "col_names")
-```
 
-We have a 10 rows (equal to 10 variables) dedicated to every row id in this dataframe. We can use `group_by` to compute the means within every group and find deviations for every score from the mean.
-
-```{r}
-data %>% 
-  add_id() %>% 
-  pivot_longer(cols = !id, names_to = "col_names") %>% 
-  group_by(id) %>% 
-  mutate(means_rowwise = mean(value, na.rm = T),
-         value = value - means_rowwise)
-```
-
-Now, we can use `pivot_wider` for reformatting the data to how it looked before.
-
-```{r}
-data %>% 
-  add_id() %>% 
-  pivot_longer(cols = !id, names_to = "col_names") %>% 
-  group_by(id) %>% 
-  mutate(means_rowwise = mean(value, na.rm = T),
-         value = value - means_rowwise) %>% 
-  pivot_wider(names_from = col_names, values_from = value) %>% 
-  select(id, !means_rowwise) %>% 
-   ungroup()
-```
+__How do we build the functions specified in step 2?__\
+We will focus on one function at a time. We are going to first build the ipsatize function. Let's break down the ipsatize function.\
+i. What is the _name_ of the function? \
+We will call it `ipsatize_MeanDev` as the type of ipsatization this function will perform is Mean deviation.\
+ii. What will the the function _do_? \
 
 Now we can wrap this into a function
 
