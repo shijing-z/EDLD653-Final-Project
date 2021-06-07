@@ -10,35 +10,39 @@ output:
     self_contained: false
 ---
 
-
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+knitr::opts_chunk$set(warning = FALSE)
+knitr::opts_chunk$set(message = FALSE)
 ```
 
-### Introduction:
+## Introduction
 
-This is a tutorial on using functional programming to solve specific problems in research. This tutorial addresses the issue of Ipsatization which consists of methods of data transformation used in Personality Psychology and Social Psychology research. Ipsatization transforms each participant's ratings relative to their average response such that the total and the average of the participant's scores across all items in the dataset are zero (or another constant for all people) (Greer and Dunlap, 1997) [<https://psycnet.apa.org/record/1997-06270-006>].
+# Ipsatization
 
-Packages such as (`multicon)[https://cran.r-project.org/web/packages/multicon/multicon.pdf]` have built functions like `ipsatize` [<https://rdrr.io/cran/multicon/man/ipsatize.html>] which enable standardizing rows of the dataframes being studied. However it does not address the various types of ipsative scorings available for carrying out different transformations.
+This is a tutorial on using functional programming to solve specific problems in research. This tutorial addresses the issue of Ipsatization which consists of methods of data transformation used in Personality Psychology and Social Psychology research. Ipsatization transforms each participant's ratings relative to their average response such that the total and the average of the participant's scores across all items in the data set are zero (or another constant for all people) ([Greer and Dunlap, 1997](https://psycnet.apa.org/record/1997-06270-006)).
+
+Packages such as [`multicon`](https://cran.r-project.org/web/packages/multicon/multicon.pdf) have built functions like [`ipsatize()`](https://rdrr.io/cran/multicon/man/ipsatize.html) which enable standardizing rows of the dataframes being studied. However it does not address the various types of ipsative scorings available for carrying out different transformations.
 
 An important aspect of using data transformations involves understanding the relationship between raw data and transformed data. The purpose of the function built here will be to address this specific issue.
 
+# Loading Libraries
 
-### Data used for this study  
-
-We will use the following libraries for this tutorial. Loading the entire library may not be always necessary especially if you intend to use it only once. The following list consists of all libraries used in this tutorial. Those which only need loading once will be used where the function is being called.
+Before we get started, we need to load the libraries necessary to complete this tutorial. Loading the entire library may not be always necessary, especially if you intend to use it only once. This will be the case for `rio`, `here`, and `knitr` in this tutorial, so you may choose not to load them here if you'd like.
 
 ```{r}
-library(tidyverse) #for data manipulation
-library(purrr) #for building functions
-#library(rio) #for calling data
-#library(knitr) #for formatting data into tables
+library(tidyverse)
+library(purrr)
+library(rio) # optional
+library(here) # optional
+library(knitr) #optional
 ```
 
-For this tutorial we will be using the Ten Item Personality Inventory (TIPI; Gosling, S. D., Rentfrow, P. J., & Swann, W. B., Jr., 2003)[<https://psycnet.apa.org/record/2003-09807-003>]. This is a brief measure of the Big Five Personality Domains (Goldberg, 1993)[<https://psycnet.apa.org/record/1993-17546-001>].
+# About the Data
 
-The TIPI items were rated "I see myself as:" \_\_\_\_\_ such that
+For this tutorial, we will be working with a dataset containing the Ten Item Personality Inventory (TIPI; [Gosling, S. D., Rentfrow, P. J., & Swann, W. B., Jr., 2003](https://psycnet.apa.org/record/2003-09807-003)). This is a brief measure of the Big Five Personality Domains ([Goldberg, 1993](https://psycnet.apa.org/record/1993-17546-001)).!!!!!info about N and what variables are called etc!!!!!!
 
+The TIPI items were rated "I see myself as:" \_\_\_\_\_ such that !!!!format and edit next!!!!!!
 1 = Disagree strongly
 2 = Disagree moderately
 3 = Disagree a little
@@ -47,25 +51,35 @@ The TIPI items were rated "I see myself as:" \_\_\_\_\_ such that
 6 = Agree moderately
 7 = Agree strongly
 
-We call the data using the `import` function from the `rio` package, setting the class of the data to "tibble". This step helps to retain the data in a format which is more amenable with the data manipulation in `tidyverse` . We then look at the structure of the data which indicates that most of the column classes in this dataset are integers. We will retain the columns form TIPI1 to TIPI10 using the `select` function from `dplyr`. This package is loaded along with other packages in `tidyverse` . The `kable` function from the `knitr` package helps to format the data into a table and I am specifying 5 rows to be displayed in this table.
+### Importing the Data
+
+When importing data, two important things to keep in mind are your working directory and reproducibility. Where you save your files can impact the ease at which you can call them; you'll have the best luck saving data files of interest within the corresponding R Project. `rio`'s `import()` function provides an easy method for importing data files, including the ability to set the class of the data to tibble, which helps to retain the data in a format which is more amenable to data manipulation in `tidyverse`. To enhance reproducibility across different devices, we'll use the `here()` function within the [`here`](https://here.r-lib.org/) package when specifying our file path.
 
 ```{r}
-file.data = rio::import(here::here("content/dataCT.csv"), setclass = "tibble")
-str(file.data)
-
-#TIPI variables retained
-data = file.data %>% 
-  select(TIPI1:TIPI10)
-
-data %>% 
-  knitr::kable() %>% 
-  head(5)
-
+# Import data
+df_tipi <- rio::import(here::here("content/dataCT.csv"), setclass = "tibble")
 ```
 
-Now that we have our data imported let's start building functions.
+For the current project, we'll only be working with the TIPI items, so to simplify the dataframe we're using, we can select only those columns.
 
-### Building Functions
+```{r}
+# Select desired variables
+data <- df_tipi %>% 
+  select(TIPI1:TIPI10)
+```
+
+Now we can take a look at the data we'll be working with. The `kable()` function from the `knitr` package helps to format the data into a neat table.
+
+```{r}
+# Take a look at the data
+data %>% 
+  head(n = 5) %>% 
+  knitr::kable()
+```
+
+With the libraries loaded and data imported, we can now begin building our function.
+
+## Building Functions
 
 There are several ways in which one could go about building functions. The approach outlined here should be viewed as one of the several approaches to go about building functions.
 
@@ -79,7 +93,6 @@ Step 1 - What should my output look like?\
 Here we are looking for an output which is a list consisting of raw and transformed or ipsatized data.
 
 ```{r eval=FALSE}
-
 ipsatize.MeanDev(dataframe)
 
 >list
@@ -102,9 +115,8 @@ A good way of thinking about writing functions is to start with the data. We wil
 We can use the `row_number` within mutate to create a new column.
 
 ```{r}
-
 data %>% 
-  mutate(id = row_number()) %>% 
+  mutate(id = row_number()) %>%
   knitr::kable() %>% 
   head(5)
 ```
@@ -112,13 +124,11 @@ data %>%
 That works! Now let's wrap this within a function. We will call it `add_id`
 
 ```{r}
-
 add_id <- function(df) {
   df_id <- df %>% 
     mutate(id = row_number())
   df_id
 }
-
 ```
 
 Now let's check if it works.
@@ -127,7 +137,6 @@ Now let's check if it works.
 add_id(data)%>% 
   knitr::kable() %>% 
   head(5)
-
 ```
 
 Perfect! Now the next part is figuring out how to add a column with the mean rows. One way of thinking about this is we have a id variable which can be used to group the data. We can then use `pivot_longer` and `pivot_wider` to format the data.
@@ -166,7 +175,7 @@ data %>%
 Now we can wrap this into a function
 
 ```{r}
-ipsatize.MD <- function(df){
+ipsatize_MD <- function(df){
   
  dfid <- df %>% 
    add_id()
@@ -183,14 +192,12 @@ ipsatize.MD <- function(df){
   output
 }
 
-ipsatize.MD(data)
-
+ipsatize_MD(data)
 ```
 
 This works! We can add constraints to which type of variables can be added in the dataframe. For this we can build a function which only selects numeric columns.
 
 ```{r}
-
 just_num <- function(df) {
   if(sum(purrr::map_lgl(df, is.numeric)) == 0) {
     stop("No numeric columns.")
@@ -202,12 +209,12 @@ just_num <- function(df) {
 }
 ```
 
-In the above function, we specify that if the sum of all possible numeric columns in a dataframe is 0, we stop the loop and throw an error message else return the dataframe. This will ensure that all the columns in the dataframe we are working with are numeric. We are using `map_lgl` from the `purrr` package which maps the `is.numeric` function to every column in th edataframe.
+In the above function, we specify that if the sum of all possible numeric columns in a dataframe is 0, we stop the loop and throw an error message else return the dataframe. This will ensure that all the columns in the dataframe we are working with are numeric. We are using `map_lgl` from the `purrr` package which maps the `is.numeric` function to every column in the dataframe.
 
-Let's give this function a try. We know that the dataframe "data" has all columns of class numeric whereas "file.data" does not.
+Let's give this function a try. We know that the dataframe "data" has all columns of class numeric whereas `df_tipi` does not.
 
 ```{r}
-ncol(just_num(file.data)) == (ncol(file.data))
+ncol(just_num(df_tipi)) == (ncol(df_tipi))
 ncol(just_num(data)) == (ncol(data))
 ```
 
@@ -216,8 +223,7 @@ This works!
 Now we can add this to the main function.
 
 ```{r echo=TRUE}
-
-ipsatize.MD <- function(df){
+ipsatize_MD <- function(df){
   
  df_clean <- df %>% 
    just_num() %>% 
@@ -236,57 +242,54 @@ ipsatize.MD <- function(df){
   output
 }
 
-ipsatize.MD(data)
+ipsatize_MD(data)
 ```
 
 A closer look will tell you that we could benefit from renaming the column names of the ips dataframe within the list. The `paste` function can be helpful to do this.
 
 ```{r echo=TRUE}
-rename_ips = function(ipsatized_data){
+rename_ips <- function(ipsatized_data){
   names(ipsatized_data) <- paste0(names(ipsatized_data), "_ips")
   return(ipsatized_data)
 }
 
-rename_ips(ipsatize.MD(data))
+rename_ips(ipsatize_MD(data))
 ```
 
 All we need to do now is wrap up the ipsatized data and raw data within a list.
 
 ```{r echo=TRUE}
-
-ipsatize.MeanDev = function(set){
+ipsatize_MeanDev <- function(set){
   
   l <- list("ips" = rename_ips(ipsatize.MD(data)) ,                "raw" = data,
             "correlation.matrix" = cor(rename_ips(ipsatize.MD(data)), data))
   l
 }
 
-(ips.raw.data = ipsatize.MeanDev(data))
+ips_raw_data <- ipsatize_MeanDev(data)
 ```
 
 So now we have a list with the three dataframes. We can look at the correlations between raw and ipsatized data.
 
 ```{r echo=TRUE}
 tibble(
-  diag(ips.raw.data$correlation.matrix), colnames(ips.raw.data$ips), colnames(ips.raw.data$raw)
+  diag(ips_raw_data$correlation.matrix), colnames(ips_raw_data$ips), colnames(ips_raw_data$raw)
 )
 ```
 
 We can also plot raw and ipsatized data. For example, lets look at the item 1.
 
 ```{r}
+TIPI_item1 <- data.frame(ips_raw_data$raw$TIPI1, ips_raw_data$ips$TIPI1_ips)
 
-TIPI.item1 = data.frame(ips.raw.data$raw$TIPI1, ips.raw.data$ips$TIPI1_ips)
-
-TIPI.item1 %>% 
+TIPI_item1 %>% 
   ggplot()+
-   geom_density(aes(x=TIPI.item1[,1]), colour="red", fill = "red", alpha = .5) + 
-   geom_density(aes(x=TIPI.item1[,2]), colour="blue", fill = "blue", alpha = .5) +
+   geom_density(aes(x=TIPI_item1[,1]), colour="red", fill = "red", alpha = .5) + 
+   geom_density(aes(x=TIPI_item1[,2]), colour="blue", fill = "blue", alpha = .5) +
   theme_minimal()
-
 ```
 
 # Things to work on 
 1. Formatting - how to add links 
-2. Make sure the code chunks are visible 
 3. Plots - make them pretty, can add a vline for the mean, can change colors to a colorblind palette, can annotate 
+4. conclusion
