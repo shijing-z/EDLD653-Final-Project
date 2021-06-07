@@ -74,11 +74,23 @@ Now we can take a look at the data we'll be working with. The `kable()` function
 ```{r}
 # Take a look at the data
 data %>% 
-  head(n = 5) %>% 
-  knitr::kable()
+  head(n = 5) %>% # Take a look at the first 5 rows of the resulting dataframe
+  knitr::kable() # Format the output table neatly
 ```
 
 With the libraries loaded and data imported, we can now begin building our function.
+
+### Taking a look at the data
+
+First, though, we can brush off our function-building skills with a simple function to start. In the code above, we used `head()` to take a look at the data and `kable()` to format it. We'll be doing this same process many, many times throughout the tutorial, meaning it would be a very useful function for us. This function, `glance()` will have two arguments: df and nrows, which are the dataframe and the desired number of preview rows, respectively.
+
+```{r}
+glance <- function(df, nrows) {
+  df %>% 
+    head(n = nrows) %>% 
+    knitr::kable()
+}
+```
 
 ## Building Functions
 
@@ -92,14 +104,6 @@ Now that we understand the problem, let's think about how our function could add
 
 __What is the goal of this function?__\
 Basically, what do we need this function to do? For the current tutorial, we are writing a function that ipsatizes any dataset, meaning that it will compute the means of the rows and subtract the mean from every score in the respective rows. Ideally, it will produce output in the form of a list containing the raw and transformed (i.e., ipsatized) data.
-
-```{r eval=FALSE}
-ipsatize.MeanDev(dataframe) # Raleigh edit: I'm not sure what's going on in this chunk
-
->list
- $raw...
- $ipsatize...
-```
 
 __How can we achieve this goal for a specific dataset?__\
 As we learned in previous posts, when taking a functional programming approach to this problem, we should first attempt to solve it within a specific case. Once we've done so, we can then consider generalizing to a function. For this tutorial, we will be solving the problem first with the TIPI dataset, and then we can apply that solution to build the final function.
@@ -117,9 +121,8 @@ First, though, we need to create an ID for each participant that can then be use
 data_id <- data %>% 
   mutate(id = c(1:nrow(data))) # Create ID column
 
-data_id %>% 
-  head(n = 5) %>% # Take a look at the first 5 rows of the resulting dataframe
-  knitr::kable() # Format the output table neatly
+data_id %>%
+  glance(5)
 ```
 
 Now that we have an ID variable that can be used to identify each participant's responses, we can figure out how to create a column that calculates the mean of each rows using `pivot_longer()`.
@@ -129,8 +132,7 @@ data_long <- data_id %>%
   pivot_longer(cols = !id, names_to = "item", values_to = "response")
 
 data_long %>% 
-  head(n = 15) %>% 
-  knitr::kable()
+  glance(15)
 ```
 
 Instead of participants' responses being organized by row, all responses are now contained in one column and can be identified using the corresponding ID and Item values. We can use `tidyverse`'s `group_by()` function to group this dataframe by participant ID and then compute 1) the mean for each group and 2) the difference between each response and the mean of its group.
@@ -142,8 +144,7 @@ data_dev <- data_long %>%
          ipsatized = response - mean_row) # Calculate individual response deviation from mean
 
 data_dev %>% 
-  head(n = 15) %>% 
-  knitr::kable()
+  glance(15)
 ```
 
 Now, we can use `pivot_wider()` to transform the data back to its original format. Because we want the function output to be formatted as a list that contains the ipsatized data, raw data, and a correlation matrix of the two, it will be helpful to create two dataframes: an ipsatized dataframe and a raw dataframe.
@@ -163,12 +164,10 @@ data_raw <- data_dev %>%
 
 # Take a look at the results
 data_ips %>% 
-  head(n = 15) %>% 
-  knitr::kable()
+  glance(15)
 
 data_raw %>% 
-  head(n = 15) %>% 
-  knitr::kable()
+  glance(15)
 ```
 
 Lastly, let's create that list.
@@ -181,61 +180,56 @@ list_output <- list("ipsatized" = data_ips,
 list_output
 ```
 
-This list is what we set out to create! We've achieved our goal. Now that we've solved this problem in a specific case, we can begin to generalize it to a function. Or, rather, a set of functions!
+This list is what we set out to create! We've achieved our goal.\
+Now that we've solved this problem in a specific case, we can begin to generalize it to a function. Or, rather, a set of functions!
 
 ### Applying specific case to generalized function s
 
-------------------------------------------------------------------------------------------
-That works! Now let's wrap this within a function. We will call it `add_id`
+Since we want each function to only do one task, we can first outline the individual tasks that make up the ipsatization process.
+
+1. Add an ID variable to the dataframe
+2. Pivot the data to a longer format
+3. Calculate the mean of each row and transform each response by subtracting the row mean from it
+4. Pivot the data back to a wider format
+5. Create a list to organize the output
+
+Now we can set out to make a function to complete each task. These functions don't ever have to be used on their own; in the end, they'll all be combined into a final, single function. This may seem like it's making work more complicated, but this approach enhances readability of your code and aids in troubleshooting errors. Since we've done the majority of the problem solving already, we can essentially copy and paste our code from above, making sure to adapt as necessary to the function format. Luckily, for the current tutorial, these changes mostly consist of changing the name of the dataframe input to "df," which is the name of our only argument in this function./
+After we build each function, we can test that it works with some datasets to ensure it works.
+
+1. Add an ID variable to the dataframe
 
 ```{r}
 add_id <- function(df) {
-  df_id <- df %>% 
-    mutate(id = row_number())
-  df_id
-}
-```
-
-Now let's check if it works.
-
-```{r}
-add_id(data)%>% 
-  head(n = 5) %>% 
-  knitr::kable()
-```
-
-
-
-__How do we build the functions specified in step 2?__\
-We will focus on one function at a time. We are going to first build the ipsatize function. Let's break down the ipsatize function.\
-i. What is the _name_ of the function? \
-We will call it `ipsatize_MeanDev` as the type of ipsatization this function will perform is Mean deviation.\
-ii. What will the the function _do_? \
-
-Now we can wrap this into a function
-
-```{r}
-ipsatize_MD <- function(df){
-  
- dfid <- df %>% 
-   add_id()
-  
- output <- dfid %>% 
-  pivot_longer(cols = !id, names_to = "col_names") %>% 
-  group_by(id) %>% 
-  mutate(means_rowwise = mean(value, na.rm = T),
-         value = value - means_rowwise) %>% 
-  pivot_wider(names_from = col_names, values_from = value) %>% 
-  select(id, !means_rowwise) %>% 
-   ungroup()
-
-  output
+  df %>%
+    mutate(id = c(1:nrow(df)))
 }
 
-ipsatize_MD(data)
+# Test it out
+test1 <- data %>% 
+  add_id()
+
+test2 <- iris %>% 
+  add_id()
+
+test1 %>%  
+  glance(5)
+
+test2 %>%  
+  glance(5)
 ```
 
-This works! We can add constraints to which type of variables can be added in the dataframe. For this we can build a function which only selects numeric columns.
+It works! However, when looking at the output for the dataframe `iris`, you may notice a difference between it and the specific case in which we originally wrote this code: This dataset contains character data in addition to numeric data. Before we go any further, we have to write code that extracts only numeric columns from the dataframe of interest.
+
+1.5. Select only numeric columns from dataframe
+
+We can accomplish this using the `map_lgl()` function from the `purrr` package, which we've discussed in previous posts as well. We specify that if the sum of all possible numeric columns in a dataframe is 0, we stop the loop and throw an error message else return the dataframe. This will ensure that all the columns in the dataframe we are working with are numeric. We are using `map_lgl` from the `purrr` package which maps the `is.numeric` function to every column in the dataframe.
+
+
+```{r}
+iris[ , purrr::map_lgl(iris, is.numeric)]
+```
+
+Just like before, we can now translate that code into a function. This time, we'll also add a condition to our function: If there are no numeric columns in the dataset, the function will throw an error saying so. If there is at least one numeric column, the function will run as normal.
 
 ```{r}
 just_num <- function(df) {
@@ -247,69 +241,145 @@ just_num <- function(df) {
       df1
     }
 }
+
+# Test it out
+test1 <- test1 %>% 
+  just_num()
+
+test2 <- test2 %>% 
+  just_num()
+
+test1 %>% 
+  glance(15)
+
+test2 %>% 
+  glance(15)
 ```
 
-In the above function, we specify that if the sum of all possible numeric columns in a dataframe is 0, we stop the loop and throw an error message else return the dataframe. This will ensure that all the columns in the dataframe we are working with are numeric. We are using `map_lgl` from the `purrr` package which maps the `is.numeric` function to every column in the dataframe.
+Critically, this function will allow our final function to generalize to multiple different datasets. With that done, we can continue with the rest of our outlined tasks.
 
-Let's give this function a try. We know that the dataframe "data" has all columns of class numeric whereas `df_tipi` does not.
+2. Pivot the data to a longer format
 
 ```{r}
-ncol(just_num(df_tipi)) == (ncol(df_tipi))
-ncol(just_num(data)) == (ncol(data))
-```
-
-This works!
-
-Now we can add this to the main function.
-
-```{r echo=TRUE}
-ipsatize_MD <- function(df){
-  
- df_clean <- df %>% 
-   just_num() %>% 
-   add_id()
-  
- output <- df_clean %>% 
-  pivot_longer(cols = !id, names_to = "col_names") %>% 
-  group_by(id) %>% 
-  mutate(means_rowwise = mean(value, na.rm = T),
-         value = value - means_rowwise) %>% 
-  pivot_wider(names_from = col_names, values_from = value) %>% 
-  select(id, !means_rowwise) %>% 
-   ungroup() %>% 
-   select(-id)
-
-  output
+lengthen_data <- function(df) {
+  df %>% 
+  pivot_longer(cols = !id, names_to = "item", values_to = "response")
 }
 
-ipsatize_MD(data)
+# Test it out
+test1 <- test1 %>% 
+  lengthen_data()
+
+test2 <- test2 %>% 
+  lengthen_data()
+
+test1 %>% 
+  glance(15)
+
+test2 %>% 
+  glance(15)
 ```
 
-A closer look will tell you that we could benefit from renaming the column names of the ips dataframe within the list. The `paste` function can be helpful to do this.
+3. Calculate the mean of each row and transform each response by subtracting the row mean from it
 
-```{r echo=TRUE}
-rename_ips <- function(ipsatized_data){
-  names(ipsatized_data) <- paste0(names(ipsatized_data), "_ips")
-  return(ipsatized_data)
+```{r}
+transform_data <- function(df) {
+  df %>% 
+  group_by(id) %>% # Group by participant ID
+  mutate(mean_row = mean(response, na.rm = TRUE), # Calculate participant mean
+         ipsatized = response - mean_row) # Calculate individual response deviation from mean
 }
 
-rename_ips(ipsatize_MD(data))
+# Test it out
+test1 <- test1 %>% 
+  transform_data()
+
+test2 <- test2 %>% 
+  transform_data()
+
+test1 %>% 
+  glance(15)
+
+test2 %>% 
+  glance(15)
 ```
 
-All we need to do now is wrap up the ipsatized data and raw data within a list.
+4. Pivot the data back to a wider format
 
-```{r echo=TRUE}
-ipsatize_MeanDev <- function(set){
-  
-  l <- list("ips" = rename_ips(ipsatize_MD(data)) ,                "raw" = data,
-            "correlation.matrix" = cor(rename_ips(ipsatize_MD(data)), data))
-  l
+```{r}
+widen_data <- function(df) {
+  # Create ipsatized data frame
+data_ips <- df %>% 
+  pivot_wider(id_cols = id, names_from = item, values_from = c(response, ipsatized)) %>%
+  select(id, contains("ipsatized")) %>% 
+   ungroup()
+
+# Create raw dataframe
+data_raw <- df %>% 
+  pivot_wider(id_cols = id, names_from = item, values_from = c(response, ipsatized)) %>%
+  select(id, contains("response")) %>% 
+   ungroup()
+
+data_ips
+data_raw
 }
 
-ips_raw_data <- ipsatize_MeanDev(data)
+iris %>% 
+  add_id() %>% 
+  just_num() %>% 
+  lengthen_data() %>% 
+  transform_data() %>% 
+  widen_data()
 
+# Test it out
+test1 <- as.tibble(test1) %>% 
+  widen_data()
 
+test2 <- test2 %>% 
+  widen_data()
+
+test1 %>% 
+  glance(15)
+
+test2 %>% 
+  glance(15)
 ```
+
+5. Create a list to organize the output
+
+```{r}
+ipsatize_list <- function(df) {
+  list("ipsatized" = data_ips,
+          "raw" = data_raw,
+          "correlation_matrix" = cor(data_ips, data_raw))
+}
+
+# Test it out
+test1 %>%
+  ipsatize_list()
+
+test1 %>%
+  ipsatize_list()
+```
+
+Now let's combine all of these functions together!
+
+```{r}
+ipsatize <- function(df) {
+  df %>% 
+    add_id() %>% 
+    lengthen_data() %>% 
+    transform_data() %>% 
+    widen_data() %>% 
+    ipsatize_list()
+}
+
+# Test it out
+ipsatize(data)
+ipsatize(iris)
+```
+
+
 
 So now we have a list with the three dataframes. We can look at the correlations between raw and ipsatized data.
 
@@ -332,6 +402,5 @@ TIPI_item1 %>%
 ```
 
 # Things to work on 
-1. Formatting - how to add links 
 3. Plots - make them pretty, can add a vline for the mean, can change colors to a colorblind palette, can annotate 
 4. conclusion
