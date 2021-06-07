@@ -2148,8 +2148,8 @@ document.addEventListener('DOMContentLoaded', function() {
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='co'># Take a look at the data</span>
 <span class='va'>data</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>knitr</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/knitr/man/kable.html'>kable</a></span><span class='op'>(</span><span class='op'>)</span>
+  <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='co'># Take a look at the first 5 rows of the resulting dataframe</span>
+  <span class='fu'>knitr</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/knitr/man/kable.html'>kable</a></span><span class='op'>(</span><span class='op'>)</span> <span class='co'># Format the output table neatly</span>
 </code></pre>
 </div>
 <table>
@@ -2232,6 +2232,18 @@ document.addEventListener('DOMContentLoaded', function() {
 </table>
 </div>
 <p>With the libraries loaded and data imported, we can now begin building our function.</p>
+<h3 id="taking-a-look-at-the-data">Taking a look at the data</h3>
+<p>First, though, we can brush off our function-building skills with a simple function to start. In the code above, we used <code>head()</code> to take a look at the data and <code>kable()</code> to format it. We’ll be doing this same process many, many times throughout the tutorial, so it would be a very useful function for us. This function, <code>glance()</code> will have two arguments: df and nrows, which are the dataframe and the desired number of preview rows, respectively.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>glance</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>df</span>, <span class='va'>nrows</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='va'>df</span> <span class='op'>%&gt;%</span> 
+    <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='va'>nrows</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+    <span class='fu'>knitr</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/knitr/man/kable.html'>kable</a></span><span class='op'>(</span><span class='op'>)</span>
+<span class='op'>}</span>
+</code></pre>
+</div>
+</div>
 <h2 id="building-functions">Building Functions</h2>
 <p>There are several ways in which one could go about building functions. The approach outlined here should be viewed as one of the several approaches to go about building functions.</p>
 <p>As you think about building a function, keep in mind the purpose of why you set to build a function in the first place. Your function will ideally solve a problem specific to your analysis or can also be used by others to carry out their analyses.</p>
@@ -2239,13 +2251,6 @@ document.addEventListener('DOMContentLoaded', function() {
 <p>Now that we understand the problem, let’s think about how our function could address this problem. Here are a sequence of questions which will help you think about the function you intend to build.</p>
 <p><strong>What is the goal of this function?</strong><br />
 Basically, what do we need this function to do? For the current tutorial, we are writing a function that ipsatizes any dataset, meaning that it will compute the means of the rows and subtract the mean from every score in the respective rows. Ideally, it will produce output in the form of a list containing the raw and transformed (i.e., ipsatized) data.</p>
-<div class="layout-chunk" data-layout="l-body">
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ipsatize.MeanDev</span>(dataframe) <span class="co"># Raleigh edit: I&#39;m not sure what&#39;s going on in this chunk</span></span>
-<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
-<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span>list</span>
-<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a> <span class="sc">$</span>raw...</span>
-<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a> <span class="sc">$</span>ipsatize...</span></code></pre></div>
-</div>
 <p><strong>How can we achieve this goal for a specific dataset?</strong><br />
 As we learned in previous posts, when taking a functional programming approach to this problem, we should first attempt to solve it within a specific case. Once we’ve done so, we can then consider generalizing to a function. For this tutorial, we will be solving the problem first with the TIPI dataset, and then we can apply that solution to build the final function.</p>
 <p><strong>How can we break the function’s goal into smaller tasks?</strong><br />
@@ -2258,9 +2263,8 @@ Most likely, we aren’t just going to be writing one function in this tutorial.
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>data_id</span> <span class='op'>&lt;-</span> <span class='va'>data</span> <span class='op'>%&gt;%</span> 
   <span class='fu'>mutate</span><span class='op'>(</span>id <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>data</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='co'># Create ID column</span>
 
-<span class='va'>data_id</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='co'># Take a look at the first 5 rows of the resulting dataframe</span>
-  <span class='fu'>knitr</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/knitr/man/kable.html'>kable</a></span><span class='op'>(</span><span class='op'>)</span> <span class='co'># Format the output table neatly</span>
+<span class='va'>data_id</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>glance</span><span class='op'>(</span><span class='fl'>5</span><span class='op'>)</span>
 </code></pre>
 </div>
 <table>
@@ -2355,8 +2359,7 @@ Most likely, we aren’t just going to be writing one function in this tutorial.
   <span class='fu'>pivot_longer</span><span class='op'>(</span>cols <span class='op'>=</span> <span class='op'>!</span><span class='va'>id</span>, names_to <span class='op'>=</span> <span class='st'>"item"</span>, values_to <span class='op'>=</span> <span class='st'>"response"</span><span class='op'>)</span>
 
 <span class='va'>data_long</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>15</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>knitr</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/knitr/man/kable.html'>kable</a></span><span class='op'>(</span><span class='op'>)</span>
+  <span class='fu'>glance</span><span class='op'>(</span><span class='fl'>15</span><span class='op'>)</span>
 </code></pre>
 </div>
 <table>
@@ -2455,8 +2458,7 @@ Most likely, we aren’t just going to be writing one function in this tutorial.
          ipsatized <span class='op'>=</span> <span class='va'>response</span> <span class='op'>-</span> <span class='va'>mean_row</span><span class='op'>)</span> <span class='co'># Calculate individual response deviation from mean</span>
 
 <span class='va'>data_dev</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>15</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>knitr</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/knitr/man/kable.html'>kable</a></span><span class='op'>(</span><span class='op'>)</span>
+  <span class='fu'>glance</span><span class='op'>(</span><span class='fl'>15</span><span class='op'>)</span>
 </code></pre>
 </div>
 <table>
@@ -2595,8 +2597,7 @@ Most likely, we aren’t just going to be writing one function in this tutorial.
 
 <span class='co'># Take a look at the results</span>
 <span class='va'>data_ips</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>15</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>knitr</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/knitr/man/kable.html'>kable</a></span><span class='op'>(</span><span class='op'>)</span>
+  <span class='fu'>glance</span><span class='op'>(</span><span class='fl'>15</span><span class='op'>)</span>
 </code></pre>
 </div>
 <table style="width:100%;">
@@ -2828,8 +2829,7 @@ Most likely, we aren’t just going to be writing one function in this tutorial.
 </table>
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>data_raw</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>15</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>knitr</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/knitr/man/kable.html'>kable</a></span><span class='op'>(</span><span class='op'>)</span>
+  <span class='fu'>glance</span><span class='op'>(</span><span class='fl'>15</span><span class='op'>)</span>
 </code></pre>
 </div>
 <table style="width:100%;">
@@ -3158,26 +3158,42 @@ ipsatized_TIPI8     -0.32648284    -0.089488624
 ipsatized_TIPI9      0.95761526    -0.057303325
 ipsatized_TIPI10    -0.06741043     0.941250723</code></pre>
 </div>
-<p>This list is what we set out to create! We’ve achieved our goal. Now that we’ve solved this problem in a specific case, we can begin to generalize it to a function. Or, rather, a set of functions!</p>
-<h3 id="applying-specific-case-to-generalized-function-s">Applying specific case to generalized function s</h3>
-<hr />
-<p>That works! Now let’s wrap this within a function. We will call it <code>add_id</code></p>
+<p>This list is what we set out to create! We’ve achieved our goal.<br />
+Now that we’ve solved this problem in a specific case, we can begin to generalize it to a function. Or, rather, a set of functions!</p>
+<h3 id="applying-specific-case-to-generalized-functions">Applying specific case to generalized functions</h3>
+<p>Since we want each function to only do one task, we can first outline the individual tasks that make up the ipsatization process.</p>
+<ol type="1">
+<li>Add an ID variable to the dataframe</li>
+<li>Pivot the data to a longer format</li>
+<li>Calculate the mean of each row and transform each response by subtracting the row mean from it</li>
+<li>Pivot the data back to a wider format</li>
+<li>Create a list to organize the output</li>
+</ol>
+<p>Now we can set out to make a function to complete each task. These functions don’t ever have to be used on their own; in the end, they’ll all be combined into a final, single function. This may seem like it’s making work more complicated, but this approach enhances readability of your code and aids in troubleshooting errors.<br />
+Since we’ve done the majority of the problem solving already, we can essentially copy and paste our code from above, making sure to adapt as necessary to the function format. Luckily, for the current tutorial, these changes mostly consist of changing the name of the dataframe input to “df,” which is the name of our only argument in this function./ After we build each function, we can test that it works with some datasets to ensure it works.</p>
+<ol type="1">
+<li>Add an ID variable to the dataframe</li>
+</ol>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>add_id</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span> <span class='op'>{</span>
-  <span class='va'>df_id</span> <span class='op'>&lt;-</span> <span class='va'>df</span> <span class='op'>%&gt;%</span> 
-    <span class='fu'>mutate</span><span class='op'>(</span>id <span class='op'>=</span> <span class='fu'>row_number</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span>
-  <span class='va'>df_id</span>
+  <span class='va'>df</span> <span class='op'>%&gt;%</span>
+    <span class='fu'>mutate</span><span class='op'>(</span>id <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
 <span class='op'>}</span>
 </code></pre>
 </div>
 </div>
-<p>Now let’s check if it works.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>add_id</span><span class='op'>(</span><span class='va'>data</span><span class='op'>)</span><span class='op'>%&gt;%</span> 
-  <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>knitr</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/knitr/man/kable.html'>kable</a></span><span class='op'>(</span><span class='op'>)</span>
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># Test it out</span>
+<span class='va'>test1</span> <span class='op'>&lt;-</span> <span class='va'>data</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>add_id</span><span class='op'>(</span><span class='op'>)</span>
+
+<span class='va'>test2</span> <span class='op'>&lt;-</span> <span class='va'>iris</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>add_id</span><span class='op'>(</span><span class='op'>)</span>
+
+<span class='va'>test1</span> <span class='op'>%&gt;%</span>  
+  <span class='fu'>glance</span><span class='op'>(</span><span class='fl'>5</span><span class='op'>)</span>
 </code></pre>
 </div>
 <table>
@@ -3264,52 +3280,149 @@ ipsatized_TIPI10    -0.06741043     0.941250723</code></pre>
 </tr>
 </tbody>
 </table>
-</div>
-<p><strong>How do we build the functions specified in step 2?</strong><br />
-We will focus on one function at a time. We are going to first build the ipsatize function. Let’s break down the ipsatize function.<br />
-i. What is the <em>name</em> of the function?<br />
-We will call it <code>ipsatize_MeanDev</code> as the type of ipsatization this function will perform is Mean deviation.<br />
-ii. What will the the function <em>do</em>?<br />
-</p>
-<p>Now we can wrap this into a function</p>
-<div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>ipsatize_MD</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span><span class='op'>{</span>
-  
- <span class='va'>dfid</span> <span class='op'>&lt;-</span> <span class='va'>df</span> <span class='op'>%&gt;%</span> 
-   <span class='fu'>add_id</span><span class='op'>(</span><span class='op'>)</span>
-  
- <span class='va'>output</span> <span class='op'>&lt;-</span> <span class='va'>dfid</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>pivot_longer</span><span class='op'>(</span>cols <span class='op'>=</span> <span class='op'>!</span><span class='va'>id</span>, names_to <span class='op'>=</span> <span class='st'>"col_names"</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>group_by</span><span class='op'>(</span><span class='va'>id</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>mutate</span><span class='op'>(</span>means_rowwise <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>value</span>, na.rm <span class='op'>=</span> <span class='cn'>T</span><span class='op'>)</span>,
-         value <span class='op'>=</span> <span class='va'>value</span> <span class='op'>-</span> <span class='va'>means_rowwise</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>pivot_wider</span><span class='op'>(</span>names_from <span class='op'>=</span> <span class='va'>col_names</span>, values_from <span class='op'>=</span> <span class='va'>value</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>select</span><span class='op'>(</span><span class='va'>id</span>, <span class='op'>!</span><span class='va'>means_rowwise</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
-   <span class='fu'>ungroup</span><span class='op'>(</span><span class='op'>)</span>
-
-  <span class='va'>output</span>
-<span class='op'>}</span>
-
-<span class='fu'>ipsatize_MD</span><span class='op'>(</span><span class='va'>data</span><span class='op'>)</span>
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>test2</span> <span class='op'>%&gt;%</span>  
+  <span class='fu'>glance</span><span class='op'>(</span><span class='fl'>5</span><span class='op'>)</span>
 </code></pre>
 </div>
-<pre><code># A tibble: 2,495 x 11
-      id  TIPI1  TIPI2  TIPI3 TIPI4  TIPI5  TIPI6  TIPI7  TIPI8 TIPI9
-   &lt;int&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
- 1     1  0.5   -1.5    1.5    -2.5  1.5    1.5    2.5   -2.5     2.5
- 2     2  1.1    2.1    1.1     2.1  1.1   -1.9    2.1    0.100  -3.9
- 3     3  0.400  0.400  0.400  -4.6  1.4   -0.600  0.400 -0.600   1.4
- 4     4  1      2      2       0    2      1      0     -4       0  
- 5     5 -3.1   -1.1    2.9    -2.1  1.9   -0.100  0.9    0.9     0.9
- 6     6 -0.200 -2.2    1.8    -2.2  1.8    0.8    1.8   -1.2     1.8
- 7     7 -1.9    1.1    0.100  -1.9  1.1    2.1   -1.9   -0.9     1.1
- 8     8 -0.200  0.8    1.8    -2.2  2.8   -0.200  0.8    0.8    -1.2
- 9     9 -0.300  0.7    1.7    -2.3 -0.300  0.7    1.7   -2.3     2.7
-10    10 -3.5    1.5   -1.5    -3.5  0.5    2.5    1.5    0.5     2.5
-# ... with 2,485 more rows, and 1 more variable: TIPI10 &lt;dbl&gt;</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: right;">Sepal.Length</th>
+<th style="text-align: right;">Sepal.Width</th>
+<th style="text-align: right;">Petal.Length</th>
+<th style="text-align: right;">Petal.Width</th>
+<th style="text-align: left;">Species</th>
+<th style="text-align: right;">id</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">5.1</td>
+<td style="text-align: right;">3.5</td>
+<td style="text-align: right;">1.4</td>
+<td style="text-align: right;">0.2</td>
+<td style="text-align: left;">setosa</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4.9</td>
+<td style="text-align: right;">3.0</td>
+<td style="text-align: right;">1.4</td>
+<td style="text-align: right;">0.2</td>
+<td style="text-align: left;">setosa</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">4.7</td>
+<td style="text-align: right;">3.2</td>
+<td style="text-align: right;">1.3</td>
+<td style="text-align: right;">0.2</td>
+<td style="text-align: left;">setosa</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4.6</td>
+<td style="text-align: right;">3.1</td>
+<td style="text-align: right;">1.5</td>
+<td style="text-align: right;">0.2</td>
+<td style="text-align: left;">setosa</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">5.0</td>
+<td style="text-align: right;">3.6</td>
+<td style="text-align: right;">1.4</td>
+<td style="text-align: right;">0.2</td>
+<td style="text-align: left;">setosa</td>
+<td style="text-align: right;">5</td>
+</tr>
+</tbody>
+</table>
 </div>
-<p>This works! We can add constraints to which type of variables can be added in the dataframe. For this we can build a function which only selects numeric columns.</p>
+<p>It works! However, when looking at the output for the dataframe <code>iris</code>, you may notice a difference between it and the specific case in which we originally wrote this code: This dataset contains character data in addition to numeric data. Before we go any further, we have to write code that extracts only numeric columns from the dataframe of interest.</p>
+<p>1.5. Select only numeric columns from dataframe</p>
+<p>We can accomplish this using the <code>map_lgl()</code> function from the <code>purrr</code> package, which we’ve discussed in previous posts as well. We specify that if the sum of all possible numeric columns in a dataframe is 0, we stop the loop and throw an error message else return the dataframe. This will ensure that all the columns in the dataframe we are working with are numeric. We are using <code>map_lgl</code> from the <code>purrr</code> package which maps the <code>is.numeric</code> function to every column in the dataframe.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>iris</span><span class='op'>[</span> , <span class='fu'>purrr</span><span class='fu'>::</span><span class='fu'><a href='https://purrr.tidyverse.org/reference/map.html'>map_lgl</a></span><span class='op'>(</span><span class='va'>iris</span>, <span class='va'>is.numeric</span><span class='op'>)</span><span class='op'>]</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>glance</span><span class='op'>(</span><span class='fl'>10</span><span class='op'>)</span>
+</code></pre>
+</div>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: right;">Sepal.Length</th>
+<th style="text-align: right;">Sepal.Width</th>
+<th style="text-align: right;">Petal.Length</th>
+<th style="text-align: right;">Petal.Width</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">5.1</td>
+<td style="text-align: right;">3.5</td>
+<td style="text-align: right;">1.4</td>
+<td style="text-align: right;">0.2</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4.9</td>
+<td style="text-align: right;">3.0</td>
+<td style="text-align: right;">1.4</td>
+<td style="text-align: right;">0.2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">4.7</td>
+<td style="text-align: right;">3.2</td>
+<td style="text-align: right;">1.3</td>
+<td style="text-align: right;">0.2</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4.6</td>
+<td style="text-align: right;">3.1</td>
+<td style="text-align: right;">1.5</td>
+<td style="text-align: right;">0.2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">5.0</td>
+<td style="text-align: right;">3.6</td>
+<td style="text-align: right;">1.4</td>
+<td style="text-align: right;">0.2</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">5.4</td>
+<td style="text-align: right;">3.9</td>
+<td style="text-align: right;">1.7</td>
+<td style="text-align: right;">0.4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">4.6</td>
+<td style="text-align: right;">3.4</td>
+<td style="text-align: right;">1.4</td>
+<td style="text-align: right;">0.3</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">5.0</td>
+<td style="text-align: right;">3.4</td>
+<td style="text-align: right;">1.5</td>
+<td style="text-align: right;">0.2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">4.4</td>
+<td style="text-align: right;">2.9</td>
+<td style="text-align: right;">1.4</td>
+<td style="text-align: right;">0.2</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4.9</td>
+<td style="text-align: right;">3.1</td>
+<td style="text-align: right;">1.5</td>
+<td style="text-align: right;">0.1</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Just like before, we can now translate that code into a function. This time, we’ll also add a condition to our function: If there are no numeric columns in the dataset, the function will throw an error saying so. If there is at least one numeric column, the function will run as normal.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>just_num</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span> <span class='op'>{</span>
@@ -3324,128 +3437,1296 @@ ii. What will the the function <em>do</em>?<br />
 </code></pre>
 </div>
 </div>
-<p>In the above function, we specify that if the sum of all possible numeric columns in a dataframe is 0, we stop the loop and throw an error message else return the dataframe. This will ensure that all the columns in the dataframe we are working with are numeric. We are using <code>map_lgl</code> from the <code>purrr</code> package which maps the <code>is.numeric</code> function to every column in the dataframe.</p>
-<p>Let’s give this function a try. We know that the dataframe “data” has all columns of class numeric whereas <code>df_tipi</code> does not.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span><span class='op'>(</span><span class='fu'>just_num</span><span class='op'>(</span><span class='va'>df_tipi</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>==</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span><span class='op'>(</span><span class='va'>df_tipi</span><span class='op'>)</span><span class='op'>)</span>
-</code></pre>
-</div>
-<pre><code>[1] FALSE</code></pre>
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span><span class='op'>(</span><span class='fu'>just_num</span><span class='op'>(</span><span class='va'>data</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>==</span> <span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>ncol</a></span><span class='op'>(</span><span class='va'>data</span><span class='op'>)</span><span class='op'>)</span>
-</code></pre>
-</div>
-<pre><code>[1] TRUE</code></pre>
-</div>
-<p>This works!</p>
-<p>Now we can add this to the main function.</p>
-<div class="layout-chunk" data-layout="l-body">
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>ipsatize_MD</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span><span class='op'>{</span>
-  
- <span class='va'>df_clean</span> <span class='op'>&lt;-</span> <span class='va'>df</span> <span class='op'>%&gt;%</span> 
-   <span class='fu'>just_num</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
-   <span class='fu'>add_id</span><span class='op'>(</span><span class='op'>)</span>
-  
- <span class='va'>output</span> <span class='op'>&lt;-</span> <span class='va'>df_clean</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>pivot_longer</span><span class='op'>(</span>cols <span class='op'>=</span> <span class='op'>!</span><span class='va'>id</span>, names_to <span class='op'>=</span> <span class='st'>"col_names"</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>group_by</span><span class='op'>(</span><span class='va'>id</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>mutate</span><span class='op'>(</span>means_rowwise <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>value</span>, na.rm <span class='op'>=</span> <span class='cn'>T</span><span class='op'>)</span>,
-         value <span class='op'>=</span> <span class='va'>value</span> <span class='op'>-</span> <span class='va'>means_rowwise</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>pivot_wider</span><span class='op'>(</span>names_from <span class='op'>=</span> <span class='va'>col_names</span>, values_from <span class='op'>=</span> <span class='va'>value</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>select</span><span class='op'>(</span><span class='va'>id</span>, <span class='op'>!</span><span class='va'>means_rowwise</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
-   <span class='fu'>ungroup</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
-   <span class='fu'>select</span><span class='op'>(</span><span class='op'>-</span><span class='va'>id</span><span class='op'>)</span>
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># Test it out</span>
+<span class='va'>test1</span> <span class='op'>&lt;-</span> <span class='va'>test1</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>just_num</span><span class='op'>(</span><span class='op'>)</span>
 
-  <span class='va'>output</span>
+<span class='va'>test2</span> <span class='op'>&lt;-</span> <span class='va'>test2</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>just_num</span><span class='op'>(</span><span class='op'>)</span>
+
+<span class='va'>test1</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>glance</span><span class='op'>(</span><span class='fl'>15</span><span class='op'>)</span>
+</code></pre>
+</div>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: right;">TIPI1</th>
+<th style="text-align: right;">TIPI2</th>
+<th style="text-align: right;">TIPI3</th>
+<th style="text-align: right;">TIPI4</th>
+<th style="text-align: right;">TIPI5</th>
+<th style="text-align: right;">TIPI6</th>
+<th style="text-align: right;">TIPI7</th>
+<th style="text-align: right;">TIPI8</th>
+<th style="text-align: right;">TIPI9</th>
+<th style="text-align: right;">TIPI10</th>
+<th style="text-align: right;">id</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">7</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">8</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">9</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">10</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">11</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">12</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">13</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">14</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">15</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>test2</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>glance</span><span class='op'>(</span><span class='fl'>15</span><span class='op'>)</span>
+</code></pre>
+</div>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: right;">Sepal.Length</th>
+<th style="text-align: right;">Sepal.Width</th>
+<th style="text-align: right;">Petal.Length</th>
+<th style="text-align: right;">Petal.Width</th>
+<th style="text-align: right;">id</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">5.1</td>
+<td style="text-align: right;">3.5</td>
+<td style="text-align: right;">1.4</td>
+<td style="text-align: right;">0.2</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4.9</td>
+<td style="text-align: right;">3.0</td>
+<td style="text-align: right;">1.4</td>
+<td style="text-align: right;">0.2</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">4.7</td>
+<td style="text-align: right;">3.2</td>
+<td style="text-align: right;">1.3</td>
+<td style="text-align: right;">0.2</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4.6</td>
+<td style="text-align: right;">3.1</td>
+<td style="text-align: right;">1.5</td>
+<td style="text-align: right;">0.2</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">5.0</td>
+<td style="text-align: right;">3.6</td>
+<td style="text-align: right;">1.4</td>
+<td style="text-align: right;">0.2</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">5.4</td>
+<td style="text-align: right;">3.9</td>
+<td style="text-align: right;">1.7</td>
+<td style="text-align: right;">0.4</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">4.6</td>
+<td style="text-align: right;">3.4</td>
+<td style="text-align: right;">1.4</td>
+<td style="text-align: right;">0.3</td>
+<td style="text-align: right;">7</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">5.0</td>
+<td style="text-align: right;">3.4</td>
+<td style="text-align: right;">1.5</td>
+<td style="text-align: right;">0.2</td>
+<td style="text-align: right;">8</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">4.4</td>
+<td style="text-align: right;">2.9</td>
+<td style="text-align: right;">1.4</td>
+<td style="text-align: right;">0.2</td>
+<td style="text-align: right;">9</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4.9</td>
+<td style="text-align: right;">3.1</td>
+<td style="text-align: right;">1.5</td>
+<td style="text-align: right;">0.1</td>
+<td style="text-align: right;">10</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">5.4</td>
+<td style="text-align: right;">3.7</td>
+<td style="text-align: right;">1.5</td>
+<td style="text-align: right;">0.2</td>
+<td style="text-align: right;">11</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4.8</td>
+<td style="text-align: right;">3.4</td>
+<td style="text-align: right;">1.6</td>
+<td style="text-align: right;">0.2</td>
+<td style="text-align: right;">12</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">4.8</td>
+<td style="text-align: right;">3.0</td>
+<td style="text-align: right;">1.4</td>
+<td style="text-align: right;">0.1</td>
+<td style="text-align: right;">13</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4.3</td>
+<td style="text-align: right;">3.0</td>
+<td style="text-align: right;">1.1</td>
+<td style="text-align: right;">0.1</td>
+<td style="text-align: right;">14</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">5.8</td>
+<td style="text-align: right;">4.0</td>
+<td style="text-align: right;">1.2</td>
+<td style="text-align: right;">0.2</td>
+<td style="text-align: right;">15</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Critically, this function will allow our final function to generalize to multiple different datasets. With that done, we can continue with the rest of our outlined tasks.</p>
+<ol start="2" type="1">
+<li>Pivot the data to a longer format</li>
+</ol>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>lengthen_data</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='va'>df</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>pivot_longer</span><span class='op'>(</span>cols <span class='op'>=</span> <span class='op'>!</span><span class='va'>id</span>, names_to <span class='op'>=</span> <span class='st'>"item"</span>, values_to <span class='op'>=</span> <span class='st'>"response"</span><span class='op'>)</span>
+<span class='op'>}</span>
+</code></pre>
+</div>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># Test it out</span>
+<span class='va'>test1</span> <span class='op'>&lt;-</span> <span class='va'>test1</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>lengthen_data</span><span class='op'>(</span><span class='op'>)</span>
+
+<span class='va'>test2</span> <span class='op'>&lt;-</span> <span class='va'>test2</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>lengthen_data</span><span class='op'>(</span><span class='op'>)</span>
+
+<span class='va'>test1</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>glance</span><span class='op'>(</span><span class='fl'>15</span><span class='op'>)</span>
+</code></pre>
+</div>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: right;">id</th>
+<th style="text-align: left;">item</th>
+<th style="text-align: right;">response</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">TIPI1</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">TIPI2</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">TIPI3</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">TIPI4</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">TIPI5</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">TIPI6</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">TIPI7</td>
+<td style="text-align: right;">7</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">TIPI8</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">TIPI9</td>
+<td style="text-align: right;">7</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">TIPI10</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">TIPI1</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">TIPI2</td>
+<td style="text-align: right;">7</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">TIPI3</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">TIPI4</td>
+<td style="text-align: right;">7</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">TIPI5</td>
+<td style="text-align: right;">6</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>test2</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>glance</span><span class='op'>(</span><span class='fl'>15</span><span class='op'>)</span>
+</code></pre>
+</div>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: right;">id</th>
+<th style="text-align: left;">item</th>
+<th style="text-align: right;">response</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Sepal.Length</td>
+<td style="text-align: right;">5.1</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Sepal.Width</td>
+<td style="text-align: right;">3.5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Petal.Length</td>
+<td style="text-align: right;">1.4</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Petal.Width</td>
+<td style="text-align: right;">0.2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">Sepal.Length</td>
+<td style="text-align: right;">4.9</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">Sepal.Width</td>
+<td style="text-align: right;">3.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">Petal.Length</td>
+<td style="text-align: right;">1.4</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">Petal.Width</td>
+<td style="text-align: right;">0.2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: left;">Sepal.Length</td>
+<td style="text-align: right;">4.7</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">3</td>
+<td style="text-align: left;">Sepal.Width</td>
+<td style="text-align: right;">3.2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: left;">Petal.Length</td>
+<td style="text-align: right;">1.3</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">3</td>
+<td style="text-align: left;">Petal.Width</td>
+<td style="text-align: right;">0.2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">4</td>
+<td style="text-align: left;">Sepal.Length</td>
+<td style="text-align: right;">4.6</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4</td>
+<td style="text-align: left;">Sepal.Width</td>
+<td style="text-align: right;">3.1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">4</td>
+<td style="text-align: left;">Petal.Length</td>
+<td style="text-align: right;">1.5</td>
+</tr>
+</tbody>
+</table>
+</div>
+<ol start="3" type="1">
+<li>Calculate the mean of each row and transform each response by subtracting the row mean from it</li>
+</ol>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>transform_data</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='va'>df</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>group_by</span><span class='op'>(</span><span class='va'>id</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='co'># Group by participant ID</span>
+  <span class='fu'>mutate</span><span class='op'>(</span>mean_row <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>response</span>, na.rm <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>, <span class='co'># Calculate participant mean</span>
+         ipsatized <span class='op'>=</span> <span class='va'>response</span> <span class='op'>-</span> <span class='va'>mean_row</span><span class='op'>)</span> <span class='co'># Calculate individual response deviation from mean</span>
+<span class='op'>}</span>
+</code></pre>
+</div>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># Test it out</span>
+<span class='va'>test1</span> <span class='op'>&lt;-</span> <span class='va'>test1</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>transform_data</span><span class='op'>(</span><span class='op'>)</span>
+
+<span class='va'>test2</span> <span class='op'>&lt;-</span> <span class='va'>test2</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>transform_data</span><span class='op'>(</span><span class='op'>)</span>
+
+<span class='va'>test1</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>glance</span><span class='op'>(</span><span class='fl'>15</span><span class='op'>)</span>
+</code></pre>
+</div>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: right;">id</th>
+<th style="text-align: left;">item</th>
+<th style="text-align: right;">response</th>
+<th style="text-align: right;">mean_row</th>
+<th style="text-align: right;">ipsatized</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">TIPI1</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">4.5</td>
+<td style="text-align: right;">0.5</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">TIPI2</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">4.5</td>
+<td style="text-align: right;">-1.5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">TIPI3</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">4.5</td>
+<td style="text-align: right;">1.5</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">TIPI4</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">4.5</td>
+<td style="text-align: right;">-2.5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">TIPI5</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">4.5</td>
+<td style="text-align: right;">1.5</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">TIPI6</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">4.5</td>
+<td style="text-align: right;">1.5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">TIPI7</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">4.5</td>
+<td style="text-align: right;">2.5</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">TIPI8</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">4.5</td>
+<td style="text-align: right;">-2.5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">TIPI9</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">4.5</td>
+<td style="text-align: right;">2.5</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">TIPI10</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">4.5</td>
+<td style="text-align: right;">-3.5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">TIPI1</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">4.9</td>
+<td style="text-align: right;">1.1</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">TIPI2</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">4.9</td>
+<td style="text-align: right;">2.1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">TIPI3</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">4.9</td>
+<td style="text-align: right;">1.1</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">TIPI4</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">4.9</td>
+<td style="text-align: right;">2.1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">TIPI5</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">4.9</td>
+<td style="text-align: right;">1.1</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>test2</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>glance</span><span class='op'>(</span><span class='fl'>15</span><span class='op'>)</span>
+</code></pre>
+</div>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: right;">id</th>
+<th style="text-align: left;">item</th>
+<th style="text-align: right;">response</th>
+<th style="text-align: right;">mean_row</th>
+<th style="text-align: right;">ipsatized</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Sepal.Length</td>
+<td style="text-align: right;">5.1</td>
+<td style="text-align: right;">2.550</td>
+<td style="text-align: right;">2.550</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Sepal.Width</td>
+<td style="text-align: right;">3.5</td>
+<td style="text-align: right;">2.550</td>
+<td style="text-align: right;">0.950</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Petal.Length</td>
+<td style="text-align: right;">1.4</td>
+<td style="text-align: right;">2.550</td>
+<td style="text-align: right;">-1.150</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">Petal.Width</td>
+<td style="text-align: right;">0.2</td>
+<td style="text-align: right;">2.550</td>
+<td style="text-align: right;">-2.350</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">Sepal.Length</td>
+<td style="text-align: right;">4.9</td>
+<td style="text-align: right;">2.375</td>
+<td style="text-align: right;">2.525</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">Sepal.Width</td>
+<td style="text-align: right;">3.0</td>
+<td style="text-align: right;">2.375</td>
+<td style="text-align: right;">0.625</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">Petal.Length</td>
+<td style="text-align: right;">1.4</td>
+<td style="text-align: right;">2.375</td>
+<td style="text-align: right;">-0.975</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">Petal.Width</td>
+<td style="text-align: right;">0.2</td>
+<td style="text-align: right;">2.375</td>
+<td style="text-align: right;">-2.175</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: left;">Sepal.Length</td>
+<td style="text-align: right;">4.7</td>
+<td style="text-align: right;">2.350</td>
+<td style="text-align: right;">2.350</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">3</td>
+<td style="text-align: left;">Sepal.Width</td>
+<td style="text-align: right;">3.2</td>
+<td style="text-align: right;">2.350</td>
+<td style="text-align: right;">0.850</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: left;">Petal.Length</td>
+<td style="text-align: right;">1.3</td>
+<td style="text-align: right;">2.350</td>
+<td style="text-align: right;">-1.050</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">3</td>
+<td style="text-align: left;">Petal.Width</td>
+<td style="text-align: right;">0.2</td>
+<td style="text-align: right;">2.350</td>
+<td style="text-align: right;">-2.150</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">4</td>
+<td style="text-align: left;">Sepal.Length</td>
+<td style="text-align: right;">4.6</td>
+<td style="text-align: right;">2.350</td>
+<td style="text-align: right;">2.250</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4</td>
+<td style="text-align: left;">Sepal.Width</td>
+<td style="text-align: right;">3.1</td>
+<td style="text-align: right;">2.350</td>
+<td style="text-align: right;">0.750</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">4</td>
+<td style="text-align: left;">Petal.Length</td>
+<td style="text-align: right;">1.5</td>
+<td style="text-align: right;">2.350</td>
+<td style="text-align: right;">-0.850</td>
+</tr>
+</tbody>
+</table>
+</div>
+<ol start="4" type="1">
+<li>Pivot the data back to a wider format</li>
+</ol>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>widen_data</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='co'># Create ipsatized data frame</span>
+<span class='va'>data_ips</span> <span class='op'>&lt;-</span> <span class='va'>df</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>pivot_wider</span><span class='op'>(</span>id_cols <span class='op'>=</span> <span class='va'>id</span>, names_from <span class='op'>=</span> <span class='va'>item</span>, values_from <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>response</span>, <span class='va'>ipsatized</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>select</span><span class='op'>(</span><span class='va'>id</span>, <span class='fu'>contains</span><span class='op'>(</span><span class='st'>"ipsatized"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+   <span class='fu'>ungroup</span><span class='op'>(</span><span class='op'>)</span>
+
+<span class='co'># Create raw dataframe</span>
+<span class='va'>data_raw</span> <span class='op'>&lt;-</span> <span class='va'>df</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>pivot_wider</span><span class='op'>(</span>id_cols <span class='op'>=</span> <span class='va'>id</span>, names_from <span class='op'>=</span> <span class='va'>item</span>, values_from <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>response</span>, <span class='va'>ipsatized</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>select</span><span class='op'>(</span><span class='va'>id</span>, <span class='fu'>contains</span><span class='op'>(</span><span class='st'>"response"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+   <span class='fu'>ungroup</span><span class='op'>(</span><span class='op'>)</span>
+
+<span class='va'>outputlist</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>"data_ips"</span> <span class='op'>=</span> <span class='va'>data_ips</span>, 
+                   <span class='st'>"data_raw"</span> <span class='op'>=</span> <span class='va'>data_raw</span><span class='op'>)</span>
+
+<span class='kw'><a href='https://rdrr.io/r/base/function.html'>return</a></span><span class='op'>(</span><span class='va'>outputlist</span><span class='op'>)</span>
+<span class='op'>}</span>
+</code></pre>
+</div>
+</div>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># Test it out</span>
+<span class='va'>test1</span> <span class='op'>&lt;-</span> <span class='va'>test1</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>widen_data</span><span class='op'>(</span><span class='op'>)</span>
+
+<span class='va'>test2</span> <span class='op'>&lt;-</span> <span class='va'>test2</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>widen_data</span><span class='op'>(</span><span class='op'>)</span>
+
+<span class='va'>test1</span>
+</code></pre>
+</div>
+<pre><code>$data_ips
+# A tibble: 2,495 x 11
+      id ipsatized_TIPI1 ipsatized_TIPI2 ipsatized_TIPI3
+   &lt;int&gt;           &lt;dbl&gt;           &lt;dbl&gt;           &lt;dbl&gt;
+ 1     1           0.5            -1.5             1.5  
+ 2     2           1.1             2.1             1.1  
+ 3     3           0.400           0.400           0.400
+ 4     4           1               2               2    
+ 5     5          -3.1            -1.1             2.9  
+ 6     6          -0.200          -2.2             1.8  
+ 7     7          -1.9             1.1             0.100
+ 8     8          -0.200           0.8             1.8  
+ 9     9          -0.300           0.7             1.7  
+10    10          -3.5             1.5            -1.5  
+# ... with 2,485 more rows, and 7 more variables:
+#   ipsatized_TIPI4 &lt;dbl&gt;, ipsatized_TIPI5 &lt;dbl&gt;,
+#   ipsatized_TIPI6 &lt;dbl&gt;, ipsatized_TIPI7 &lt;dbl&gt;,
+#   ipsatized_TIPI8 &lt;dbl&gt;, ipsatized_TIPI9 &lt;dbl&gt;,
+#   ipsatized_TIPI10 &lt;dbl&gt;
+
+$data_raw
+# A tibble: 2,495 x 11
+      id response_TIPI1 response_TIPI2 response_TIPI3 response_TIPI4
+   &lt;int&gt;          &lt;int&gt;          &lt;int&gt;          &lt;int&gt;          &lt;int&gt;
+ 1     1              5              3              6              2
+ 2     2              6              7              6              7
+ 3     3              6              6              6              1
+ 4     4              6              7              7              5
+ 5     5              1              3              7              2
+ 6     6              4              2              6              2
+ 7     7              2              5              4              2
+ 8     8              4              5              6              2
+ 9     9              4              5              6              2
+10    10              1              6              3              1
+# ... with 2,485 more rows, and 6 more variables:
+#   response_TIPI5 &lt;int&gt;, response_TIPI6 &lt;int&gt;, response_TIPI7 &lt;int&gt;,
+#   response_TIPI8 &lt;int&gt;, response_TIPI9 &lt;int&gt;, response_TIPI10 &lt;int&gt;</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>test2</span>
+</code></pre>
+</div>
+<pre><code>$data_ips
+# A tibble: 150 x 5
+      id ipsatized_Sepal.Len~ ipsatized_Sepal.Wid~ ipsatized_Petal.Le~
+   &lt;int&gt;                &lt;dbl&gt;                &lt;dbl&gt;               &lt;dbl&gt;
+ 1     1                 2.55                0.95               -1.15 
+ 2     2                 2.53                0.625              -0.975
+ 3     3                 2.35                0.85               -1.05 
+ 4     4                 2.25                0.75               -0.85 
+ 5     5                 2.45                1.05               -1.15 
+ 6     6                 2.55                1.05               -1.15 
+ 7     7                 2.17                0.975              -1.02 
+ 8     8                 2.48                0.875              -1.02 
+ 9     9                 2.18                0.675              -0.825
+10    10                 2.5                 0.7                -0.9  
+# ... with 140 more rows, and 1 more variable:
+#   ipsatized_Petal.Width &lt;dbl&gt;
+
+$data_raw
+# A tibble: 150 x 5
+      id response_Sepal.Leng~ response_Sepal.Width response_Petal.Len~
+   &lt;int&gt;                &lt;dbl&gt;                &lt;dbl&gt;               &lt;dbl&gt;
+ 1     1                  5.1                  3.5                 1.4
+ 2     2                  4.9                  3                   1.4
+ 3     3                  4.7                  3.2                 1.3
+ 4     4                  4.6                  3.1                 1.5
+ 5     5                  5                    3.6                 1.4
+ 6     6                  5.4                  3.9                 1.7
+ 7     7                  4.6                  3.4                 1.4
+ 8     8                  5                    3.4                 1.5
+ 9     9                  4.4                  2.9                 1.4
+10    10                  4.9                  3.1                 1.5
+# ... with 140 more rows, and 1 more variable:
+#   response_Petal.Width &lt;dbl&gt;</code></pre>
+</div>
+<ol start="5" type="1">
+<li>Create a list to organize the output</li>
+</ol>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>ipsatize_list</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>"ipsatized"</span> <span class='op'>=</span> <span class='va'>df</span><span class='op'>$</span><span class='va'>data_ips</span>,
+          <span class='st'>"raw"</span> <span class='op'>=</span> <span class='va'>df</span><span class='op'>$</span><span class='va'>data_raw</span>,
+          <span class='st'>"correlation_matrix"</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/cor.html'>cor</a></span><span class='op'>(</span><span class='va'>df</span><span class='op'>$</span><span class='va'>data_ips</span>, <span class='va'>df</span><span class='op'>$</span><span class='va'>data_raw</span><span class='op'>)</span><span class='op'>)</span>
 <span class='op'>}</span>
 
-<span class='fu'>ipsatize_MD</span><span class='op'>(</span><span class='va'>data</span><span class='op'>)</span>
+<span class='co'># list("ipsatized" = test2$data_ips,</span>
+<span class='co'>#           "raw" = test2$data_raw,</span>
+<span class='co'>#           "correlation_matrix" = cor(test2$data_ips, test2$data_raw))</span>
 </code></pre>
 </div>
-<pre><code># A tibble: 2,495 x 10
-    TIPI1  TIPI2  TIPI3 TIPI4  TIPI5  TIPI6  TIPI7  TIPI8 TIPI9 TIPI10
-    &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;
- 1  0.5   -1.5    1.5    -2.5  1.5    1.5    2.5   -2.5     2.5   -3.5
- 2  1.1    2.1    1.1     2.1  1.1   -1.9    2.1    0.100  -3.9   -3.9
- 3  0.400  0.400  0.400  -4.6  1.4   -0.600  0.400 -0.600   1.4    1.4
- 4  1      2      2       0    2      1      0     -4       0     -4  
- 5 -3.1   -1.1    2.9    -2.1  1.9   -0.100  0.9    0.9     0.9   -1.1
- 6 -0.200 -2.2    1.8    -2.2  1.8    0.8    1.8   -1.2     1.8   -2.2
- 7 -1.9    1.1    0.100  -1.9  1.1    2.1   -1.9   -0.9     1.1    1.1
- 8 -0.200  0.8    1.8    -2.2  2.8   -0.200  0.8    0.8    -1.2   -3.2
- 9 -0.300  0.7    1.7    -2.3 -0.300  0.7    1.7   -2.3     2.7   -2.3
-10 -3.5    1.5   -1.5    -3.5  0.5    2.5    1.5    0.5     2.5   -0.5
-# ... with 2,485 more rows</code></pre>
 </div>
-<p>A closer look will tell you that we could benefit from renaming the column names of the ips dataframe within the list. The <code>paste</code> function can be helpful to do this.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>rename_ips</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>ipsatized_data</span><span class='op'>)</span><span class='op'>{</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='va'>ipsatized_data</span><span class='op'>)</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/paste.html'>paste0</a></span><span class='op'>(</span><span class='fu'><a href='https://rdrr.io/r/base/names.html'>names</a></span><span class='op'>(</span><span class='va'>ipsatized_data</span><span class='op'>)</span>, <span class='st'>"_ips"</span><span class='op'>)</span>
-  <span class='kw'><a href='https://rdrr.io/r/base/function.html'>return</a></span><span class='op'>(</span><span class='va'>ipsatized_data</span><span class='op'>)</span>
-<span class='op'>}</span>
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># Test it out</span>
+<span class='va'>test1</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>ipsatize_list</span><span class='op'>(</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>$ipsatized
+# A tibble: 2,495 x 11
+      id ipsatized_TIPI1 ipsatized_TIPI2 ipsatized_TIPI3
+   &lt;int&gt;           &lt;dbl&gt;           &lt;dbl&gt;           &lt;dbl&gt;
+ 1     1           0.5            -1.5             1.5  
+ 2     2           1.1             2.1             1.1  
+ 3     3           0.400           0.400           0.400
+ 4     4           1               2               2    
+ 5     5          -3.1            -1.1             2.9  
+ 6     6          -0.200          -2.2             1.8  
+ 7     7          -1.9             1.1             0.100
+ 8     8          -0.200           0.8             1.8  
+ 9     9          -0.300           0.7             1.7  
+10    10          -3.5             1.5            -1.5  
+# ... with 2,485 more rows, and 7 more variables:
+#   ipsatized_TIPI4 &lt;dbl&gt;, ipsatized_TIPI5 &lt;dbl&gt;,
+#   ipsatized_TIPI6 &lt;dbl&gt;, ipsatized_TIPI7 &lt;dbl&gt;,
+#   ipsatized_TIPI8 &lt;dbl&gt;, ipsatized_TIPI9 &lt;dbl&gt;,
+#   ipsatized_TIPI10 &lt;dbl&gt;
 
-<span class='fu'>rename_ips</span><span class='op'>(</span><span class='fu'>ipsatize_MD</span><span class='op'>(</span><span class='va'>data</span><span class='op'>)</span><span class='op'>)</span>
-</code></pre>
-</div>
-<pre><code># A tibble: 2,495 x 10
-   TIPI1_ips TIPI2_ips TIPI3_ips TIPI4_ips TIPI5_ips TIPI6_ips
-       &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;     &lt;dbl&gt;
- 1     0.5      -1.5       1.5        -2.5     1.5       1.5  
- 2     1.1       2.1       1.1         2.1     1.1      -1.9  
- 3     0.400     0.400     0.400      -4.6     1.4      -0.600
- 4     1         2         2           0       2         1    
- 5    -3.1      -1.1       2.9        -2.1     1.9      -0.100
- 6    -0.200    -2.2       1.8        -2.2     1.8       0.8  
- 7    -1.9       1.1       0.100      -1.9     1.1       2.1  
- 8    -0.200     0.8       1.8        -2.2     2.8      -0.200
- 9    -0.300     0.7       1.7        -2.3    -0.300     0.7  
-10    -3.5       1.5      -1.5        -3.5     0.5       2.5  
-# ... with 2,485 more rows, and 4 more variables: TIPI7_ips &lt;dbl&gt;,
-#   TIPI8_ips &lt;dbl&gt;, TIPI9_ips &lt;dbl&gt;, TIPI10_ips &lt;dbl&gt;</code></pre>
-</div>
-<p>All we need to do now is wrap up the ipsatized data and raw data within a list.</p>
-<div class="layout-chunk" data-layout="l-body">
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>ipsatize_MeanDev</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>set</span><span class='op'>)</span><span class='op'>{</span>
-  
-  <span class='va'>l</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>"ips"</span> <span class='op'>=</span> <span class='fu'>rename_ips</span><span class='op'>(</span><span class='fu'>ipsatize_MD</span><span class='op'>(</span><span class='va'>data</span><span class='op'>)</span><span class='op'>)</span> ,                <span class='st'>"raw"</span> <span class='op'>=</span> <span class='va'>data</span>,
-            <span class='st'>"correlation.matrix"</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/cor.html'>cor</a></span><span class='op'>(</span><span class='fu'>rename_ips</span><span class='op'>(</span><span class='fu'>ipsatize_MD</span><span class='op'>(</span><span class='va'>data</span><span class='op'>)</span><span class='op'>)</span>, <span class='va'>data</span><span class='op'>)</span><span class='op'>)</span>
-  <span class='va'>l</span>
-<span class='op'>}</span>
+$raw
+# A tibble: 2,495 x 11
+      id response_TIPI1 response_TIPI2 response_TIPI3 response_TIPI4
+   &lt;int&gt;          &lt;int&gt;          &lt;int&gt;          &lt;int&gt;          &lt;int&gt;
+ 1     1              5              3              6              2
+ 2     2              6              7              6              7
+ 3     3              6              6              6              1
+ 4     4              6              7              7              5
+ 5     5              1              3              7              2
+ 6     6              4              2              6              2
+ 7     7              2              5              4              2
+ 8     8              4              5              6              2
+ 9     9              4              5              6              2
+10    10              1              6              3              1
+# ... with 2,485 more rows, and 6 more variables:
+#   response_TIPI5 &lt;int&gt;, response_TIPI6 &lt;int&gt;, response_TIPI7 &lt;int&gt;,
+#   response_TIPI8 &lt;int&gt;, response_TIPI9 &lt;int&gt;, response_TIPI10 &lt;int&gt;
 
-<span class='va'>ips_raw_data</span> <span class='op'>&lt;-</span> <span class='fu'>ipsatize_MeanDev</span><span class='op'>(</span><span class='va'>data</span><span class='op'>)</span>
+$correlation_matrix
+                           id response_TIPI1 response_TIPI2
+id                1.000000000    -0.03087740    -0.03727441
+ipsatized_TIPI1  -0.021481713     0.95997515    -0.11340834
+ipsatized_TIPI2  -0.027501605    -0.12071784     0.95428074
+ipsatized_TIPI3  -0.036290745     0.02535938    -0.16688353
+ipsatized_TIPI4   0.022218869    -0.25970548     0.12817941
+ipsatized_TIPI5   0.017044441     0.15867518    -0.13509164
+ipsatized_TIPI6   0.033065029    -0.68318241    -0.07328539
+ipsatized_TIPI7   0.021550310     0.19604318    -0.39102208
+ipsatized_TIPI8   0.028246853    -0.09883568     0.05362126
+ipsatized_TIPI9  -0.029634489     0.06676858    -0.27632275
+ipsatized_TIPI10 -0.005017054    -0.22041641    -0.06129857
+                 response_TIPI3 response_TIPI4 response_TIPI5
+id                 -0.045915845    0.011284963   0.0008224971
+ipsatized_TIPI1     0.031167709   -0.244068520   0.1736167712
+ipsatized_TIPI2    -0.167224238    0.148187176  -0.1206510887
+ipsatized_TIPI3     0.948872899   -0.298764735   0.0086683433
+ipsatized_TIPI4    -0.307516250    0.962139678  -0.2550686241
+ipsatized_TIPI5    -0.005073157   -0.256663167   0.9192189953
+ipsatized_TIPI6    -0.024670231    0.073760081  -0.2270060851
+ipsatized_TIPI7     0.007475973   -0.008942264   0.0736922080
+ipsatized_TIPI8    -0.550478491    0.158821663  -0.0270662628
+ipsatized_TIPI9     0.268938383   -0.690397982   0.0655434271
+ipsatized_TIPI10   -0.108530999   -0.002177791  -0.3767678405
+                 response_TIPI6 response_TIPI7 response_TIPI8
+id                  0.021000522    0.007644219     0.01618021
+ipsatized_TIPI1    -0.666541441    0.170445729    -0.08266381
+ipsatized_TIPI2    -0.038939637   -0.403279907     0.06565301
+ipsatized_TIPI3     0.015568018   -0.020080341    -0.54989652
+ipsatized_TIPI4     0.091005873   -0.050084957     0.15131155
+ipsatized_TIPI5    -0.203227013    0.024189448    -0.02356731
+ipsatized_TIPI6     0.953180313   -0.215281446    -0.08954131
+ipsatized_TIPI7    -0.162399055    0.949232042    -0.08558253
+ipsatized_TIPI8    -0.067303304   -0.119072017     0.95695523
+ipsatized_TIPI9    -0.009290563   -0.028893032    -0.33029253
+ipsatized_TIPI10    0.040201343   -0.228842712    -0.10619799
+                 response_TIPI9 response_TIPI10
+id                  -0.03949432    -0.017594425
+ipsatized_TIPI1      0.09172718    -0.187414036
+ipsatized_TIPI2     -0.26483551    -0.031356832
+ipsatized_TIPI3      0.29771049    -0.076414836
+ipsatized_TIPI4     -0.68790076     0.007123348
+ipsatized_TIPI5      0.08228079    -0.365950413
+ipsatized_TIPI6     -0.02645471     0.029629981
+ipsatized_TIPI7      0.01615832    -0.176200329
+ipsatized_TIPI8     -0.32648284    -0.089488624
+ipsatized_TIPI9      0.95761526    -0.057303325
+ipsatized_TIPI10    -0.06741043     0.941250723</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>test2</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>ipsatize_list</span><span class='op'>(</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>$ipsatized
+# A tibble: 150 x 5
+      id ipsatized_Sepal.Len~ ipsatized_Sepal.Wid~ ipsatized_Petal.Le~
+   &lt;int&gt;                &lt;dbl&gt;                &lt;dbl&gt;               &lt;dbl&gt;
+ 1     1                 2.55                0.95               -1.15 
+ 2     2                 2.53                0.625              -0.975
+ 3     3                 2.35                0.85               -1.05 
+ 4     4                 2.25                0.75               -0.85 
+ 5     5                 2.45                1.05               -1.15 
+ 6     6                 2.55                1.05               -1.15 
+ 7     7                 2.17                0.975              -1.02 
+ 8     8                 2.48                0.875              -1.02 
+ 9     9                 2.18                0.675              -0.825
+10    10                 2.5                 0.7                -0.9  
+# ... with 140 more rows, and 1 more variable:
+#   ipsatized_Petal.Width &lt;dbl&gt;
+
+$raw
+# A tibble: 150 x 5
+      id response_Sepal.Leng~ response_Sepal.Width response_Petal.Len~
+   &lt;int&gt;                &lt;dbl&gt;                &lt;dbl&gt;               &lt;dbl&gt;
+ 1     1                  5.1                  3.5                 1.4
+ 2     2                  4.9                  3                   1.4
+ 3     3                  4.7                  3.2                 1.3
+ 4     4                  4.6                  3.1                 1.5
+ 5     5                  5                    3.6                 1.4
+ 6     6                  5.4                  3.9                 1.7
+ 7     7                  4.6                  3.4                 1.4
+ 8     8                  5                    3.4                 1.5
+ 9     9                  4.4                  2.9                 1.4
+10    10                  4.9                  3.1                 1.5
+# ... with 140 more rows, and 1 more variable:
+#   response_Petal.Width &lt;dbl&gt;
+
+$correlation_matrix
+                                id response_Sepal.Length
+id                      1.00000000             0.7166763
+ipsatized_Sepal.Length -0.25714094             0.3325941
+ipsatized_Sepal.Width  -0.86197818            -0.8057327
+ipsatized_Petal.Length  0.87192559             0.7855245
+ipsatized_Petal.Width   0.08708789            -0.4736449
+                       response_Sepal.Width response_Petal.Length
+id                               -0.4023010             0.8826365
+ipsatized_Sepal.Length            0.2741067            -0.1309424
+ipsatized_Sepal.Width             0.6253708            -0.9690120
+ipsatized_Petal.Length           -0.5686501             0.9834439
+ipsatized_Petal.Width            -0.4460778            -0.1048994
+                       response_Petal.Width
+id                                0.9000274
+ipsatized_Sepal.Length           -0.2411263
+ipsatized_Sepal.Width            -0.9271668
+ipsatized_Petal.Length            0.9327515
+ipsatized_Petal.Width             0.0736434</code></pre>
+</div>
+<p>Now let’s combine all of these functions together!</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>ipsatize</span> <span class='op'>&lt;-</span> <span class='kw'>function</span><span class='op'>(</span><span class='va'>df</span><span class='op'>)</span> <span class='op'>{</span>
+  <span class='va'>df</span> <span class='op'>%&gt;%</span> 
+    <span class='fu'>just_num</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+    <span class='fu'>add_id</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+    <span class='fu'>lengthen_data</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+    <span class='fu'>transform_data</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+    <span class='fu'>widen_data</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+    <span class='fu'>ipsatize_list</span><span class='op'>(</span><span class='op'>)</span>
+<span class='op'>}</span>
 </code></pre>
 </div>
 </div>
-<p>So now we have a list with the three dataframes. We can look at the correlations between raw and ipsatized data.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>tibble</span><span class='op'>(</span>
-  <span class='fu'><a href='https://rdrr.io/r/base/diag.html'>diag</a></span><span class='op'>(</span><span class='va'>ips_raw_data</span><span class='op'>$</span><span class='va'>correlation.matrix</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>ips_raw_data</span><span class='op'>$</span><span class='va'>ips</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>ips_raw_data</span><span class='op'>$</span><span class='va'>raw</span><span class='op'>)</span>
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># Test it out</span>
+<span class='fu'>ipsatize</span><span class='op'>(</span><span class='va'>data</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>$ipsatized
+# A tibble: 2,495 x 11
+      id ipsatized_TIPI1 ipsatized_TIPI2 ipsatized_TIPI3
+   &lt;int&gt;           &lt;dbl&gt;           &lt;dbl&gt;           &lt;dbl&gt;
+ 1     1           0.5            -1.5             1.5  
+ 2     2           1.1             2.1             1.1  
+ 3     3           0.400           0.400           0.400
+ 4     4           1               2               2    
+ 5     5          -3.1            -1.1             2.9  
+ 6     6          -0.200          -2.2             1.8  
+ 7     7          -1.9             1.1             0.100
+ 8     8          -0.200           0.8             1.8  
+ 9     9          -0.300           0.7             1.7  
+10    10          -3.5             1.5            -1.5  
+# ... with 2,485 more rows, and 7 more variables:
+#   ipsatized_TIPI4 &lt;dbl&gt;, ipsatized_TIPI5 &lt;dbl&gt;,
+#   ipsatized_TIPI6 &lt;dbl&gt;, ipsatized_TIPI7 &lt;dbl&gt;,
+#   ipsatized_TIPI8 &lt;dbl&gt;, ipsatized_TIPI9 &lt;dbl&gt;,
+#   ipsatized_TIPI10 &lt;dbl&gt;
+
+$raw
+# A tibble: 2,495 x 11
+      id response_TIPI1 response_TIPI2 response_TIPI3 response_TIPI4
+   &lt;int&gt;          &lt;int&gt;          &lt;int&gt;          &lt;int&gt;          &lt;int&gt;
+ 1     1              5              3              6              2
+ 2     2              6              7              6              7
+ 3     3              6              6              6              1
+ 4     4              6              7              7              5
+ 5     5              1              3              7              2
+ 6     6              4              2              6              2
+ 7     7              2              5              4              2
+ 8     8              4              5              6              2
+ 9     9              4              5              6              2
+10    10              1              6              3              1
+# ... with 2,485 more rows, and 6 more variables:
+#   response_TIPI5 &lt;int&gt;, response_TIPI6 &lt;int&gt;, response_TIPI7 &lt;int&gt;,
+#   response_TIPI8 &lt;int&gt;, response_TIPI9 &lt;int&gt;, response_TIPI10 &lt;int&gt;
+
+$correlation_matrix
+                           id response_TIPI1 response_TIPI2
+id                1.000000000    -0.03087740    -0.03727441
+ipsatized_TIPI1  -0.021481713     0.95997515    -0.11340834
+ipsatized_TIPI2  -0.027501605    -0.12071784     0.95428074
+ipsatized_TIPI3  -0.036290745     0.02535938    -0.16688353
+ipsatized_TIPI4   0.022218869    -0.25970548     0.12817941
+ipsatized_TIPI5   0.017044441     0.15867518    -0.13509164
+ipsatized_TIPI6   0.033065029    -0.68318241    -0.07328539
+ipsatized_TIPI7   0.021550310     0.19604318    -0.39102208
+ipsatized_TIPI8   0.028246853    -0.09883568     0.05362126
+ipsatized_TIPI9  -0.029634489     0.06676858    -0.27632275
+ipsatized_TIPI10 -0.005017054    -0.22041641    -0.06129857
+                 response_TIPI3 response_TIPI4 response_TIPI5
+id                 -0.045915845    0.011284963   0.0008224971
+ipsatized_TIPI1     0.031167709   -0.244068520   0.1736167712
+ipsatized_TIPI2    -0.167224238    0.148187176  -0.1206510887
+ipsatized_TIPI3     0.948872899   -0.298764735   0.0086683433
+ipsatized_TIPI4    -0.307516250    0.962139678  -0.2550686241
+ipsatized_TIPI5    -0.005073157   -0.256663167   0.9192189953
+ipsatized_TIPI6    -0.024670231    0.073760081  -0.2270060851
+ipsatized_TIPI7     0.007475973   -0.008942264   0.0736922080
+ipsatized_TIPI8    -0.550478491    0.158821663  -0.0270662628
+ipsatized_TIPI9     0.268938383   -0.690397982   0.0655434271
+ipsatized_TIPI10   -0.108530999   -0.002177791  -0.3767678405
+                 response_TIPI6 response_TIPI7 response_TIPI8
+id                  0.021000522    0.007644219     0.01618021
+ipsatized_TIPI1    -0.666541441    0.170445729    -0.08266381
+ipsatized_TIPI2    -0.038939637   -0.403279907     0.06565301
+ipsatized_TIPI3     0.015568018   -0.020080341    -0.54989652
+ipsatized_TIPI4     0.091005873   -0.050084957     0.15131155
+ipsatized_TIPI5    -0.203227013    0.024189448    -0.02356731
+ipsatized_TIPI6     0.953180313   -0.215281446    -0.08954131
+ipsatized_TIPI7    -0.162399055    0.949232042    -0.08558253
+ipsatized_TIPI8    -0.067303304   -0.119072017     0.95695523
+ipsatized_TIPI9    -0.009290563   -0.028893032    -0.33029253
+ipsatized_TIPI10    0.040201343   -0.228842712    -0.10619799
+                 response_TIPI9 response_TIPI10
+id                  -0.03949432    -0.017594425
+ipsatized_TIPI1      0.09172718    -0.187414036
+ipsatized_TIPI2     -0.26483551    -0.031356832
+ipsatized_TIPI3      0.29771049    -0.076414836
+ipsatized_TIPI4     -0.68790076     0.007123348
+ipsatized_TIPI5      0.08228079    -0.365950413
+ipsatized_TIPI6     -0.02645471     0.029629981
+ipsatized_TIPI7      0.01615832    -0.176200329
+ipsatized_TIPI8     -0.32648284    -0.089488624
+ipsatized_TIPI9      0.95761526    -0.057303325
+ipsatized_TIPI10    -0.06741043     0.941250723</code></pre>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>ipsatize</span><span class='op'>(</span><span class='va'>iris</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>$ipsatized
+# A tibble: 150 x 5
+      id ipsatized_Sepal.Len~ ipsatized_Sepal.Wid~ ipsatized_Petal.Le~
+   &lt;int&gt;                &lt;dbl&gt;                &lt;dbl&gt;               &lt;dbl&gt;
+ 1     1                 2.55                0.95               -1.15 
+ 2     2                 2.53                0.625              -0.975
+ 3     3                 2.35                0.85               -1.05 
+ 4     4                 2.25                0.75               -0.85 
+ 5     5                 2.45                1.05               -1.15 
+ 6     6                 2.55                1.05               -1.15 
+ 7     7                 2.17                0.975              -1.02 
+ 8     8                 2.48                0.875              -1.02 
+ 9     9                 2.18                0.675              -0.825
+10    10                 2.5                 0.7                -0.9  
+# ... with 140 more rows, and 1 more variable:
+#   ipsatized_Petal.Width &lt;dbl&gt;
+
+$raw
+# A tibble: 150 x 5
+      id response_Sepal.Leng~ response_Sepal.Width response_Petal.Len~
+   &lt;int&gt;                &lt;dbl&gt;                &lt;dbl&gt;               &lt;dbl&gt;
+ 1     1                  5.1                  3.5                 1.4
+ 2     2                  4.9                  3                   1.4
+ 3     3                  4.7                  3.2                 1.3
+ 4     4                  4.6                  3.1                 1.5
+ 5     5                  5                    3.6                 1.4
+ 6     6                  5.4                  3.9                 1.7
+ 7     7                  4.6                  3.4                 1.4
+ 8     8                  5                    3.4                 1.5
+ 9     9                  4.4                  2.9                 1.4
+10    10                  4.9                  3.1                 1.5
+# ... with 140 more rows, and 1 more variable:
+#   response_Petal.Width &lt;dbl&gt;
+
+$correlation_matrix
+                                id response_Sepal.Length
+id                      1.00000000             0.7166763
+ipsatized_Sepal.Length -0.25714094             0.3325941
+ipsatized_Sepal.Width  -0.86197818            -0.8057327
+ipsatized_Petal.Length  0.87192559             0.7855245
+ipsatized_Petal.Width   0.08708789            -0.4736449
+                       response_Sepal.Width response_Petal.Length
+id                               -0.4023010             0.8826365
+ipsatized_Sepal.Length            0.2741067            -0.1309424
+ipsatized_Sepal.Width             0.6253708            -0.9690120
+ipsatized_Petal.Length           -0.5686501             0.9834439
+ipsatized_Petal.Width            -0.4460778            -0.1048994
+                       response_Petal.Width
+id                                0.9000274
+ipsatized_Sepal.Length           -0.2411263
+ipsatized_Sepal.Width            -0.9271668
+ipsatized_Petal.Length            0.9327515
+ipsatized_Petal.Width             0.0736434</code></pre>
+</div>
+<p>So now we have a list with the three dataframes. Our function-writing journey is officially complete. Finally, we can explore a couple of ways to use this function and its output.<br />
+<br />
+When using this function on projects for personality research, we may want to look at the correlations between raw and ipsatized data.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>ipsdat</span> <span class='op'>&lt;-</span> <span class='fu'>ipsatize</span><span class='op'>(</span><span class='va'>data</span><span class='op'>)</span>
+
+<span class='fu'>tibble</span><span class='op'>(</span>
+  <span class='fu'><a href='https://rdrr.io/r/base/diag.html'>diag</a></span><span class='op'>(</span><span class='va'>ipsdat</span><span class='op'>$</span><span class='va'>correlation_matrix</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>ipsdat</span><span class='op'>$</span><span class='va'>ipsatized</span><span class='op'>)</span>, <span class='fu'><a href='https://rdrr.io/r/base/colnames.html'>colnames</a></span><span class='op'>(</span><span class='va'>ipsdat</span><span class='op'>$</span><span class='va'>raw</span><span class='op'>)</span>
 <span class='op'>)</span>
 </code></pre>
 </div>
-<pre><code># A tibble: 10 x 3
-   `diag(ips_raw_data$corre~ `colnames(ips_raw_d~ `colnames(ips_raw_d~
-                       &lt;dbl&gt; &lt;chr&gt;                &lt;chr&gt;               
- 1                     0.960 TIPI1_ips            TIPI1               
- 2                     0.954 TIPI2_ips            TIPI2               
- 3                     0.949 TIPI3_ips            TIPI3               
- 4                     0.962 TIPI4_ips            TIPI4               
- 5                     0.919 TIPI5_ips            TIPI5               
- 6                     0.953 TIPI6_ips            TIPI6               
- 7                     0.949 TIPI7_ips            TIPI7               
- 8                     0.957 TIPI8_ips            TIPI8               
- 9                     0.958 TIPI9_ips            TIPI9               
-10                     0.941 TIPI10_ips           TIPI10              </code></pre>
 </div>
-<p>We can also plot raw and ipsatized data. For example, lets look at the item 1.</p>
+<p>We can also plot raw and ipsatized data. For example, let’s look at the item 1.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>TIPI_item1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span><span class='va'>ips_raw_data</span><span class='op'>$</span><span class='va'>raw</span><span class='op'>$</span><span class='va'>TIPI1</span>, <span class='va'>ips_raw_data</span><span class='op'>$</span><span class='va'>ips</span><span class='op'>$</span><span class='va'>TIPI1_ips</span><span class='op'>)</span>
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>TIPI_item1</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/data.frame.html'>data.frame</a></span><span class='op'>(</span><span class='va'>ipsdat</span><span class='op'>$</span><span class='va'>raw</span><span class='op'>$</span><span class='va'>TIPI1</span>, <span class='va'>ipsdat</span><span class='op'>$</span><span class='va'>ipsatized</span><span class='op'>$</span><span class='va'>TIPI1_ips</span><span class='op'>)</span>
 
 <span class='va'>TIPI_item1</span> <span class='op'>%&gt;%</span> 
   <span class='fu'>ggplot</span><span class='op'>(</span><span class='op'>)</span><span class='op'>+</span>
@@ -3454,15 +4735,8 @@ ii. What will the the function <em>do</em>?<br />
   <span class='fu'>theme_minimal</span><span class='op'>(</span><span class='op'>)</span>
 </code></pre>
 </div>
-<p><img src="write-a-function_files/figure-html5/unnamed-chunk-20-1.png" width="624" /></p>
 </div>
-<h1 id="things-to-work-on">Things to work on</h1>
-<ol type="1">
-<li>Formatting - how to add links</li>
-<li>Plots - make them pretty, can add a vline for the mean, can change colors to a colorblind palette, can annotate</li>
-<li>conclusion</li>
-</ol>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>

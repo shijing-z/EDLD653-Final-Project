@@ -82,7 +82,7 @@ With the libraries loaded and data imported, we can now begin building our funct
 
 ### Taking a look at the data
 
-First, though, we can brush off our function-building skills with a simple function to start. In the code above, we used `head()` to take a look at the data and `kable()` to format it. We'll be doing this same process many, many times throughout the tutorial, meaning it would be a very useful function for us. This function, `glance()` will have two arguments: df and nrows, which are the dataframe and the desired number of preview rows, respectively.
+First, though, we can brush off our function-building skills with a simple function to start. In the code above, we used `head()` to take a look at the data and `kable()` to format it. We'll be doing this same process many, many times throughout the tutorial, so it would be a very useful function for us. This function, `glance()` will have two arguments: df and nrows, which are the dataframe and the desired number of preview rows, respectively.
 
 ```{r}
 glance <- function(df, nrows) {
@@ -183,7 +183,7 @@ list_output
 This list is what we set out to create! We've achieved our goal.\
 Now that we've solved this problem in a specific case, we can begin to generalize it to a function. Or, rather, a set of functions!
 
-### Applying specific case to generalized function s
+### Applying specific case to generalized functions
 
 Since we want each function to only do one task, we can first outline the individual tasks that make up the ipsatization process.
 
@@ -193,7 +193,8 @@ Since we want each function to only do one task, we can first outline the indivi
 4. Pivot the data back to a wider format
 5. Create a list to organize the output
 
-Now we can set out to make a function to complete each task. These functions don't ever have to be used on their own; in the end, they'll all be combined into a final, single function. This may seem like it's making work more complicated, but this approach enhances readability of your code and aids in troubleshooting errors. Since we've done the majority of the problem solving already, we can essentially copy and paste our code from above, making sure to adapt as necessary to the function format. Luckily, for the current tutorial, these changes mostly consist of changing the name of the dataframe input to "df," which is the name of our only argument in this function./
+Now we can set out to make a function to complete each task. These functions don't ever have to be used on their own; in the end, they'll all be combined into a final, single function. This may seem like it's making work more complicated, but this approach enhances readability of your code and aids in troubleshooting errors.\
+Since we've done the majority of the problem solving already, we can essentially copy and paste our code from above, making sure to adapt as necessary to the function format. Luckily, for the current tutorial, these changes mostly consist of changing the name of the dataframe input to "df," which is the name of our only argument in this function./
 After we build each function, we can test that it works with some datasets to ensure it works.
 
 1. Add an ID variable to the dataframe
@@ -203,7 +204,9 @@ add_id <- function(df) {
   df %>%
     mutate(id = c(1:nrow(df)))
 }
+```
 
+```{r}
 # Test it out
 test1 <- data %>% 
   add_id()
@@ -226,7 +229,8 @@ We can accomplish this using the `map_lgl()` function from the `purrr` package, 
 
 
 ```{r}
-iris[ , purrr::map_lgl(iris, is.numeric)]
+iris[ , purrr::map_lgl(iris, is.numeric)] %>% 
+  glance(10)
 ```
 
 Just like before, we can now translate that code into a function. This time, we'll also add a condition to our function: If there are no numeric columns in the dataset, the function will throw an error saying so. If there is at least one numeric column, the function will run as normal.
@@ -241,7 +245,9 @@ just_num <- function(df) {
       df1
     }
 }
+```
 
+```{r}
 # Test it out
 test1 <- test1 %>% 
   just_num()
@@ -265,7 +271,9 @@ lengthen_data <- function(df) {
   df %>% 
   pivot_longer(cols = !id, names_to = "item", values_to = "response")
 }
+```
 
+```{r}
 # Test it out
 test1 <- test1 %>% 
   lengthen_data()
@@ -289,7 +297,9 @@ transform_data <- function(df) {
   mutate(mean_row = mean(response, na.rm = TRUE), # Calculate participant mean
          ipsatized = response - mean_row) # Calculate individual response deviation from mean
 }
+```
 
+```{r}
 # Test it out
 test1 <- test1 %>% 
   transform_data()
@@ -320,45 +330,46 @@ data_raw <- df %>%
   select(id, contains("response")) %>% 
    ungroup()
 
-data_ips
-data_raw
+outputlist <- list("data_ips" = data_ips, 
+                   "data_raw" = data_raw)
+
+return(outputlist)
 }
+```
 
-iris %>% 
-  add_id() %>% 
-  just_num() %>% 
-  lengthen_data() %>% 
-  transform_data() %>% 
-  widen_data()
-
+```{r}
 # Test it out
-test1 <- as.tibble(test1) %>% 
+test1 <- test1 %>% 
   widen_data()
 
 test2 <- test2 %>% 
   widen_data()
 
-test1 %>% 
-  glance(15)
+test1
 
-test2 %>% 
-  glance(15)
+test2
 ```
 
 5. Create a list to organize the output
 
 ```{r}
 ipsatize_list <- function(df) {
-  list("ipsatized" = data_ips,
-          "raw" = data_raw,
-          "correlation_matrix" = cor(data_ips, data_raw))
+  list("ipsatized" = df$data_ips,
+          "raw" = df$data_raw,
+          "correlation_matrix" = cor(df$data_ips, df$data_raw))
 }
 
+# list("ipsatized" = test2$data_ips,
+#           "raw" = test2$data_raw,
+#           "correlation_matrix" = cor(test2$data_ips, test2$data_raw))
+```
+
+```{r}
 # Test it out
 test1 %>%
   ipsatize_list()
 
-test1 %>%
+test2 %>%
   ipsatize_list()
 ```
 
@@ -367,32 +378,37 @@ Now let's combine all of these functions together!
 ```{r}
 ipsatize <- function(df) {
   df %>% 
+    just_num() %>% 
     add_id() %>% 
     lengthen_data() %>% 
     transform_data() %>% 
     widen_data() %>% 
     ipsatize_list()
 }
+```
 
+```{r}
 # Test it out
 ipsatize(data)
 ipsatize(iris)
 ```
 
+So now we have a list with the three dataframes. Our function-writing journey is officially complete. Finally, we can explore a couple of ways to use this function and its output.\
+\
+When using this function on projects for personality research, we may want to look at the correlations between raw and ipsatized data.
 
+```{r echo=TRUE, eval=F}
+ipsdat <- ipsatize(data)
 
-So now we have a list with the three dataframes. We can look at the correlations between raw and ipsatized data.
-
-```{r echo=TRUE}
 tibble(
-  diag(ips_raw_data$correlation.matrix), colnames(ips_raw_data$ips), colnames(ips_raw_data$raw)
+  diag(ipsdat$correlation_matrix), colnames(ipsdat$ipsatized), colnames(ipsdat$raw)
 )
 ```
 
-We can also plot raw and ipsatized data. For example, lets look at the item 1.
+We can also plot raw and ipsatized data. For example, let's look at the item 1.
 
-```{r}
-TIPI_item1 <- data.frame(ips_raw_data$raw$TIPI1, ips_raw_data$ips$TIPI1_ips)
+```{r eval=F}
+TIPI_item1 <- data.frame(ipsdat$raw$TIPI1, ipsdat$ipsatized$TIPI1_ips)
 
 TIPI_item1 %>% 
   ggplot()+
@@ -400,7 +416,3 @@ TIPI_item1 %>%
    geom_density(aes(x=TIPI_item1[,2]), colour="blue", fill = "blue", alpha = .5) +
   theme_minimal()
 ```
-
-# Things to work on 
-3. Plots - make them pretty, can add a vline for the mean, can change colors to a colorblind palette, can annotate 
-4. conclusion
