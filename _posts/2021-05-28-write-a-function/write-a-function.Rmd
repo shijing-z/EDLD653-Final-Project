@@ -319,13 +319,13 @@ test2 %>%
 ```{r}
 widen_data <- function(df) {
   # Create ipsatized data frame
-data_ips <- df %>% 
+data_ips_id <- df %>% 
   pivot_wider(id_cols = id, names_from = item, values_from = c(response, ipsatized)) %>%
   select(id, contains("ipsatized")) %>% 
    ungroup()
 
 # Create raw dataframe
-data_raw <- df %>% 
+data_raw_id <- df %>% 
   pivot_wider(id_cols = id, names_from = item, values_from = c(response, ipsatized)) %>%
   select(id, contains("response")) %>% 
    ungroup()
@@ -358,10 +358,6 @@ ipsatize_list <- function(df) {
           "raw" = df$data_raw,
           "correlation_matrix" = cor(df$data_ips, df$data_raw))
 }
-
-# list("ipsatized" = test2$data_ips,
-#           "raw" = test2$data_raw,
-#           "correlation_matrix" = cor(test2$data_ips, test2$data_raw))
 ```
 
 ```{r}
@@ -397,18 +393,22 @@ So now we have a list with the three dataframes. Our function-writing journey is
 \
 When using this function on projects for personality research, we may want to look at the correlations between raw and ipsatized data.
 
-```{r echo=TRUE, eval=F}
+```{r echo=TRUE}
 ipsdat <- ipsatize(data)
 
 tibble(
   diag(ipsdat$correlation_matrix), colnames(ipsdat$ipsatized), colnames(ipsdat$raw)
 )
+
+ipsdat
 ```
 
 We can also plot raw and ipsatized data. For example, let's look at the item 1.
 
-```{r eval=F}
-TIPI_item1 <- data.frame(ipsdat$raw$TIPI1, ipsdat$ipsatized$TIPI1_ips)
+```{r}
+# THIS PLOT NEEDS TO BE FORMATTED
+
+TIPI_item1 <- data.frame(ipsdat$raw$response_TIPI1, ipsdat$ipsatized$ipsatized_TIPI1)
 
 TIPI_item1 %>% 
   ggplot()+
