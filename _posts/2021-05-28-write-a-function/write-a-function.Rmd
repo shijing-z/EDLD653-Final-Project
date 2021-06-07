@@ -20,7 +20,7 @@ knitr::opts_chunk$set(message = FALSE)
 
 # Ipsatization
 
-This is a tutorial on using functional programming to solve specific problems in research. This tutorial addresses the issue of Ipsatization which consists of methods of data transformation used in Personality Psychology and Social Psychology research. Ipsatization transforms each participant's ratings relative to their average response such that the total and the average of the participant's scores across all items in the data set are zero (or another constant for all people) ([Greer and Dunlap, 1997](https://psycnet.apa.org/record/1997-06270-006)).
+This is a tutorial on using functional programming to solve specific problems in research. This tutorial addresses the issue of __ipsatization__, which consists of methods of data transformation used in Personality Psychology and Social Psychology research. Ipsatization transforms each participant's ratings relative to their average response such that the total and the average of the participant's scores across all items in the data set are zero (or another constant for all people) ([Greer and Dunlap, 1997](https://psycnet.apa.org/record/1997-06270-006)). In simpler terms, it's a transformation in which you compute an average response for each participant and then subtract that average from each of their individual responses.
 
 Packages such as [`multicon`](https://cran.r-project.org/web/packages/multicon/multicon.pdf) have built functions like [`ipsatize()`](https://rdrr.io/cran/multicon/man/ipsatize.html) which enable standardizing rows of the dataframes being studied. However it does not address the various types of ipsative scorings available for carrying out different transformations.
 
@@ -34,8 +34,8 @@ Before we get started, we need to load the libraries necessary to complete this 
 library(tidyverse)
 library(purrr)
 library(rio) # optional
-library(here) #optional
-library(knitr) #optional
+library(here) # optional
+library(knitr) # optional
 ```
 
 # About the Data
@@ -54,18 +54,18 @@ This particular dataset contains observations from N=2495 individuals who comple
 
 ### Importing the Data
 
-When importing data, two important things to keep in mind are your working directory and reproducibility. Where you save your files can impact the ease at which you can call them; you'll have the best luck saving data files of interest within the corresponding R Project. `rio`'s `import()` function provides an easy method for importing data files, including the ability to set the class of the data to tibble, which helps to retain the data in a format which is more amenable to data manipulation in `tidyverse`. To enhance reproducibility across different devices, we'll use the `here()` function within the [`here`](https://here.r-lib.org/) package when specifying our file path.
+When importing data, two important things to keep in mind are your working directory and reproducibility. Where you save your files can impact the ease at which you can call them; you'll have the best luck saving data files of interest within the corresponding R Project. `rio`'s `import()` function provides an easy method for importing data files, including the ability to set the class of the data to tibble, which helps to retain the data in a format which is more amenable to data manipulation in `tidyverse`. To enhance reproducibility across different devices and potentially changing file paths, we'll use the `here()` function within the [`here`](https://here.r-lib.org/) package when specifying our file path.
 
 ```{r}
 # Import data
-df_tipi <- rio::import(here::here("content/dataCT.csv"), setclass = "tibble")
+full_df <- rio::import(here::here("content/dataCT.csv"), setclass = "tibble")
 ```
 
 For the current project, we'll only be working with the TIPI items, so to simplify the dataframe we're using, we can select only those columns.
 
 ```{r}
 # Select desired variables
-data <- df_tipi %>% 
+data <- full_df %>% 
   select(TIPI1:TIPI10)
 ```
 
@@ -82,7 +82,7 @@ With the libraries loaded and data imported, we can now begin building our funct
 
 ### Taking a look at the data
 
-First, though, we can brush off our function-building skills with a simple function to start. In the code above, we used `head()` to take a look at the data and `kable()` to format it. We'll be doing this same process many, many times throughout the tutorial, so it would be a very useful function for us. This function, `glance()` will have two arguments: df and nrows, which are the dataframe and the desired number of preview rows, respectively.
+First, though, we can brush off our function-building skills with a simple function to start. In the code above, we used `head()` to take a look at the data and `kable()` to format it. We'll be doing this same process many, many times throughout the tutorial, so it would be a very useful function for us. This function, `glance()`, will have two arguments: df and nrows, which are the dataframe and the desired number of preview rows, respectively.
 
 ```{r}
 glance <- function(df, nrows) {
@@ -90,7 +90,13 @@ glance <- function(df, nrows) {
     head(n = nrows) %>% 
     knitr::kable()
 }
+
+# Test it out
+data %>% 
+  glance(5)
 ```
+
+This works! Now we can move on to building something more complex.
 
 ## Building Functions
 
@@ -98,12 +104,12 @@ There are several ways in which one could go about building functions. The appro
 
 As you think about building a function, keep in mind the purpose of why you set to build a function in the first place. Your function will ideally solve a problem specific to your analysis or can also be used by others to carry out their analyses.
 
-Let's state the problem first: The difference between raw and ipsatized data has been studied to some extent leading to several debates amongst researchers questioning the utility of these methods. It is therefore important to look at correlations between the raw and ipsatized data.
+Let's state the problem first: The difference between raw and ipsatized data has been studied to some extent leading to several debates amongst researchers questioning the utility of these methods. It is therefore important to look at correlations between the raw and ipsatized data. With this function, we will perform the ipsatization transformation and correlate its results with the raw data.
 
 Now that we understand the problem, let's think about how our function could address this problem. Here are a sequence of questions which will help you think about the function you intend to build.
 
 __What is the goal of this function?__\
-Basically, what do we need this function to do? For the current tutorial, we are writing a function that ipsatizes any dataset, meaning that it will compute the means of the rows and subtract the mean from every score in the respective rows. Ideally, it will produce output in the form of a list containing the raw and transformed (i.e., ipsatized) data.
+Basically, what do we need this function to do? For the current tutorial, we are writing a function that ipsatizes any dataset, meaning that it will compute the means of the rows and subtract the mean from every score in the respective rows. Ideally, it will produce output in the form of a list containing the raw and transformed (i.e., ipsatized) data, along with a correlation matrix.
 
 __How can we achieve this goal for a specific dataset?__\
 As we learned in previous posts, when taking a functional programming approach to this problem, we should first attempt to solve it within a specific case. Once we've done so, we can then consider generalizing to a function. For this tutorial, we will be solving the problem first with the TIPI dataset, and then we can apply that solution to build the final function.
@@ -119,7 +125,7 @@ First, though, we need to create an ID for each participant that can then be use
 
 ```{r}
 data_id <- data %>% 
-  mutate(id = c(1:nrow(data))) # Create ID column
+  mutate(id = c(1:nrow(data))) # Create ID variable
 
 data_id %>%
   glance(5)
@@ -151,15 +157,15 @@ Now, we can use `pivot_wider()` to transform the data back to its original forma
 
 ```{r}
 # Create ipsatized data frame
-data_ips <- data_dev %>% 
+data_ips <- data_dev %>%
   pivot_wider(id_cols = id, names_from = item, values_from = c(response, ipsatized)) %>%
-  select(id, contains("ipsatized")) %>% 
+  select(id, contains("ipsatized")) %>%
    ungroup()
 
 # Create raw dataframe
-data_raw <- data_dev %>% 
+data_raw <- data_dev %>%
   pivot_wider(id_cols = id, names_from = item, values_from = c(response, ipsatized)) %>%
-  select(id, contains("response")) %>% 
+  select(id, contains("response")) %>%
    ungroup()
 
 # Take a look at the results
@@ -180,10 +186,10 @@ list_output <- list("ipsatized" = data_ips,
 list_output
 ```
 
-This list is what we set out to create! We've achieved our goal.\
+This list is what we set out to create! We've achieved our goal using this dataset.\
 Now that we've solved this problem in a specific case, we can begin to generalize it to a function. Or, rather, a set of functions!
 
-### Applying specific case to generalized functions
+### Applying specific case to generalized function(s)
 
 Since we want each function to only do one task, we can first outline the individual tasks that make up the ipsatization process.
 
@@ -194,8 +200,8 @@ Since we want each function to only do one task, we can first outline the indivi
 5. Create a list to organize the output
 
 Now we can set out to make a function to complete each task. These functions don't ever have to be used on their own; in the end, they'll all be combined into a final, single function. This may seem like it's making work more complicated, but this approach enhances readability of your code and aids in troubleshooting errors.\
-Since we've done the majority of the problem solving already, we can essentially copy and paste our code from above, making sure to adapt as necessary to the function format. Luckily, for the current tutorial, these changes mostly consist of changing the name of the dataframe input to "df," which is the name of our only argument in this function./
-After we build each function, we can test that it works with some datasets to ensure it works.
+Since we've done the majority of the problem solving already, we can essentially copy and paste our code from above, making sure to adapt as necessary to the function format. Luckily, for the current tutorial, these changes mostly consist of changing the name of the dataframe input to "df," which is the name of our only argument in this function.\
+After we build each function, we can test that it works with both our TIPI dataset and the `iris` dataset to ensure it can handle different data.
 
 1. Add an ID variable to the dataframe
 
@@ -225,15 +231,14 @@ It works! However, when looking at the output for the dataframe `iris`, you may 
 
 1.5. Select only numeric columns from dataframe
 
-We can accomplish this using the `map_lgl()` function from the `purrr` package, which we've discussed in previous posts as well. We specify that if the sum of all possible numeric columns in a dataframe is 0, we stop the loop and throw an error message else return the dataframe. This will ensure that all the columns in the dataframe we are working with are numeric. We are using `map_lgl` from the `purrr` package which maps the `is.numeric` function to every column in the dataframe.
-
+We can accomplish this using the `map_lgl()` function from the `purrr` package, which maps the `is.numeric()` function to every column in the dataframe and is appropriate in this case because the output will be a logical vector. This will ensure that all the columns in the dataframe we are working with are numeric. First, we can try writing this code to solve the problem in the `iris` dataset specifically.
 
 ```{r}
 iris[ , purrr::map_lgl(iris, is.numeric)] %>% 
   glance(10)
 ```
 
-Just like before, we can now translate that code into a function. This time, we'll also add a condition to our function: If there are no numeric columns in the dataset, the function will throw an error saying so. If there is at least one numeric column, the function will run as normal.
+Just like before, we can now translate that code into a function. This time, we'll also add a condition to our function: If there are no numeric columns in the dataset (i.e., if the sum of all possible numeric columns is 0), the loop will stop and the function will throw an error message. If there is at least one numeric column, the function will run as normal.
 
 ```{r}
 just_num <- function(df) {
@@ -260,6 +265,32 @@ test1 %>%
 
 test2 %>% 
   glance(15)
+```
+
+To test our condition, we should also test this function with a dataset that has no numeric columns. 
+
+```{r}
+test3 <- tibble(letters, LETTERS)
+
+test3 %>% 
+  glance(5)
+```
+
+When doing so, we can also explore the utility of the `safely()` function from `purrr`. If we use `just_num()` on `test3` and it throws the correct error, we will not be able to knit this document. `safely()` allows you to create "safe" functions that will return output that also "captures" errors, which would normally stop a function from being able to run. This can be very useful for troubleshooting and will help us test our function on `test3`.
+
+```{r}
+# Test it out with `safely()`
+safe_just_num <- purrr::safely(just_num)
+
+test3 %>% 
+  safe_just_num()
+
+# vs:
+
+test4 <- tibble(1:5, 6:10)
+
+test4 %>% 
+  safe_just_num()
 ```
 
 Critically, this function will allow our final function to generalize to multiple different datasets. With that done, we can continue with the rest of our outlined tasks.
@@ -319,20 +350,22 @@ test2 %>%
 ```{r}
 widen_data <- function(df) {
   # Create ipsatized data frame
-data_ips_id <- df %>% 
+data_ips_id <- df %>%
   pivot_wider(id_cols = id, names_from = item, values_from = c(response, ipsatized)) %>%
-  select(id, contains("ipsatized")) %>% 
+  select(id, contains("ipsatized")) %>%
    ungroup()
 
 # Create raw dataframe
-data_raw_id <- df %>% 
+data_raw_id <- df %>%
   pivot_wider(id_cols = id, names_from = item, values_from = c(response, ipsatized)) %>%
-  select(id, contains("response")) %>% 
+  select(id, contains("response")) %>%
    ungroup()
 
+# Functions don't return multiple objects, so we have to wrap them into a single list
 outputlist <- list("data_ips" = data_ips, 
                    "data_raw" = data_raw)
 
+# Return list
 return(outputlist)
 }
 ```
@@ -350,7 +383,7 @@ test1
 test2
 ```
 
-5. Create a list to organize the output
+5. Create a list to organize the desired, final output
 
 ```{r}
 ipsatize_list <- function(df) {
@@ -389,6 +422,16 @@ ipsatize(data)
 ipsatize(iris)
 ```
 
+The utility of `safely()` is especially apparent with this function. In addition to running code that would normally stop with an error, it also tells you in which specific function the error is occurring: in `just_num()`.
+
+```{r}
+# Test it out with `safely()`
+safe_ipsatize <- safely(ipsatize)
+
+test3 %>% 
+  safe_ipsatize()
+```
+
 So now we have a list with the three dataframes. Our function-writing journey is officially complete. Finally, we can explore a couple of ways to use this function and its output.\
 \
 When using this function on projects for personality research, we may want to look at the correlations between raw and ipsatized data.
@@ -398,21 +441,29 @@ ipsdat <- ipsatize(data)
 
 tibble(
   diag(ipsdat$correlation_matrix), colnames(ipsdat$ipsatized), colnames(ipsdat$raw)
-)
-
-ipsdat
+) %>% 
+  rename(Correlation = `diag(ipsdat$correlation_matrix)`,
+         Ipsatized = `colnames(ipsdat$ipsatized)`,
+         Raw = `colnames(ipsdat$raw)`
+) %>% 
+  filter(Ipsatized != "id",
+         Raw != "id") %>% 
+  knitr::kable()
 ```
 
-We can also plot raw and ipsatized data. For example, let's look at the item 1.
+We can also plot raw and ipsatized data. For example, let's look at Item 1.
 
 ```{r}
-# THIS PLOT NEEDS TO BE FORMATTED
-
-TIPI_item1 <- data.frame(ipsdat$raw$response_TIPI1, ipsdat$ipsatized$ipsatized_TIPI1)
+TIPI_item1 <- data.frame(ipsdat$raw$response_TIPI1, ipsdat$ipsatized$ipsatized_TIPI1) %>% 
+  rename(Raw = ipsdat.raw.response_TIPI1,
+         Ipsatized = ipsdat.ipsatized.ipsatized_TIPI1) %>% 
+  pivot_longer(cols = Raw:Ipsatized, names_to = "Data", values_to = "Item1")
 
 TIPI_item1 %>% 
-  ggplot()+
-   geom_density(aes(x=TIPI_item1[,1]), colour="red", fill = "red", alpha = .5) + 
-   geom_density(aes(x=TIPI_item1[,2]), colour="blue", fill = "blue", alpha = .5) +
+  ggplot() +
+  geom_density(aes(x = Item1, color = Data, fill = Data), alpha = .5) +
+  labs(x = "TIPI Item 1", y = "Density") +
+  colorblindr::scale_color_OkabeIto() +
+  colorblindr::scale_fill_OkabeIto() +
   theme_minimal()
 ```
