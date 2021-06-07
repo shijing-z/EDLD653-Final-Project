@@ -91,7 +91,7 @@ Let's state the problem first: The difference between raw and ipsatized data has
 Now that we understand the problem, let's think about how our function could address this problem. Here are a sequence of questions which will help you think about the function you intend to build.
 
 __What is the goal of this function?__\
-What do we need this function to do? For the current tutorial, we are writing a function that ipsatizes any dataset, meaning that it will compute the means of the rows and subtract the mean from every score in the respective rows. Ideally, it will produce output in the form of a list containing the raw and transformed (i.e., ipsatized) data.
+Basically, what do we need this function to do? For the current tutorial, we are writing a function that ipsatizes any dataset, meaning that it will compute the means of the rows and subtract the mean from every score in the respective rows. Ideally, it will produce output in the form of a list containing the raw and transformed (i.e., ipsatized) data.
 
 ```{r eval=FALSE}
 ipsatize.MeanDev(dataframe) # Raleigh edit: I'm not sure what's going on in this chunk
@@ -107,7 +107,7 @@ As we learned in previous posts, when taking a functional programming approach t
 __How can we break the function's goal into smaller tasks?__\
 Most likely, we aren't just going to be writing one function in this tutorial. Ideally, a function should complete exactly one task; therefore, when we are attempting to build a function to complete a complicated task like ipsatization, we will need to write multiple simple functions and combine them. Thus, it can be helpful to first outline and think through each step of the process and eventually create a function for each step.
 
-### Step 1: Creating an ID column
+### Solving for a specific case
 
 To ipsatize the data, we need to calculate each participant's mean response to the TIPI scale items and then subtract each response by that mean. This means we need to be able to conduct these operations by row rather than by column. One of the easier ways to do this is to use `pivot_longer()` to transform the data into a "longer" format. 
 
@@ -136,29 +136,56 @@ data_long %>%
 Instead of participants' responses being organized by row, all responses are now contained in one column and can be identified using the corresponding ID and Item values. We can use `tidyverse`'s `group_by()` function to group this dataframe by participant ID and then compute 1) the mean for each group and 2) the difference between each response and the mean of its group.
 
 ```{r}
-data_long <- data_long %>% 
+data_dev <- data_long %>% 
   group_by(id) %>% # Group by participant ID
   mutate(mean_row = mean(response, na.rm = TRUE), # Calculate participant mean
-         deviation = response - mean_row) # Calculate individual response deviation from mean
+         ipsatized = response - mean_row) # Calculate individual response deviation from mean
 
-data_long %>% 
+data_dev %>% 
   head(n = 15) %>% 
   knitr::kable()
 ```
 
-Now, we can use `pivot_wider()` to transform the data back to its original format.
+Now, we can use `pivot_wider()` to transform the data back to its original format. Because we want the function output to be formatted as a list that contains the ipsatized data, raw data, and a correlation matrix of the two, it will be helpful to create two dataframes: an ipsatized dataframe and a raw dataframe.
 
 ```{r}
-data_wide <- data_long %>% 
-  pivot_wider(names_from = item, values_from = deviation) %>% # something is going wrong here
-  select(id, !mean_row) %>% 
+# Create ipsatized data frame
+data_ips <- data_dev %>% 
+  pivot_wider(id_cols = id, names_from = item, values_from = c(response, ipsatized)) %>%
+  select(id, contains("ipsatized")) %>% 
    ungroup()
 
-data_wide %>% 
+# Create raw dataframe
+data_raw <- data_dev %>% 
+  pivot_wider(id_cols = id, names_from = item, values_from = c(response, ipsatized)) %>%
+  select(id, contains("response")) %>% 
+   ungroup()
+
+# Take a look at the results
+data_ips %>% 
+  head(n = 15) %>% 
+  knitr::kable()
+
+data_raw %>% 
   head(n = 15) %>% 
   knitr::kable()
 ```
 
+Lastly, let's create that list.
+
+```{r}
+list_output <- list("ipsatized" = data_ips,
+          "raw" = data_raw,
+          "correlation_matrix" = cor(data_ips, data_raw))
+
+list_output
+```
+
+This list is what we set out to create! We've achieved our goal. Now that we've solved this problem in a specific case, we can begin to generalize it to a function. Or, rather, a set of functions!
+
+### Applying specific case to generalized function s
+
+------------------------------------------------------------------------------------------
 That works! Now let's wrap this within a function. We will call it `add_id`
 
 ```{r}
@@ -280,6 +307,8 @@ ipsatize_MeanDev <- function(set){
 }
 
 ips_raw_data <- ipsatize_MeanDev(data)
+
+
 ```
 
 So now we have a list with the three dataframes. We can look at the correlations between raw and ipsatized data.

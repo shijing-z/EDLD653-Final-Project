@@ -116,7 +116,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <!--/radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-resource-manifest">
-  {"type":"character","attributes":{},"value":["write-a-function_files/anchor-4.2.2/anchor.min.js","write-a-function_files/bowser-1.9.3/bowser.min.js","write-a-function_files/distill-2.2.21/template.v2.js","write-a-function_files/figure-html5/unnamed-chunk-17-1.png","write-a-function_files/figure-html5/unnamed-chunk-19-1.png","write-a-function_files/header-attrs-2.6/header-attrs.js","write-a-function_files/header-attrs-2.7/header-attrs.js","write-a-function_files/header-attrs-2.8/header-attrs.js","write-a-function_files/jquery-1.11.3/jquery.min.js","write-a-function_files/popper-2.6.0/popper.min.js","write-a-function_files/tippy-6.2.7/tippy-bundle.umd.min.js","write-a-function_files/tippy-6.2.7/tippy-light-border.css","write-a-function_files/tippy-6.2.7/tippy.css","write-a-function_files/tippy-6.2.7/tippy.umd.min.js","write-a-function_files/webcomponents-2.0.0/webcomponents.js"]}
+  {"type":"character","attributes":{},"value":["write-a-function_files/anchor-4.2.2/anchor.min.js","write-a-function_files/bowser-1.9.3/bowser.min.js","write-a-function_files/distill-2.2.21/template.v2.js","write-a-function_files/figure-html5/unnamed-chunk-17-1.png","write-a-function_files/figure-html5/unnamed-chunk-19-1.png","write-a-function_files/figure-html5/unnamed-chunk-20-1.png","write-a-function_files/header-attrs-2.6/header-attrs.js","write-a-function_files/header-attrs-2.7/header-attrs.js","write-a-function_files/header-attrs-2.8/header-attrs.js","write-a-function_files/jquery-1.11.3/jquery.min.js","write-a-function_files/popper-2.6.0/popper.min.js","write-a-function_files/tippy-6.2.7/tippy-bundle.umd.min.js","write-a-function_files/tippy-6.2.7/tippy-light-border.css","write-a-function_files/tippy-6.2.7/tippy.css","write-a-function_files/tippy-6.2.7/tippy.umd.min.js","write-a-function_files/webcomponents-2.0.0/webcomponents.js"]}
   </script>
   <!--radix_placeholder_navigation_in_header-->
 <meta name="distill:offset" content="../.."/>
@@ -2115,15 +2115,16 @@ document.addEventListener('DOMContentLoaded', function() {
 </div>
 </div>
 <h1 id="about-the-data">About the Data</h1>
-<p>For this tutorial, we will be working with a dataset containing the Ten Item Personality Inventory (TIPI; <a href="https://psycnet.apa.org/record/2003-09807-003">Gosling, S. D., Rentfrow, P. J., &amp; Swann, W. B., Jr., 2003</a>), a brief measure of the Big Five Personality Domains (<a href="https://psycnet.apa.org/record/1993-17546-001">Goldberg, 1993</a>). Each item asks respondents to rate themselves on attributes (e.g., extraverted, critical, anxious, calm, etc.) using a Likert scale ranging from 1 to 7, wherein:<br />
+<p>For this tutorial, we will be working with a dataset containing the Ten Item Personality Inventory (TIPI; <a href="https://psycnet.apa.org/record/2003-09807-003">Gosling, S. D., Rentfrow, P. J., &amp; Swann, W. B., Jr., 2003</a>), a brief measure of the Big Five Personality Domains (<a href="https://psycnet.apa.org/record/1993-17546-001">Goldberg, 1993</a>). Each item asks respondents to rate themselves on attributes (e.g., extroverted, critical, anxious, calm, etc.) using a Likert scale ranging from 1 to 7, wherein:<br />
 <br />
-1 = Disagree strongly<br />
-2 = Disagree moderately<br />
-3 = Disagree a little<br />
-4 = Neither agree nor disagree<br />
-5 = Agree a little<br />
-6 = Agree moderately<br />
-7 = Agree strongly</p>
+1 = “Disagree strongly”<br />
+2 = “Disagree moderately”<br />
+3 = “Disagree a little”<br />
+4 = “Neither agree nor disagree”<br />
+5 = “Agree a little”<br />
+6 = “Agree moderately”<br />
+7 = “Agree strongly”</p>
+<p>This particular dataset contains observations from N=2495 individuals who completed, among many other measures, the 10 TIPI items in 2016. Other variables included the Generic Conspiracist Beliefs Scale (<a href="https://www.frontiersin.org/articles/10.3389/fpsyg.2013.00279/full">Brotherton et al., 2013</a>), various response time metrics, a vocabulary validity check, and demographics.</p>
 <h3 id="importing-the-data">Importing the Data</h3>
 <p>When importing data, two important things to keep in mind are your working directory and reproducibility. Where you save your files can impact the ease at which you can call them; you’ll have the best luck saving data files of interest within the corresponding R Project. <code>rio</code>’s <code>import()</code> function provides an easy method for importing data files, including the ability to set the class of the data to tibble, which helps to retain the data in a format which is more amenable to data manipulation in <code>tidyverse</code>. To enhance reproducibility across different devices, we’ll use the <code>here()</code> function within the <a href="https://here.r-lib.org/"><code>here</code></a> package when specifying our file path.</p>
 <div class="layout-chunk" data-layout="l-body">
@@ -2234,33 +2235,32 @@ document.addEventListener('DOMContentLoaded', function() {
 <h2 id="building-functions">Building Functions</h2>
 <p>There are several ways in which one could go about building functions. The approach outlined here should be viewed as one of the several approaches to go about building functions.</p>
 <p>As you think about building a function, keep in mind the purpose of why you set to build a function in the first place. Your function will ideally solve a problem specific to your analysis or can also be used by others to carry out their analyses.</p>
-<p>Let’s state the problem first - The difference between raw and ipsatized data has been studied to some extent leading to several debates amongst researchers questioning the utility of these methods. It is therefore important to look at correlations between the raw and ipsatized data.</p>
-<p>Now that we understand the problem let’s think about how our function could address this problem. Here are a sequence of questions which will help you think about the function you intend to build.</p>
-<p>Step 1: What should my output look like?<br />
-Here we are looking for an output which is a list consisting of raw and transformed or ipsatized data.</p>
+<p>Let’s state the problem first: The difference between raw and ipsatized data has been studied to some extent leading to several debates amongst researchers questioning the utility of these methods. It is therefore important to look at correlations between the raw and ipsatized data.</p>
+<p>Now that we understand the problem, let’s think about how our function could address this problem. Here are a sequence of questions which will help you think about the function you intend to build.</p>
+<p><strong>What is the goal of this function?</strong><br />
+Basically, what do we need this function to do? For the current tutorial, we are writing a function that ipsatizes any dataset, meaning that it will compute the means of the rows and subtract the mean from every score in the respective rows. Ideally, it will produce output in the form of a list containing the raw and transformed (i.e., ipsatized) data.</p>
 <div class="layout-chunk" data-layout="l-body">
-<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ipsatize.MeanDev</span>(dataframe)</span>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="fu">ipsatize.MeanDev</span>(dataframe) <span class="co"># Raleigh edit: I&#39;m not sure what&#39;s going on in this chunk</span></span>
 <span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a></span>
 <span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="sc">&gt;</span>list</span>
 <span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a> <span class="sc">$</span>raw...</span>
 <span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a> <span class="sc">$</span>ipsatize...</span></code></pre></div>
 </div>
-<p>Step 2: What is the broad outline for obtaining this output?<br />
-We can build a function for ipsatizing the data and one for then putting the ipsatized data with the raw data within a larger list. Great we have a broad plan! Let’s break this down further.</p>
-<p>Step 3: How do we build the functions specified in step 2?<br />
-We will focus on one function at a time. We are going to first build the ipsatize function. Let’s break down the ipsatize function<br />
-i. What is the <span class="math inline">\(name\)</span> of the function?<br />
-We will call it <code>ipsatize.MeanDev</code> as the type of ipsatization this function will perform is Mean deviation.<br />
-ii. What will the the function $do$ ?<br />
-It will compute the means of the rows and subtract the mean from every score in the respective rows. In order to do this we will need an id column to calculate means for every row. This is slightly tricky but will be clear as we go along.</p>
-<p>A good way of thinking about writing functions is to start with the data. We will try and add an id column to the data.</p>
-<p>We can use the <code>row_number</code> within mutate to create a new column.</p>
+<p><strong>How can we achieve this goal for a specific dataset?</strong><br />
+As we learned in previous posts, when taking a functional programming approach to this problem, we should first attempt to solve it within a specific case. Once we’ve done so, we can then consider generalizing to a function. For this tutorial, we will be solving the problem first with the TIPI dataset, and then we can apply that solution to build the final function.</p>
+<p><strong>How can we break the function’s goal into smaller tasks?</strong><br />
+Most likely, we aren’t just going to be writing one function in this tutorial. Ideally, a function should complete exactly one task; therefore, when we are attempting to build a function to complete a complicated task like ipsatization, we will need to write multiple simple functions and combine them. Thus, it can be helpful to first outline and think through each step of the process and eventually create a function for each step.</p>
+<h3 id="solving-for-a-specific-case">Solving for a specific case</h3>
+<p>To ipsatize the data, we need to calculate each participant’s mean response to the TIPI scale items and then subtract each response by that mean. This means we need to be able to conduct these operations by row rather than by column. One of the easier ways to do this is to use <code>pivot_longer()</code> to transform the data into a “longer” format.</p>
+<p>First, though, we need to create an ID for each participant that can then be used to identify their responses once the data is transformed.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>data</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>mutate</span><span class='op'>(</span>id <span class='op'>=</span> <span class='fu'>row_number</span><span class='op'>(</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
-  <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>knitr</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/knitr/man/kable.html'>kable</a></span><span class='op'>(</span><span class='op'>)</span>
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>data_id</span> <span class='op'>&lt;-</span> <span class='va'>data</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>mutate</span><span class='op'>(</span>id <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span><span class='op'>:</span><span class='fu'><a href='https://rdrr.io/r/base/nrow.html'>nrow</a></span><span class='op'>(</span><span class='va'>data</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span> <span class='co'># Create ID column</span>
+
+<span class='va'>data_id</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>5</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='co'># Take a look at the first 5 rows of the resulting dataframe</span>
+  <span class='fu'>knitr</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/knitr/man/kable.html'>kable</a></span><span class='op'>(</span><span class='op'>)</span> <span class='co'># Format the output table neatly</span>
 </code></pre>
 </div>
 <table>
@@ -2348,6 +2348,819 @@ It will compute the means of the rows and subtract the mean from every score in 
 </tbody>
 </table>
 </div>
+<p>Now that we have an ID variable that can be used to identify each participant’s responses, we can figure out how to create a column that calculates the mean of each rows using <code>pivot_longer()</code>.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>data_long</span> <span class='op'>&lt;-</span> <span class='va'>data_id</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>pivot_longer</span><span class='op'>(</span>cols <span class='op'>=</span> <span class='op'>!</span><span class='va'>id</span>, names_to <span class='op'>=</span> <span class='st'>"item"</span>, values_to <span class='op'>=</span> <span class='st'>"response"</span><span class='op'>)</span>
+
+<span class='va'>data_long</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>15</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>knitr</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/knitr/man/kable.html'>kable</a></span><span class='op'>(</span><span class='op'>)</span>
+</code></pre>
+</div>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: right;">id</th>
+<th style="text-align: left;">item</th>
+<th style="text-align: right;">response</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">TIPI1</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">TIPI2</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">TIPI3</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">TIPI4</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">TIPI5</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">TIPI6</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">TIPI7</td>
+<td style="text-align: right;">7</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">TIPI8</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">TIPI9</td>
+<td style="text-align: right;">7</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">TIPI10</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">TIPI1</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">TIPI2</td>
+<td style="text-align: right;">7</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">TIPI3</td>
+<td style="text-align: right;">6</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">TIPI4</td>
+<td style="text-align: right;">7</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">TIPI5</td>
+<td style="text-align: right;">6</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Instead of participants’ responses being organized by row, all responses are now contained in one column and can be identified using the corresponding ID and Item values. We can use <code>tidyverse</code>’s <code>group_by()</code> function to group this dataframe by participant ID and then compute 1) the mean for each group and 2) the difference between each response and the mean of its group.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>data_dev</span> <span class='op'>&lt;-</span> <span class='va'>data_long</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>group_by</span><span class='op'>(</span><span class='va'>id</span><span class='op'>)</span> <span class='op'>%&gt;%</span> <span class='co'># Group by participant ID</span>
+  <span class='fu'>mutate</span><span class='op'>(</span>mean_row <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>response</span>, na.rm <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>, <span class='co'># Calculate participant mean</span>
+         ipsatized <span class='op'>=</span> <span class='va'>response</span> <span class='op'>-</span> <span class='va'>mean_row</span><span class='op'>)</span> <span class='co'># Calculate individual response deviation from mean</span>
+
+<span class='va'>data_dev</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>15</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>knitr</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/knitr/man/kable.html'>kable</a></span><span class='op'>(</span><span class='op'>)</span>
+</code></pre>
+</div>
+<table>
+<thead>
+<tr class="header">
+<th style="text-align: right;">id</th>
+<th style="text-align: left;">item</th>
+<th style="text-align: right;">response</th>
+<th style="text-align: right;">mean_row</th>
+<th style="text-align: right;">ipsatized</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">TIPI1</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">4.5</td>
+<td style="text-align: right;">0.5</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">TIPI2</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">4.5</td>
+<td style="text-align: right;">-1.5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">TIPI3</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">4.5</td>
+<td style="text-align: right;">1.5</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">TIPI4</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">4.5</td>
+<td style="text-align: right;">-2.5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">TIPI5</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">4.5</td>
+<td style="text-align: right;">1.5</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">TIPI6</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">4.5</td>
+<td style="text-align: right;">1.5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">TIPI7</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">4.5</td>
+<td style="text-align: right;">2.5</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">TIPI8</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">4.5</td>
+<td style="text-align: right;">-2.5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">TIPI9</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">4.5</td>
+<td style="text-align: right;">2.5</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">1</td>
+<td style="text-align: left;">TIPI10</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">4.5</td>
+<td style="text-align: right;">-3.5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">TIPI1</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">4.9</td>
+<td style="text-align: right;">1.1</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">TIPI2</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">4.9</td>
+<td style="text-align: right;">2.1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">TIPI3</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">4.9</td>
+<td style="text-align: right;">1.1</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">TIPI4</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">4.9</td>
+<td style="text-align: right;">2.1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">2</td>
+<td style="text-align: left;">TIPI5</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">4.9</td>
+<td style="text-align: right;">1.1</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Now, we can use <code>pivot_wider()</code> to transform the data back to its original format. Because we want the function output to be formatted as a list that contains the ipsatized data, raw data, and a correlation matrix of the two, it will be helpful to create two dataframes: an ipsatized dataframe and a raw dataframe.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='co'># Create ipsatized data frame</span>
+<span class='va'>data_ips</span> <span class='op'>&lt;-</span> <span class='va'>data_dev</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>pivot_wider</span><span class='op'>(</span>id_cols <span class='op'>=</span> <span class='va'>id</span>, names_from <span class='op'>=</span> <span class='va'>item</span>, values_from <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>response</span>, <span class='va'>ipsatized</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>select</span><span class='op'>(</span><span class='va'>id</span>, <span class='fu'>contains</span><span class='op'>(</span><span class='st'>"ipsatized"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+   <span class='fu'>ungroup</span><span class='op'>(</span><span class='op'>)</span>
+
+<span class='co'># Create raw dataframe</span>
+<span class='va'>data_raw</span> <span class='op'>&lt;-</span> <span class='va'>data_dev</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>pivot_wider</span><span class='op'>(</span>id_cols <span class='op'>=</span> <span class='va'>id</span>, names_from <span class='op'>=</span> <span class='va'>item</span>, values_from <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='va'>response</span>, <span class='va'>ipsatized</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>select</span><span class='op'>(</span><span class='va'>id</span>, <span class='fu'>contains</span><span class='op'>(</span><span class='st'>"response"</span><span class='op'>)</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+   <span class='fu'>ungroup</span><span class='op'>(</span><span class='op'>)</span>
+
+<span class='co'># Take a look at the results</span>
+<span class='va'>data_ips</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>15</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>knitr</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/knitr/man/kable.html'>kable</a></span><span class='op'>(</span><span class='op'>)</span>
+</code></pre>
+</div>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 1%" />
+<col style="width: 9%" />
+<col style="width: 9%" />
+<col style="width: 9%" />
+<col style="width: 9%" />
+<col style="width: 9%" />
+<col style="width: 9%" />
+<col style="width: 9%" />
+<col style="width: 9%" />
+<col style="width: 9%" />
+<col style="width: 10%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: right;">id</th>
+<th style="text-align: right;">ipsatized_TIPI1</th>
+<th style="text-align: right;">ipsatized_TIPI2</th>
+<th style="text-align: right;">ipsatized_TIPI3</th>
+<th style="text-align: right;">ipsatized_TIPI4</th>
+<th style="text-align: right;">ipsatized_TIPI5</th>
+<th style="text-align: right;">ipsatized_TIPI6</th>
+<th style="text-align: right;">ipsatized_TIPI7</th>
+<th style="text-align: right;">ipsatized_TIPI8</th>
+<th style="text-align: right;">ipsatized_TIPI9</th>
+<th style="text-align: right;">ipsatized_TIPI10</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">0.5</td>
+<td style="text-align: right;">-1.5</td>
+<td style="text-align: right;">1.5</td>
+<td style="text-align: right;">-2.5</td>
+<td style="text-align: right;">1.5</td>
+<td style="text-align: right;">1.5</td>
+<td style="text-align: right;">2.5</td>
+<td style="text-align: right;">-2.5</td>
+<td style="text-align: right;">2.5</td>
+<td style="text-align: right;">-3.5</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1.1</td>
+<td style="text-align: right;">2.1</td>
+<td style="text-align: right;">1.1</td>
+<td style="text-align: right;">2.1</td>
+<td style="text-align: right;">1.1</td>
+<td style="text-align: right;">-1.9</td>
+<td style="text-align: right;">2.1</td>
+<td style="text-align: right;">0.1</td>
+<td style="text-align: right;">-3.9</td>
+<td style="text-align: right;">-3.9</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">0.4</td>
+<td style="text-align: right;">0.4</td>
+<td style="text-align: right;">0.4</td>
+<td style="text-align: right;">-4.6</td>
+<td style="text-align: right;">1.4</td>
+<td style="text-align: right;">-0.6</td>
+<td style="text-align: right;">0.4</td>
+<td style="text-align: right;">-0.6</td>
+<td style="text-align: right;">1.4</td>
+<td style="text-align: right;">1.4</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">1.0</td>
+<td style="text-align: right;">2.0</td>
+<td style="text-align: right;">2.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">2.0</td>
+<td style="text-align: right;">1.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">-4.0</td>
+<td style="text-align: right;">0.0</td>
+<td style="text-align: right;">-4.0</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">-3.1</td>
+<td style="text-align: right;">-1.1</td>
+<td style="text-align: right;">2.9</td>
+<td style="text-align: right;">-2.1</td>
+<td style="text-align: right;">1.9</td>
+<td style="text-align: right;">-0.1</td>
+<td style="text-align: right;">0.9</td>
+<td style="text-align: right;">0.9</td>
+<td style="text-align: right;">0.9</td>
+<td style="text-align: right;">-1.1</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">-0.2</td>
+<td style="text-align: right;">-2.2</td>
+<td style="text-align: right;">1.8</td>
+<td style="text-align: right;">-2.2</td>
+<td style="text-align: right;">1.8</td>
+<td style="text-align: right;">0.8</td>
+<td style="text-align: right;">1.8</td>
+<td style="text-align: right;">-1.2</td>
+<td style="text-align: right;">1.8</td>
+<td style="text-align: right;">-2.2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">-1.9</td>
+<td style="text-align: right;">1.1</td>
+<td style="text-align: right;">0.1</td>
+<td style="text-align: right;">-1.9</td>
+<td style="text-align: right;">1.1</td>
+<td style="text-align: right;">2.1</td>
+<td style="text-align: right;">-1.9</td>
+<td style="text-align: right;">-0.9</td>
+<td style="text-align: right;">1.1</td>
+<td style="text-align: right;">1.1</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">-0.2</td>
+<td style="text-align: right;">0.8</td>
+<td style="text-align: right;">1.8</td>
+<td style="text-align: right;">-2.2</td>
+<td style="text-align: right;">2.8</td>
+<td style="text-align: right;">-0.2</td>
+<td style="text-align: right;">0.8</td>
+<td style="text-align: right;">0.8</td>
+<td style="text-align: right;">-1.2</td>
+<td style="text-align: right;">-3.2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">-0.3</td>
+<td style="text-align: right;">0.7</td>
+<td style="text-align: right;">1.7</td>
+<td style="text-align: right;">-2.3</td>
+<td style="text-align: right;">-0.3</td>
+<td style="text-align: right;">0.7</td>
+<td style="text-align: right;">1.7</td>
+<td style="text-align: right;">-2.3</td>
+<td style="text-align: right;">2.7</td>
+<td style="text-align: right;">-2.3</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">-3.5</td>
+<td style="text-align: right;">1.5</td>
+<td style="text-align: right;">-1.5</td>
+<td style="text-align: right;">-3.5</td>
+<td style="text-align: right;">0.5</td>
+<td style="text-align: right;">2.5</td>
+<td style="text-align: right;">1.5</td>
+<td style="text-align: right;">0.5</td>
+<td style="text-align: right;">2.5</td>
+<td style="text-align: right;">-0.5</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">-0.3</td>
+<td style="text-align: right;">3.7</td>
+<td style="text-align: right;">-2.3</td>
+<td style="text-align: right;">3.7</td>
+<td style="text-align: right;">3.7</td>
+<td style="text-align: right;">-0.3</td>
+<td style="text-align: right;">-2.3</td>
+<td style="text-align: right;">-1.3</td>
+<td style="text-align: right;">-2.3</td>
+<td style="text-align: right;">-2.3</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">2.2</td>
+<td style="text-align: right;">-0.8</td>
+<td style="text-align: right;">-0.8</td>
+<td style="text-align: right;">-3.8</td>
+<td style="text-align: right;">2.2</td>
+<td style="text-align: right;">-0.8</td>
+<td style="text-align: right;">2.2</td>
+<td style="text-align: right;">0.2</td>
+<td style="text-align: right;">2.2</td>
+<td style="text-align: right;">-2.8</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">13</td>
+<td style="text-align: right;">1.6</td>
+<td style="text-align: right;">-2.4</td>
+<td style="text-align: right;">1.6</td>
+<td style="text-align: right;">-3.4</td>
+<td style="text-align: right;">1.6</td>
+<td style="text-align: right;">0.6</td>
+<td style="text-align: right;">2.6</td>
+<td style="text-align: right;">-0.4</td>
+<td style="text-align: right;">0.6</td>
+<td style="text-align: right;">-2.4</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">-2.8</td>
+<td style="text-align: right;">-2.8</td>
+<td style="text-align: right;">1.2</td>
+<td style="text-align: right;">0.2</td>
+<td style="text-align: right;">2.2</td>
+<td style="text-align: right;">1.2</td>
+<td style="text-align: right;">2.2</td>
+<td style="text-align: right;">0.2</td>
+<td style="text-align: right;">1.2</td>
+<td style="text-align: right;">-2.8</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">-2.7</td>
+<td style="text-align: right;">-2.7</td>
+<td style="text-align: right;">-2.7</td>
+<td style="text-align: right;">2.3</td>
+<td style="text-align: right;">1.3</td>
+<td style="text-align: right;">3.3</td>
+<td style="text-align: right;">3.3</td>
+<td style="text-align: right;">3.3</td>
+<td style="text-align: right;">-2.7</td>
+<td style="text-align: right;">-2.7</td>
+</tr>
+</tbody>
+</table>
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>data_raw</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'><a href='https://rdrr.io/r/utils/head.html'>head</a></span><span class='op'>(</span>n <span class='op'>=</span> <span class='fl'>15</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>knitr</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/knitr/man/kable.html'>kable</a></span><span class='op'>(</span><span class='op'>)</span>
+</code></pre>
+</div>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 1%" />
+<col style="width: 9%" />
+<col style="width: 9%" />
+<col style="width: 9%" />
+<col style="width: 9%" />
+<col style="width: 9%" />
+<col style="width: 9%" />
+<col style="width: 9%" />
+<col style="width: 9%" />
+<col style="width: 9%" />
+<col style="width: 10%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th style="text-align: right;">id</th>
+<th style="text-align: right;">response_TIPI1</th>
+<th style="text-align: right;">response_TIPI2</th>
+<th style="text-align: right;">response_TIPI3</th>
+<th style="text-align: right;">response_TIPI4</th>
+<th style="text-align: right;">response_TIPI5</th>
+<th style="text-align: right;">response_TIPI6</th>
+<th style="text-align: right;">response_TIPI7</th>
+<th style="text-align: right;">response_TIPI8</th>
+<th style="text-align: right;">response_TIPI9</th>
+<th style="text-align: right;">response_TIPI10</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">7</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">3</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">5</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">8</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">9</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">10</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">4</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">11</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">3</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">12</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">13</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">4</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="even">
+<td style="text-align: right;">14</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">2</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">2</td>
+</tr>
+<tr class="odd">
+<td style="text-align: right;">15</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">6</td>
+<td style="text-align: right;">5</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">7</td>
+<td style="text-align: right;">1</td>
+<td style="text-align: right;">1</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Lastly, let’s create that list.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>list_output</span> <span class='op'>&lt;-</span> <span class='fu'><a href='https://rdrr.io/r/base/list.html'>list</a></span><span class='op'>(</span><span class='st'>"ipsatized"</span> <span class='op'>=</span> <span class='va'>data_ips</span>,
+          <span class='st'>"raw"</span> <span class='op'>=</span> <span class='va'>data_raw</span>,
+          <span class='st'>"correlation_matrix"</span> <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/stats/cor.html'>cor</a></span><span class='op'>(</span><span class='va'>data_ips</span>, <span class='va'>data_raw</span><span class='op'>)</span><span class='op'>)</span>
+
+<span class='va'>list_output</span>
+</code></pre>
+</div>
+<pre><code>$ipsatized
+# A tibble: 2,495 x 11
+      id ipsatized_TIPI1 ipsatized_TIPI2 ipsatized_TIPI3
+   &lt;int&gt;           &lt;dbl&gt;           &lt;dbl&gt;           &lt;dbl&gt;
+ 1     1           0.5            -1.5             1.5  
+ 2     2           1.1             2.1             1.1  
+ 3     3           0.400           0.400           0.400
+ 4     4           1               2               2    
+ 5     5          -3.1            -1.1             2.9  
+ 6     6          -0.200          -2.2             1.8  
+ 7     7          -1.9             1.1             0.100
+ 8     8          -0.200           0.8             1.8  
+ 9     9          -0.300           0.7             1.7  
+10    10          -3.5             1.5            -1.5  
+# ... with 2,485 more rows, and 7 more variables:
+#   ipsatized_TIPI4 &lt;dbl&gt;, ipsatized_TIPI5 &lt;dbl&gt;,
+#   ipsatized_TIPI6 &lt;dbl&gt;, ipsatized_TIPI7 &lt;dbl&gt;,
+#   ipsatized_TIPI8 &lt;dbl&gt;, ipsatized_TIPI9 &lt;dbl&gt;,
+#   ipsatized_TIPI10 &lt;dbl&gt;
+
+$raw
+# A tibble: 2,495 x 11
+      id response_TIPI1 response_TIPI2 response_TIPI3 response_TIPI4
+   &lt;int&gt;          &lt;int&gt;          &lt;int&gt;          &lt;int&gt;          &lt;int&gt;
+ 1     1              5              3              6              2
+ 2     2              6              7              6              7
+ 3     3              6              6              6              1
+ 4     4              6              7              7              5
+ 5     5              1              3              7              2
+ 6     6              4              2              6              2
+ 7     7              2              5              4              2
+ 8     8              4              5              6              2
+ 9     9              4              5              6              2
+10    10              1              6              3              1
+# ... with 2,485 more rows, and 6 more variables:
+#   response_TIPI5 &lt;int&gt;, response_TIPI6 &lt;int&gt;, response_TIPI7 &lt;int&gt;,
+#   response_TIPI8 &lt;int&gt;, response_TIPI9 &lt;int&gt;, response_TIPI10 &lt;int&gt;
+
+$correlation_matrix
+                           id response_TIPI1 response_TIPI2
+id                1.000000000    -0.03087740    -0.03727441
+ipsatized_TIPI1  -0.021481713     0.95997515    -0.11340834
+ipsatized_TIPI2  -0.027501605    -0.12071784     0.95428074
+ipsatized_TIPI3  -0.036290745     0.02535938    -0.16688353
+ipsatized_TIPI4   0.022218869    -0.25970548     0.12817941
+ipsatized_TIPI5   0.017044441     0.15867518    -0.13509164
+ipsatized_TIPI6   0.033065029    -0.68318241    -0.07328539
+ipsatized_TIPI7   0.021550310     0.19604318    -0.39102208
+ipsatized_TIPI8   0.028246853    -0.09883568     0.05362126
+ipsatized_TIPI9  -0.029634489     0.06676858    -0.27632275
+ipsatized_TIPI10 -0.005017054    -0.22041641    -0.06129857
+                 response_TIPI3 response_TIPI4 response_TIPI5
+id                 -0.045915845    0.011284963   0.0008224971
+ipsatized_TIPI1     0.031167709   -0.244068520   0.1736167712
+ipsatized_TIPI2    -0.167224238    0.148187176  -0.1206510887
+ipsatized_TIPI3     0.948872899   -0.298764735   0.0086683433
+ipsatized_TIPI4    -0.307516250    0.962139678  -0.2550686241
+ipsatized_TIPI5    -0.005073157   -0.256663167   0.9192189953
+ipsatized_TIPI6    -0.024670231    0.073760081  -0.2270060851
+ipsatized_TIPI7     0.007475973   -0.008942264   0.0736922080
+ipsatized_TIPI8    -0.550478491    0.158821663  -0.0270662628
+ipsatized_TIPI9     0.268938383   -0.690397982   0.0655434271
+ipsatized_TIPI10   -0.108530999   -0.002177791  -0.3767678405
+                 response_TIPI6 response_TIPI7 response_TIPI8
+id                  0.021000522    0.007644219     0.01618021
+ipsatized_TIPI1    -0.666541441    0.170445729    -0.08266381
+ipsatized_TIPI2    -0.038939637   -0.403279907     0.06565301
+ipsatized_TIPI3     0.015568018   -0.020080341    -0.54989652
+ipsatized_TIPI4     0.091005873   -0.050084957     0.15131155
+ipsatized_TIPI5    -0.203227013    0.024189448    -0.02356731
+ipsatized_TIPI6     0.953180313   -0.215281446    -0.08954131
+ipsatized_TIPI7    -0.162399055    0.949232042    -0.08558253
+ipsatized_TIPI8    -0.067303304   -0.119072017     0.95695523
+ipsatized_TIPI9    -0.009290563   -0.028893032    -0.33029253
+ipsatized_TIPI10    0.040201343   -0.228842712    -0.10619799
+                 response_TIPI9 response_TIPI10
+id                  -0.03949432    -0.017594425
+ipsatized_TIPI1      0.09172718    -0.187414036
+ipsatized_TIPI2     -0.26483551    -0.031356832
+ipsatized_TIPI3      0.29771049    -0.076414836
+ipsatized_TIPI4     -0.68790076     0.007123348
+ipsatized_TIPI5      0.08228079    -0.365950413
+ipsatized_TIPI6     -0.02645471     0.029629981
+ipsatized_TIPI7      0.01615832    -0.176200329
+ipsatized_TIPI8     -0.32648284    -0.089488624
+ipsatized_TIPI9      0.95761526    -0.057303325
+ipsatized_TIPI10    -0.06741043     0.941250723</code></pre>
+</div>
+<p>This list is what we set out to create! We’ve achieved our goal. Now that we’ve solved this problem in a specific case, we can begin to generalize it to a function. Or, rather, a set of functions!</p>
+<h3 id="applying-specific-case-to-generalized-function-s">Applying specific case to generalized function s</h3>
+<hr />
 <p>That works! Now let’s wrap this within a function. We will call it <code>add_id</code></p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
@@ -2452,85 +3265,12 @@ It will compute the means of the rows and subtract the mean from every score in 
 </tbody>
 </table>
 </div>
-<p>Perfect! Now the next part is figuring out how to add a column with the mean rows. One way of thinking about this is we have a id variable which can be used to group the data. We can then use <code>pivot_longer</code> and <code>pivot_wider</code> to format the data.</p>
-<div class="layout-chunk" data-layout="l-body">
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>data</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>add_id</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>pivot_longer</span><span class='op'>(</span>cols <span class='op'>=</span> <span class='op'>!</span><span class='va'>id</span>, names_to <span class='op'>=</span> <span class='st'>"col_names"</span><span class='op'>)</span>
-</code></pre>
-</div>
-<pre><code># A tibble: 24,950 x 3
-      id col_names value
-   &lt;int&gt; &lt;chr&gt;     &lt;int&gt;
- 1     1 TIPI1         5
- 2     1 TIPI2         3
- 3     1 TIPI3         6
- 4     1 TIPI4         2
- 5     1 TIPI5         6
- 6     1 TIPI6         6
- 7     1 TIPI7         7
- 8     1 TIPI8         2
- 9     1 TIPI9         7
-10     1 TIPI10        1
-# ... with 24,940 more rows</code></pre>
-</div>
-<p>We have a 10 rows (equal to 10 variables) dedicated to every row id in this dataframe. We can use <code>group_by</code> to compute the means within every group and find deviations for every score from the mean.</p>
-<div class="layout-chunk" data-layout="l-body">
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>data</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>add_id</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>pivot_longer</span><span class='op'>(</span>cols <span class='op'>=</span> <span class='op'>!</span><span class='va'>id</span>, names_to <span class='op'>=</span> <span class='st'>"col_names"</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>group_by</span><span class='op'>(</span><span class='va'>id</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>mutate</span><span class='op'>(</span>means_rowwise <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>value</span>, na.rm <span class='op'>=</span> <span class='cn'>T</span><span class='op'>)</span>,
-         value <span class='op'>=</span> <span class='va'>value</span> <span class='op'>-</span> <span class='va'>means_rowwise</span><span class='op'>)</span>
-</code></pre>
-</div>
-<pre><code># A tibble: 24,950 x 4
-# Groups:   id [2,495]
-      id col_names value means_rowwise
-   &lt;int&gt; &lt;chr&gt;     &lt;dbl&gt;         &lt;dbl&gt;
- 1     1 TIPI1       0.5           4.5
- 2     1 TIPI2      -1.5           4.5
- 3     1 TIPI3       1.5           4.5
- 4     1 TIPI4      -2.5           4.5
- 5     1 TIPI5       1.5           4.5
- 6     1 TIPI6       1.5           4.5
- 7     1 TIPI7       2.5           4.5
- 8     1 TIPI8      -2.5           4.5
- 9     1 TIPI9       2.5           4.5
-10     1 TIPI10     -3.5           4.5
-# ... with 24,940 more rows</code></pre>
-</div>
-<p>Now, we can use <code>pivot_wider</code> for reformatting the data to how it looked before.</p>
-<div class="layout-chunk" data-layout="l-body">
-<div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>data</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>add_id</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>pivot_longer</span><span class='op'>(</span>cols <span class='op'>=</span> <span class='op'>!</span><span class='va'>id</span>, names_to <span class='op'>=</span> <span class='st'>"col_names"</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>group_by</span><span class='op'>(</span><span class='va'>id</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>mutate</span><span class='op'>(</span>means_rowwise <span class='op'>=</span> <span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>value</span>, na.rm <span class='op'>=</span> <span class='cn'>T</span><span class='op'>)</span>,
-         value <span class='op'>=</span> <span class='va'>value</span> <span class='op'>-</span> <span class='va'>means_rowwise</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>pivot_wider</span><span class='op'>(</span>names_from <span class='op'>=</span> <span class='va'>col_names</span>, values_from <span class='op'>=</span> <span class='va'>value</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
-  <span class='fu'>select</span><span class='op'>(</span><span class='va'>id</span>, <span class='op'>!</span><span class='va'>means_rowwise</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
-   <span class='fu'>ungroup</span><span class='op'>(</span><span class='op'>)</span>
-</code></pre>
-</div>
-<pre><code># A tibble: 2,495 x 11
-      id  TIPI1  TIPI2  TIPI3 TIPI4  TIPI5  TIPI6  TIPI7  TIPI8 TIPI9
-   &lt;int&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;dbl&gt;
- 1     1  0.5   -1.5    1.5    -2.5  1.5    1.5    2.5   -2.5     2.5
- 2     2  1.1    2.1    1.1     2.1  1.1   -1.9    2.1    0.100  -3.9
- 3     3  0.400  0.400  0.400  -4.6  1.4   -0.600  0.400 -0.600   1.4
- 4     4  1      2      2       0    2      1      0     -4       0  
- 5     5 -3.1   -1.1    2.9    -2.1  1.9   -0.100  0.9    0.9     0.9
- 6     6 -0.200 -2.2    1.8    -2.2  1.8    0.8    1.8   -1.2     1.8
- 7     7 -1.9    1.1    0.100  -1.9  1.1    2.1   -1.9   -0.9     1.1
- 8     8 -0.200  0.8    1.8    -2.2  2.8   -0.200  0.8    0.8    -1.2
- 9     9 -0.300  0.7    1.7    -2.3 -0.300  0.7    1.7   -2.3     2.7
-10    10 -3.5    1.5   -1.5    -3.5  0.5    2.5    1.5    0.5     2.5
-# ... with 2,485 more rows, and 1 more variable: TIPI10 &lt;dbl&gt;</code></pre>
-</div>
+<p><strong>How do we build the functions specified in step 2?</strong><br />
+We will focus on one function at a time. We are going to first build the ipsatize function. Let’s break down the ipsatize function.<br />
+i. What is the <em>name</em> of the function?<br />
+We will call it <code>ipsatize_MeanDev</code> as the type of ipsatization this function will perform is Mean deviation.<br />
+ii. What will the the function <em>do</em>?<br />
+</p>
 <p>Now we can wrap this into a function</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
@@ -2714,7 +3454,7 @@ It will compute the means of the rows and subtract the mean from every score in 
   <span class='fu'>theme_minimal</span><span class='op'>(</span><span class='op'>)</span>
 </code></pre>
 </div>
-<p><img src="write-a-function_files/figure-html5/unnamed-chunk-19-1.png" width="624" /></p>
+<p><img src="write-a-function_files/figure-html5/unnamed-chunk-20-1.png" width="624" /></p>
 </div>
 <h1 id="things-to-work-on">Things to work on</h1>
 <ol type="1">
@@ -2722,7 +3462,7 @@ It will compute the means of the rows and subtract the mean from every score in 
 <li>Plots - make them pretty, can add a vline for the mean, can change colors to a colorblind palette, can annotate</li>
 <li>conclusion</li>
 </ol>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>
@@ -2730,15 +3470,6 @@ It will compute the means of the rows and subtract the mean from every score in 
 <div class="d-appendix">
 </div>
 
-<!-- dynamically load mathjax for compatibility with self-contained -->
-<script>
-  (function () {
-    var script = document.createElement("script");
-    script.type = "text/javascript";
-    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
-    document.getElementsByTagName("head")[0].appendChild(script);
-  })();
-</script>
 
 <!--radix_placeholder_site_after_body-->
 <!--/radix_placeholder_site_after_body-->
