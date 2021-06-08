@@ -461,8 +461,8 @@ TIPI_item1 <- data.frame(ipsdat$raw$response_TIPI1, ipsdat$ipsatized$ipsatized_T
 
 TIPI_item1 %>% 
   ggplot() +
-  geom_density(aes(x = Item1, color = Data, fill = Data), alpha = .5) +
-  labs(x = "TIPI Item 1", y = "Density") +
+  geom_density(aes(x = Item1, color = Data, fill = Data), alpha = .6) +
+  labs(x = "TIPI Item 1", y = "Density", title="Comparison of \n raw and ipsatized scores") +
   colorblindr::scale_color_OkabeIto() +
   colorblindr::scale_fill_OkabeIto() +
   theme_minimal()
