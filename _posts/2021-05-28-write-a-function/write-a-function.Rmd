@@ -467,3 +467,5 @@ TIPI_item1 %>%
   colorblindr::scale_fill_OkabeIto() +
   theme_minimal()
 ```
+
+The correlation plot here indicates the multimodal nature of raw data which is reduced to a great extend in the ipsatized data. This helps to limit within person variability affecting the structural assessment of personality. 
