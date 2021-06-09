@@ -1,5 +1,5 @@
 ---
-title: "3. Write a Function!"
+title: "2. Write a Function!"
 description: |
   Demonstration of how to write a function with personality research data.
 author:

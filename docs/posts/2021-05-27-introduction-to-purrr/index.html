@@ -86,9 +86,9 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </style>
 
   <!--radix_placeholder_meta_tags-->
-<title>Functional Programming in R: 1. Introduction to Functional Programming</title>
+<title>Functional Programming in R: 1. Introduction to {purrr}</title>
 
-<meta property="description" itemprop="description" content="A brief introduction to Functional Programming."/>
+<meta property="description" itemprop="description" content="Using {Purrr} to achieve your goal about iterations."/>
 
 
 <!--  https://schema.org/Article -->
@@ -97,27 +97,27 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 <meta name="article:author" content="Shijing Zhou"/>
 
 <!--  https://developers.facebook.com/docs/sharing/webmasters#markup -->
-<meta property="og:title" content="Functional Programming in R: 1. Introduction to Functional Programming"/>
+<meta property="og:title" content="Functional Programming in R: 1. Introduction to {purrr}"/>
 <meta property="og:type" content="article"/>
-<meta property="og:description" content="A brief introduction to Functional Programming."/>
+<meta property="og:description" content="Using {Purrr} to achieve your goal about iterations."/>
 <meta property="og:locale" content="en_US"/>
 <meta property="og:site_name" content="Functional Programming in R"/>
 
 <!--  https://dev.twitter.com/cards/types/summary -->
 <meta property="twitter:card" content="summary"/>
-<meta property="twitter:title" content="Functional Programming in R: 1. Introduction to Functional Programming"/>
-<meta property="twitter:description" content="A brief introduction to Functional Programming."/>
+<meta property="twitter:title" content="Functional Programming in R: 1. Introduction to {purrr}"/>
+<meta property="twitter:description" content="Using {Purrr} to achieve your goal about iterations."/>
 
 <!--/radix_placeholder_meta_tags-->
   <!--radix_placeholder_rmarkdown_metadata-->
 
 <script type="text/json" id="radix-rmarkdown-metadata">
-{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","date","output"]}},"value":[{"type":"character","attributes":{},"value":["1. Introduction to Functional Programming"]},{"type":"character","attributes":{},"value":["A brief introduction to Functional Programming."]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name"]}},"value":[{"type":"character","attributes":{},"value":["Shijing Zhou"]}]}]},{"type":"character","attributes":{},"value":["05-28-2021"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained"]}},"value":[{"type":"logical","attributes":{},"value":[false]}]}]}]}
+{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["title","description","author","date","output"]}},"value":[{"type":"character","attributes":{},"value":["1. Introduction to {purrr}"]},{"type":"character","attributes":{},"value":["Using {Purrr} to achieve your goal about iterations."]},{"type":"list","attributes":{},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["name"]}},"value":[{"type":"character","attributes":{},"value":["Shijing Zhou"]}]}]},{"type":"character","attributes":{},"value":["05-28-2021"]},{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["distill::distill_article"]}},"value":[{"type":"list","attributes":{"names":{"type":"character","attributes":{},"value":["self_contained"]}},"value":[{"type":"logical","attributes":{},"value":[false]}]}]}]}
 </script>
 <!--/radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-resource-manifest">
-  {"type":"character","attributes":{},"value":["introduction-to-functional-programming_files/anchor-4.2.2/anchor.min.js","introduction-to-functional-programming_files/bowser-1.9.3/bowser.min.js","introduction-to-functional-programming_files/distill-2.2.21/template.v2.js","introduction-to-functional-programming_files/header-attrs-2.7/header-attrs.js","introduction-to-functional-programming_files/jquery-1.11.3/jquery.min.js","introduction-to-functional-programming_files/popper-2.6.0/popper.min.js","introduction-to-functional-programming_files/tippy-6.2.7/tippy-bundle.umd.min.js","introduction-to-functional-programming_files/tippy-6.2.7/tippy-light-border.css","introduction-to-functional-programming_files/tippy-6.2.7/tippy.css","introduction-to-functional-programming_files/tippy-6.2.7/tippy.umd.min.js","introduction-to-functional-programming_files/webcomponents-2.0.0/webcomponents.js"]}
+  {"type":"character","attributes":{},"value":["introduction-to-purrr_files/anchor-4.2.2/anchor.min.js","introduction-to-purrr_files/bowser-1.9.3/bowser.min.js","introduction-to-purrr_files/distill-2.2.21/template.v2.js","introduction-to-purrr_files/header-attrs-2.7/header-attrs.js","introduction-to-purrr_files/jquery-1.11.3/jquery.min.js","introduction-to-purrr_files/popper-2.6.0/popper.min.js","introduction-to-purrr_files/tippy-6.2.7/tippy-bundle.umd.min.js","introduction-to-purrr_files/tippy-6.2.7/tippy-light-border.css","introduction-to-purrr_files/tippy-6.2.7/tippy.css","introduction-to-purrr_files/tippy-6.2.7/tippy.umd.min.js","introduction-to-purrr_files/webcomponents-2.0.0/webcomponents.js"]}
   </script>
   <!--radix_placeholder_navigation_in_header-->
 <meta name="distill:offset" content="../.."/>
@@ -2062,7 +2062,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"1. Introduction to Functional Programming","description":"A brief introduction to Functional Programming.","authors":[{"author":"Shijing Zhou","authorURL":"#","affiliation":"&nbsp;","affiliationURL":"#","orcidID":""}],"publishedDate":"2021-05-28T00:00:00.000-07:00","citationText":"Zhou, 2021"}
+{"title":"1. Introduction to {purrr}","description":"Using {Purrr} to achieve your goal about iterations.","authors":[{"author":"Shijing Zhou","authorURL":"#","affiliation":"&nbsp;","affiliationURL":"#","orcidID":""}],"publishedDate":"2021-05-28T00:00:00.000+00:00","citationText":"Zhou, 2021"}
 </script>
 
 <!--/radix_placeholder_front_matter-->
@@ -2085,10 +2085,10 @@ document.addEventListener('DOMContentLoaded', function() {
 <!--/radix_placeholder_site_before_body-->
 
 <div class="d-title">
-<h1>1. Introduction to Functional Programming</h1>
+<h1>1. Introduction to {purrr}</h1>
 <!--radix_placeholder_categories-->
 <!--/radix_placeholder_categories-->
-<p><p>A brief introduction to Functional Programming.</p></p>
+<p><p>Using {Purrr} to achieve your goal about iterations.</p></p>
 </div>
 
 <div class="d-byline">
@@ -2098,7 +2098,234 @@ document.addEventListener('DOMContentLoaded', function() {
 </div>
 
 <div class="d-article">
-<div class="sourceCode" id="cb1"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
+<h1 id="what-is-purrr">What is <code>{purrr}</code>?</h1>
+<p><a href="https://purrr.tidyverse.org/"><code>{purrr}</code></a> is a handy package that provides a number of helpful functions often used for iteration with functions and vectors. In this tutorial, different uses of <code>purrr::map</code> and its variants are demonstrated.</p>
+<h2 id="what-can-you-do-with-purrrmap">What can you do with <code>purrr::map</code>?</h2>
+<p><code>purrr::map</code> and its variants allow you to transform their input by applying a function to each element of a list or atomic vector, and it will return an object of the same length as the input. The difference between <code>purrr::map</code> and its variants is that, <code>purrr::map()</code> always returns a list, but other variants return an atomic vector of the indicated type.</p>
+<p>Some commonly used variants includes:</p>
+<p><code>purrr::map_lgl()</code>: returning a logical type vector</p>
+<p><code>purrr::map_int()</code>: returning a integer type vector</p>
+<p><code>purrr::map_dbl()</code>: returning a double type vector</p>
+<p><code>purrr::map_char()</code>: returning a character type vector</p>
+<p><code>purrr::map_df()</code>: returning a data frame, often used for batch load data</p>
+<h2 id="lets-demontrate-purrrmap-with-a-few-example-with-real-data">Let’s demontrate <code>purrr::map</code> with a few example with real data</h2>
+<h3 id="load-package-and-data">Load package and data</h3>
+<p><a href="https://www.kaggle.com/lucasgreenwell/generic-conspiracist-beliefs-scale-responses">Conspiracy Theory</a> is a dataset that contains people’s response to demographics questions, personality about themselves using the Ten Item Personality Inventory and their conspiracist ideation using the Generic Conspiracist Beliefs Scale (GCBS).</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='http://tidyverse.tidyverse.org'>tidyverse</a></span><span class='op'>)</span> 
+<span class='va'>conspiracy</span> <span class='op'>&lt;-</span> <span class='fu'>rio</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/rio/man/import.html'>import</a></span><span class='op'>(</span><span class='fu'>here</span><span class='fu'>::</span><span class='fu'><a href='https://here.r-lib.org//reference/here.html'>here</a></span><span class='op'>(</span><span class='st'>"content"</span>, <span class='st'>"dataCT.csv"</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<p>Let’s take a look at those variables in the dataset.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'><a href='https://rdrr.io/r/utils/str.html'>str</a></span><span class='op'>(</span><span class='va'>conspiracy</span><span class='op'>)</span>
+</code></pre>
+</div>
+<pre><code>&#39;data.frame&#39;:   2495 obs. of  72 variables:
+ $ Q1          : int  5 5 2 5 5 1 4 5 1 1 ...
+ $ Q2          : int  5 5 4 4 4 1 3 4 1 2 ...
+ $ Q3          : int  3 5 1 1 1 1 3 3 1 1 ...
+ $ Q4          : int  5 5 2 2 4 1 3 3 1 1 ...
+ $ Q5          : int  5 5 2 4 4 1 4 4 1 1 ...
+ $ Q6          : int  5 3 2 5 5 1 3 5 1 5 ...
+ $ Q7          : int  5 5 4 4 4 1 3 5 1 1 ...
+ $ Q8          : int  3 5 2 1 3 1 4 5 1 1 ...
+ $ Q9          : int  4 1 2 4 1 1 2 5 1 1 ...
+ $ Q10         : int  5 4 4 5 5 1 3 5 1 4 ...
+ $ Q11         : int  5 4 2 5 5 1 3 5 1 1 ...
+ $ Q12         : int  5 5 4 5 5 1 2 5 1 1 ...
+ $ Q13         : int  3 4 0 1 3 1 2 3 1 1 ...
+ $ Q14         : int  5 4 2 4 5 1 3 4 1 1 ...
+ $ Q15         : int  5 5 4 5 5 1 4 5 1 5 ...
+ $ E1          : int  7070 4086 27535 4561 8841 15267 7249 8024 4654 23787 ...
+ $ E2          : int  7469 13107 7814 5589 7575 7112 4651 7343 6076 12375 ...
+ $ E3          : int  7383 2807 7762 3506 3832 4798 5496 6808 3032 2006 ...
+ $ E4          : int  6540 5030 10290 3784 7775 5214 3936 6794 3984 3650 ...
+ $ E5          : int  9098 7405 8558 5093 4160 3683 7831 8743 4328 3188 ...
+ $ E6          : int  4998 7864 10538 3555 5216 4130 6816 6196 4070 48851 ...
+ $ E7          : int  6971 16234 4740 3158 7559 4487 6167 7762 4012 9013 ...
+ $ E8          : int  4713 2603 4162 1887 5792 2376 2032 4797 2430 2128 ...
+ $ E9          : int  6032 14174 6492 7678 10296 3273 4000 8015 4191 2898 ...
+ $ E10         : int  5878 9423 11512 2304 5455 5501 3583 5764 8444 10420 ...
+ $ E11         : int  4031 11683 6874 3604 3864 3790 4481 5717 4224 5820 ...
+ $ E12         : int  4386 12718 11440 2724 11799 7777 5071 5352 4404 2049 ...
+ $ E13         : int  9077 4816 0 2689 7872 4553 2368 6387 1065 9901 ...
+ $ E14         : int  5113 6806 11418 2657 10543 5944 4408 9671 5533 3838 ...
+ $ E15         : int  4204 4823 9872 3824 4224 4028 6103 5622 4964 7208 ...
+ $ introelapse : int  11 6 7 5 4 35 12 27 2 26 ...
+ $ testelapse  : int  95 125 141 58 105 87 75 104 67 148 ...
+ $ surveyelapse: int  142 144 90 135 210 154 67 186 121 118 ...
+ $ TIPI1       : int  5 6 6 6 1 4 2 4 4 1 ...
+ $ TIPI2       : int  3 7 6 7 3 2 5 5 5 6 ...
+ $ TIPI3       : int  6 6 6 7 7 6 4 6 6 3 ...
+ $ TIPI4       : int  2 7 1 5 2 2 2 2 2 1 ...
+ $ TIPI5       : int  6 6 7 7 6 6 5 7 4 5 ...
+ $ TIPI6       : int  6 3 5 6 4 5 6 4 5 7 ...
+ $ TIPI7       : int  7 7 6 5 5 6 2 5 6 6 ...
+ $ TIPI8       : int  2 5 5 1 5 3 3 5 2 5 ...
+ $ TIPI9       : int  7 1 7 5 5 6 5 3 7 7 ...
+ $ TIPI10      : int  1 1 7 1 3 2 5 1 2 4 ...
+ $ VCL1        : int  1 1 1 1 1 1 1 1 1 1 ...
+ $ VCL2        : int  1 1 1 1 1 1 1 1 1 1 ...
+ $ VCL3        : int  1 0 1 1 0 1 0 0 0 1 ...
+ $ VCL4        : int  1 1 1 1 1 1 1 1 1 1 ...
+ $ VCL5        : int  1 1 1 1 1 1 1 1 1 1 ...
+ $ VCL6        : int  0 0 1 0 0 0 0 0 0 0 ...
+ $ VCL7        : int  0 0 1 0 0 0 0 0 0 0 ...
+ $ VCL8        : int  0 0 1 1 0 0 0 0 0 0 ...
+ $ VCL9        : int  0 0 0 0 0 1 0 0 0 0 ...
+ $ VCL10       : int  1 1 1 1 1 1 1 1 1 1 ...
+ $ VCL11       : int  1 1 1 1 0 1 0 0 0 0 ...
+ $ VCL12       : int  0 0 0 0 0 1 0 0 0 0 ...
+ $ VCL13       : int  1 0 1 1 1 1 1 0 1 1 ...
+ $ VCL14       : int  1 1 1 1 1 1 1 1 1 1 ...
+ $ VCL15       : int  1 1 1 0 1 1 1 1 1 1 ...
+ $ VCL16       : int  1 1 1 1 1 1 1 1 1 1 ...
+ $ education   : int  3 1 4 3 2 3 2 2 1 3 ...
+ $ urban       : int  0 2 2 1 2 1 2 1 3 3 ...
+ $ gender      : int  1 2 2 1 1 1 1 1 1 1 ...
+ $ engnat      : int  2 1 2 1 1 1 1 1 1 2 ...
+ $ age         : int  28 14 26 25 37 34 17 23 17 28 ...
+ $ hand        : int  1 1 1 1 1 1 1 1 1 1 ...
+ $ religion    : int  2 1 1 12 2 7 1 2 4 2 ...
+ $ orientation : int  1 2 1 1 2 1 1 1 2 1 ...
+ $ race        : int  5 4 4 4 4 4 4 4 4 4 ...
+ $ voted       : int  2 2 1 1 2 1 2 2 2 1 ...
+ $ married     : int  1 1 1 1 2 2 1 1 1 2 ...
+ $ familysize  : int  1 1 2 3 2 2 2 3 2 3 ...
+ $ major       : chr  &quot;ACTING&quot; &quot;&quot; &quot;philosophy&quot; &quot;history&quot; ...</code></pre>
+</div>
+<h3 id="using-purrrnest-along-with-purrrmap">Using <code>purrr::nest</code> along with <code>purrr:map</code></h3>
+<p>By looking at the dataset, you can tell it is pretty massive. What if you are interested in responses in different gender groups? You probably want to split the data. However, instead of using <code>split</code> from base r, <code>purrr::nest</code> can do the same thing.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>by_gender</span> <span class='op'>&lt;-</span> <span class='va'>conspiracy</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>group_by</span><span class='op'>(</span><span class='va'>gender</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>nest</span><span class='op'>(</span><span class='op'>)</span>
+
+<span class='va'>by_gender</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 4 x 2
+# Groups:   gender [4]
+  gender data                 
+   &lt;int&gt; &lt;list&gt;               
+1      1 &lt;tibble [1,222 × 71]&gt;
+2      2 &lt;tibble [1,137 × 71]&gt;
+3      3 &lt;tibble [130 × 71]&gt;  
+4      0 &lt;tibble [6 × 71]&gt;    </code></pre>
+</div>
+<p>From the output, we can see that the new dataset <code>by_gender</code> contains a list column for each gender. We can play with the list columns a little bit more.</p>
+<p>Let’s say we want to know how many observations were under each gender category.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>by_gender</span> <span class='op'>&lt;-</span> <span class='va'>conspiracy</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>group_by</span><span class='op'>(</span><span class='va'>gender</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>nest</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>mutate</span><span class='op'>(</span>n <span class='op'>=</span> <span class='fu'>map</span><span class='op'>(</span><span class='va'>data</span>, <span class='va'>nrow</span><span class='op'>)</span><span class='op'>)</span>
+
+<span class='va'>by_gender</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 4 x 3
+# Groups:   gender [4]
+  gender data                  n        
+   &lt;int&gt; &lt;list&gt;                &lt;list&gt;   
+1      1 &lt;tibble [1,222 × 71]&gt; &lt;int [1]&gt;
+2      2 &lt;tibble [1,137 × 71]&gt; &lt;int [1]&gt;
+3      3 &lt;tibble [130 × 71]&gt;   &lt;int [1]&gt;
+4      0 &lt;tibble [6 × 71]&gt;     &lt;int [1]&gt;</code></pre>
+</div>
+<p>As you can see, <code>map</code> returned the number of observations as a list for each gender category, which is not convenient for us to read in order to obtain such simple information. In case like this, variants of <code>map</code> become handy.</p>
+<h3 id="using-purrrmap_dbl">Using <code>purrr::map_dbl()</code></h3>
+<p>To simplify the previous output, we probably want <code>map</code> to just return us a vector of double (i.e., numeric). It is a good time to use <code>purrr::map_dbl()</code> then.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>by_gender</span> <span class='op'>&lt;-</span> <span class='va'>conspiracy</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>group_by</span><span class='op'>(</span><span class='va'>gender</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>nest</span><span class='op'>(</span><span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>mutate</span><span class='op'>(</span>n <span class='op'>=</span> <span class='fu'>map_dbl</span><span class='op'>(</span><span class='va'>data</span>, <span class='va'>nrow</span><span class='op'>)</span><span class='op'>)</span>
+
+<span class='va'>by_gender</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 4 x 3
+# Groups:   gender [4]
+  gender data                      n
+   &lt;int&gt; &lt;list&gt;                &lt;dbl&gt;
+1      1 &lt;tibble [1,222 × 71]&gt;  1222
+2      2 &lt;tibble [1,137 × 71]&gt;  1137
+3      3 &lt;tibble [130 × 71]&gt;     130
+4      0 &lt;tibble [6 × 71]&gt;         6</code></pre>
+</div>
+<p>Is it much easier to read now?</p>
+<h3 id="do-some-more-complex-analysis-with-purrrmap">Do some more complex analysis with <code>purrr:map</code>!</h3>
+<p>Let’s say we are interested in the relationship between <em>education</em> (<code>education</code>) and personality of <em>open to new experiences, complex</em> (<code>TIPI5</code>). Is the level of education a good predictor of <em>open to new experiences</em> in different gender groups?</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>by_gender</span> <span class='op'>&lt;-</span> <span class='va'>by_gender</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>mutate</span><span class='op'>(</span>edu_m <span class='op'>=</span> <span class='fu'>map</span><span class='op'>(</span><span class='va'>data</span>, <span class='op'>~</span><span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>TIPI5</span> <span class='op'>~</span> <span class='va'>education</span>, data <span class='op'>=</span> <span class='va'>.x</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+
+<span class='va'>by_gender</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 4 x 4
+# Groups:   gender [4]
+  gender data                      n edu_m 
+   &lt;int&gt; &lt;list&gt;                &lt;dbl&gt; &lt;list&gt;
+1      1 &lt;tibble [1,222 × 71]&gt;  1222 &lt;lm&gt;  
+2      2 &lt;tibble [1,137 × 71]&gt;  1137 &lt;lm&gt;  
+3      3 &lt;tibble [130 × 71]&gt;     130 &lt;lm&gt;  
+4      0 &lt;tibble [6 × 71]&gt;         6 &lt;lm&gt;  </code></pre>
+</div>
+<p>What about <em>religion</em> (<code>religion</code>) predicting <em>open to new experiences</em> (<code>TIPI5</code>) in different gender groups?</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>by_gender</span> <span class='op'>&lt;-</span> <span class='va'>by_gender</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>mutate</span><span class='op'>(</span>religion_m <span class='op'>=</span> <span class='fu'>map</span><span class='op'>(</span><span class='va'>data</span>, <span class='op'>~</span><span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>TIPI5</span> <span class='op'>~</span> <span class='va'>religion</span>, data <span class='op'>=</span> <span class='va'>.x</span><span class='op'>)</span><span class='op'>)</span><span class='op'>)</span>
+
+<span class='va'>by_gender</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 4 x 5
+# Groups:   gender [4]
+  gender data                      n edu_m  religion_m
+   &lt;int&gt; &lt;list&gt;                &lt;dbl&gt; &lt;list&gt; &lt;list&gt;    
+1      1 &lt;tibble [1,222 × 71]&gt;  1222 &lt;lm&gt;   &lt;lm&gt;      
+2      2 &lt;tibble [1,137 × 71]&gt;  1137 &lt;lm&gt;   &lt;lm&gt;      
+3      3 &lt;tibble [130 × 71]&gt;     130 &lt;lm&gt;   &lt;lm&gt;      
+4      0 &lt;tibble [6 × 71]&gt;         6 &lt;lm&gt;   &lt;lm&gt;      </code></pre>
+</div>
+<p>From the outputs above, you can see that the results from two liner model are two separate columns, and the result for each gender is wrapped in list column with using <code>mutate()</code> after <code>nest()</code>, but how can do know which variable does better job predict the personality of open to new experiences?</p>
+<h2 id="parallel-iteration-with-purrrmap2">Parallel iteration with <code>purrr::map2()</code></h2>
+<p>As mentioned previously, <code>map</code> transforms the input by applying a function to each element of a list or atomic vector. However, {purrr} also provide function to iterates over two vectors concurrently, which is <code>purrr::map2()</code>. Using <code>purrr::map2()</code>, we can actually compare between models we created previously!</p>
+<p>Just as you would use <code>stats::anova</code> to compare two models, we can use <code>stats::anova</code> within <code>purrr::map2()</code> to compare two list columns of models.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='va'>mods</span> <span class='op'>&lt;-</span> <span class='va'>by_gender</span> <span class='op'>%&gt;%</span>
+  <span class='fu'>mutate</span><span class='op'>(</span>
+    edu_m <span class='op'>=</span> <span class='fu'>map</span><span class='op'>(</span><span class='va'>data</span>, <span class='op'>~</span><span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>TIPI5</span> <span class='op'>~</span> <span class='va'>education</span>, data <span class='op'>=</span> <span class='va'>.x</span><span class='op'>)</span><span class='op'>)</span>,
+    religion_m <span class='op'>=</span> <span class='fu'>map</span><span class='op'>(</span><span class='va'>data</span>, <span class='op'>~</span><span class='fu'><a href='https://rdrr.io/r/stats/lm.html'>lm</a></span><span class='op'>(</span><span class='va'>TIPI5</span> <span class='op'>~</span> <span class='va'>religion</span>, data <span class='op'>=</span> <span class='va'>.x</span><span class='op'>)</span><span class='op'>)</span>
+<span class='op'>)</span> <span class='op'>%&gt;%</span> 
+  <span class='fu'>mutate</span><span class='op'>(</span>comp <span class='op'>=</span> <span class='fu'>map2</span><span class='op'>(</span><span class='va'>edu_m</span>, <span class='va'>religion_m</span>, <span class='va'>anova</span><span class='op'>)</span><span class='op'>)</span>
+
+<span class='va'>mods</span>
+</code></pre>
+</div>
+<pre><code># A tibble: 4 x 6
+# Groups:   gender [4]
+  gender data                    n edu_m  religion_m comp             
+   &lt;int&gt; &lt;list&gt;              &lt;dbl&gt; &lt;list&gt; &lt;list&gt;     &lt;list&gt;           
+1      1 &lt;tibble [1,222 × 7…  1222 &lt;lm&gt;   &lt;lm&gt;       &lt;anova[,6] [2 × …
+2      2 &lt;tibble [1,137 × 7…  1137 &lt;lm&gt;   &lt;lm&gt;       &lt;anova[,6] [2 × …
+3      3 &lt;tibble [130 × 71]&gt;   130 &lt;lm&gt;   &lt;lm&gt;       &lt;anova[,6] [2 × …
+4      0 &lt;tibble [6 × 71]&gt;       6 &lt;lm&gt;   &lt;lm&gt;       &lt;anova[,6] [2 × …</code></pre>
+</div>
+<p>Now we have model comparison for each gender group with list column! From there, you can extract any information you want.</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->
 </div>

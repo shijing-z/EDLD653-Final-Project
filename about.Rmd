@@ -12,4 +12,4 @@ The blog is created for the final project of EDLD 653 Functional Programming at 
 
 List of materials: 
 
-Data: Generic Conspiracist Beliefs Scale Responses [https://www.kaggle.com/lucasgreenwell/generic-conspiracist-beliefs-scale-responses]
+Data: [Generic Conspiracist Beliefs Scale Responses](https://www.kaggle.com/lucasgreenwell/generic-conspiracist-beliefs-scale-responses)

@@ -1,0 +1,136 @@
+---
+title: "1. Introduction to {purrr}"
+description: |
+  Using {Purrr} to achieve your goal about iterations.
+author:
+  - name: Shijing Zhou
+date: 05-28-2021
+output:
+  distill::distill_article:
+    self_contained: false
+---
+
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# What is `{purrr}`? 
+
+[`{purrr}`](https://purrr.tidyverse.org/) is a handy package that provides a number of helpful functions often used for iteration with functions and vectors. In this tutorial, different uses of `purrr::map` and its variants are demonstrated. 
+
+## What can you do with `purrr::map`?
+
+`purrr::map` and its variants allow you to transform their input by applying a function to each element of a list or atomic vector, and it will return an object of the same length as the input. The difference between `purrr::map` and its variants is that, `purrr::map()` always returns a list, but other variants return an atomic vector of the indicated type.
+
+Some commonly used variants includes: 
+
+`purrr::map_lgl()`: returning a logical type vector
+
+`purrr::map_int()`: returning a integer type vector 
+
+`purrr::map_dbl()`: returning a double type vector 
+
+`purrr::map_char()`: returning a character type vector
+
+`purrr::map_df()`: returning a data frame, often used for batch load data
+
+## Let's demontrate `purrr::map` with a few example with real data
+
+### Load package and data 
+
+[Conspiracy Theory](https://www.kaggle.com/lucasgreenwell/generic-conspiracist-beliefs-scale-responses) is a dataset that contains people’s response to demographics questions, personality about themselves using the Ten Item Personality Inventory and their conspiracist ideation using the Generic Conspiracist Beliefs Scale (GCBS).
+
+```{r}
+library(tidyverse) 
+conspiracy <- rio::import(here::here("content", "dataCT.csv"))
+```
+
+Let's take a look at those variables in the dataset. 
+
+```{r}
+str(conspiracy)
+```
+
+### Using `purrr::nest` along with `purrr:map`
+
+By looking at the dataset, you can tell it is pretty massive. What if you are interested in responses in different gender groups? You probably want to split the data. However, instead of using `split` from base r, `purrr::nest` can do the same thing. 
+
+```{r}
+by_gender <- conspiracy %>% 
+  group_by(gender) %>% 
+  nest()
+
+by_gender
+```
+
+From the output, we can see that the new dataset `by_gender` contains a list column for each gender. We can play with the list columns a little bit more. 
+
+Let's say we want to know how many observations were under each gender category. 
+
+```{r}
+by_gender <- conspiracy %>% 
+  group_by(gender) %>% 
+  nest() %>% 
+  mutate(n = map(data, nrow))
+
+by_gender
+```
+
+As you can see, `map` returned the number of observations as a list for each gender category, which is not convenient for us to read in order to obtain such simple information. In case like this, variants of `map` become handy. 
+
+### Using `purrr::map_dbl()`
+
+To simplify the previous output, we probably want `map` to just return us a vector of double (i.e., numeric). It is a good time to use `purrr::map_dbl()` then. 
+
+```{r}
+by_gender <- conspiracy %>% 
+  group_by(gender) %>% 
+  nest() %>% 
+  mutate(n = map_dbl(data, nrow))
+
+by_gender
+```
+
+Is it much easier to read now? 
+
+### Do some more complex analysis with `purrr:map`! 
+
+Let's say we are interested in the relationship between _education_ (`education`) and personality of _open to new experiences, complex_ (`TIPI5`). Is the level of education a good predictor of _open to new experiences_ in different gender groups? 
+
+```{r}
+by_gender <- by_gender %>% 
+  mutate(edu_m = map(data, ~lm(TIPI5 ~ education, data = .x)))
+
+by_gender
+```
+
+What about _religion_ (`religion`) predicting _open to new experiences_ (`TIPI5`) in different gender groups?
+
+```{r}
+by_gender <- by_gender %>% 
+  mutate(religion_m = map(data, ~lm(TIPI5 ~ religion, data = .x)))
+
+by_gender
+```
+
+From the outputs above, you can see that the results from two liner model are two separate columns, and the result for each gender is wrapped in list column with using `mutate()` after `nest()`, but how can do know which variable does better job predict the personality of open to new experiences? 
+
+## Parallel iteration with `purrr::map2()`
+
+As mentioned previously, `map` transforms the input by applying a function to each element of a list or atomic vector. However, {purrr} also provide function to iterates over two vectors concurrently, which is `purrr::map2()`. Using `purrr::map2()`, we can actually compare between models we created previously! 
+
+Just as you would use `stats::anova` to compare two models, we can use `stats::anova` within `purrr::map2()` to compare two list columns of models.
+
+```{r}
+mods <- by_gender %>%
+  mutate(
+    edu_m = map(data, ~lm(TIPI5 ~ education, data = .x)),
+    religion_m = map(data, ~lm(TIPI5 ~ religion, data = .x))
+) %>% 
+  mutate(comp = map2(edu_m, religion_m, anova))
+
+mods
+```
+
+Now we have model comparison for each gender group with list column! From there, you can extract any information you want. 
