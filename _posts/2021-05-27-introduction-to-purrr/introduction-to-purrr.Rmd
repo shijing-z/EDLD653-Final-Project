@@ -1,7 +1,7 @@
 ---
 title: "1. Introduction to {purrr}"
 description: |
-  Using {Purrr} to achieve your goal about iterations.
+  A basic introductory tutorial of some functions in `{purrr}`
 author:
   - name: Shijing Zhou
 date: 05-28-2021
