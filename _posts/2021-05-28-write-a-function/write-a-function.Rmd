@@ -54,7 +54,7 @@ This particular dataset contains observations from N=2495 individuals who comple
 
 ### Importing the Data
 
-When importing data, two important things to keep in mind are your working directory and reproducibility. Where you save your files can impact the ease at which you can call them; you'll have the best luck saving data files of interest within the corresponding R Project. `rio`'s `import()` function provides an easy method for importing data files, including the ability to set the class of the data to tibble, which helps to retain the data in a format which is more amenable to data manipulation in `tidyverse`. To enhance reproducibility across different devices and potentially changing file paths, we'll use the `here()` function within the [`here`](https://here.r-lib.org/) package when specifying our file path.
+When importing data, two important things to keep in mind are your working directory and reproducibility. Where you save your files can impact the ease at which you can call them; you'll have the best luck saving data files of interest within the corresponding R Project. `rio`'s `import()` function provides an easy method for importing data files, including the ability to set the class of the data to tibble using the `setclass` argument, which helps to retain the data in a format which is more amenable to data manipulation in `tidyverse`. To enhance reproducibility across different devices and potentially changing file paths, we'll use the `here()` function within the [`here`](https://here.r-lib.org/) package when specifying our file path. 
 
 ```{r}
 # Import data
@@ -77,6 +77,8 @@ data %>%
   head(n = 5) %>% # Take a look at the first 5 rows of the resulting dataframe
   knitr::kable() # Format the output table neatly
 ```
+
+Another package is `rmarkdown` which can be used for creating neat tables in Distill. The function `paged_table()` creates a table in its own box on the page.
 
 With the libraries loaded and data imported, we can now begin building our function.
 
