@@ -1,7 +1,8 @@
-name: "EDLD653-Final-Project"
-title: "Functional Programming in R"
+name: "fp-distill"
+#base_url: 
+title: "EDLD 653-Functional Programming"
 description: |
-  Functional Programming in R
+  EDLD 653-Functional Programming
 output_dir: "docs"
 navbar:
   right:
@@ -9,4 +10,8 @@ navbar:
       href: index.html
     - text: "About"
       href: about.html
-output: distill::distill_article
+    - icon: fa fa-github
+      href: https://github.com/shijing-z/EDLD653-Final-Project.git
+output: 
+  distill::distill_article:
+    theme: style.css
