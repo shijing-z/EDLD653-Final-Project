@@ -2040,7 +2040,7 @@ document.addEventListener('DOMContentLoaded', function() {
 </script>
 
 <!--/radix_placeholder_distill-->
-  <script src="../../site_libs/header-attrs-2.6/header-attrs.js"></script>
+  <script src="../../site_libs/header-attrs-2.8/header-attrs.js"></script>
   <script src="../../site_libs/jquery-1.11.3/jquery.min.js"></script>
   <script src="../../site_libs/popper-2.6.0/popper.min.js"></script>
   <link href="../../site_libs/tippy-6.2.7/tippy.css" rel="stylesheet" />
@@ -2061,7 +2061,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <!--radix_placeholder_front_matter-->
 
 <script id="distill-front-matter" type="text/json">
-{"title":"3. Write a Function!","description":"Demonstration of how to write a function with personality research data.","authors":[{"author":"Raleigh Goodwin, Vinita Vader","authorURL":"#","affiliation":"&nbsp;","affiliationURL":"#","orcidID":""}],"publishedDate":"2021-05-28T00:00:00.000+00:00","citationText":"Vader, 2021"}
+{"title":"3. Write a Function!","description":"Demonstration of how to write a function with personality research data.","authors":[{"author":"Raleigh Goodwin, Vinita Vader","authorURL":"#","affiliation":"&nbsp;","affiliationURL":"#","orcidID":""}],"publishedDate":"2021-05-28T00:00:00.000-07:00","citationText":"Vader, 2021"}
 </script>
 
 <!--/radix_placeholder_front_matter-->
@@ -2106,7 +2106,7 @@ document.addEventListener('DOMContentLoaded', function() {
 <p>Before we get started, we need to load the libraries necessary to complete this tutorial. Loading the entire library may not be always necessary, especially if you intend to use it only once. This will be the case for <code>rio</code>, <code>here</code>, and <code>knitr</code> in this tutorial, so you may choose not to load them here if you’d like.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='http://tidyverse.tidyverse.org'>tidyverse</a></span><span class='op'>)</span>
+<pre class="sourceCode r"><code class="sourceCode r"><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='op'>)</span>
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='http://purrr.tidyverse.org'>purrr</a></span><span class='op'>)</span>
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://github.com/leeper/rio'>rio</a></span><span class='op'>)</span> <span class='co'># optional</span>
 <span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://here.r-lib.org/'>here</a></span><span class='op'>)</span> <span class='co'># optional</span>
@@ -3157,17 +3157,17 @@ Most likely, we aren’t just going to be writing one function in this tutorial.
 # A tibble: 2,495 x 11
       id ipsatized_TIPI1 ipsatized_TIPI2 ipsatized_TIPI3
    &lt;int&gt;           &lt;dbl&gt;           &lt;dbl&gt;           &lt;dbl&gt;
- 1     1           0.5            -1.5              1.5 
- 2     2           1.10            2.10             1.10
- 3     3           0.4             0.4              0.4 
- 4     4           1               2                2   
- 5     5          -3.10           -1.10             2.9 
- 6     6          -0.2            -2.2              1.8 
- 7     7          -1.9             1.1              0.1 
- 8     8          -0.2             0.800            1.8 
- 9     9          -0.300           0.7              1.7 
-10    10          -3.5             1.5             -1.5 
-# … with 2,485 more rows, and 7 more variables:
+ 1     1           0.5            -1.5             1.5  
+ 2     2           1.1             2.1             1.1  
+ 3     3           0.400           0.400           0.400
+ 4     4           1               2               2    
+ 5     5          -3.1            -1.1             2.9  
+ 6     6          -0.200          -2.2             1.8  
+ 7     7          -1.9             1.1             0.100
+ 8     8          -0.200           0.8             1.8  
+ 9     9          -0.300           0.7             1.7  
+10    10          -3.5             1.5            -1.5  
+# ... with 2,485 more rows, and 7 more variables:
 #   ipsatized_TIPI4 &lt;dbl&gt;, ipsatized_TIPI5 &lt;dbl&gt;,
 #   ipsatized_TIPI6 &lt;dbl&gt;, ipsatized_TIPI7 &lt;dbl&gt;,
 #   ipsatized_TIPI8 &lt;dbl&gt;, ipsatized_TIPI9 &lt;dbl&gt;,
@@ -3187,9 +3187,9 @@ $raw
  8     8              4              5              6              2
  9     9              4              5              6              2
 10    10              1              6              3              1
-# … with 2,485 more rows, and 6 more variables: response_TIPI5 &lt;int&gt;,
-#   response_TIPI6 &lt;int&gt;, response_TIPI7 &lt;int&gt;, response_TIPI8 &lt;int&gt;,
-#   response_TIPI9 &lt;int&gt;, response_TIPI10 &lt;int&gt;
+# ... with 2,485 more rows, and 6 more variables:
+#   response_TIPI5 &lt;int&gt;, response_TIPI6 &lt;int&gt;, response_TIPI7 &lt;int&gt;,
+#   response_TIPI8 &lt;int&gt;, response_TIPI9 &lt;int&gt;, response_TIPI10 &lt;int&gt;
 
 $correlation_matrix
                            id response_TIPI1 response_TIPI2
@@ -3254,7 +3254,7 @@ Now that we’ve solved this problem in a specific case, we can begin to general
 </ol>
 <p>Now we can set out to make a function to complete each task. These functions don’t ever have to be used on their own; in the end, they’ll all be combined into a final, single function. This may seem like it’s making work more complicated, but this approach enhances readability of your code and aids in troubleshooting errors.<br />
 Since we’ve done the majority of the problem solving already, we can essentially copy and paste our code from above, making sure to adapt as necessary to the function format. Luckily, for the current tutorial, these changes mostly consist of changing the name of the dataframe input to “df,” which is the name of our only argument in this function.<br />
-After we build each function, we can test that it works with both our TIPI dataset and the <code>iris</code> dataset to ensure it can handle different data.</p>
+After we build each function, we can test that it works by running it with a couple of datasets. Since we wrote this code with the TIPI dataset in mind, we can also test it with another dataset in order to catch any potential issues that may crop up when using different data. Though ipsatization is typically used in personality research, we’ll use the <code>iris</code> dataset as our second test case for simplicity.</p>
 <ol type="1">
 <li>Add an ID variable to the dataframe</li>
 </ol>
@@ -4466,17 +4466,17 @@ NULL</code></pre>
 # A tibble: 2,495 x 11
       id ipsatized_TIPI1 ipsatized_TIPI2 ipsatized_TIPI3
    &lt;int&gt;           &lt;dbl&gt;           &lt;dbl&gt;           &lt;dbl&gt;
- 1     1           0.5            -1.5              1.5 
- 2     2           1.10            2.10             1.10
- 3     3           0.4             0.4              0.4 
- 4     4           1               2                2   
- 5     5          -3.10           -1.10             2.9 
- 6     6          -0.2            -2.2              1.8 
- 7     7          -1.9             1.1              0.1 
- 8     8          -0.2             0.800            1.8 
- 9     9          -0.300           0.7              1.7 
-10    10          -3.5             1.5             -1.5 
-# … with 2,485 more rows, and 7 more variables:
+ 1     1           0.5            -1.5             1.5  
+ 2     2           1.1             2.1             1.1  
+ 3     3           0.400           0.400           0.400
+ 4     4           1               2               2    
+ 5     5          -3.1            -1.1             2.9  
+ 6     6          -0.200          -2.2             1.8  
+ 7     7          -1.9             1.1             0.100
+ 8     8          -0.200           0.8             1.8  
+ 9     9          -0.300           0.7             1.7  
+10    10          -3.5             1.5            -1.5  
+# ... with 2,485 more rows, and 7 more variables:
 #   ipsatized_TIPI4 &lt;dbl&gt;, ipsatized_TIPI5 &lt;dbl&gt;,
 #   ipsatized_TIPI6 &lt;dbl&gt;, ipsatized_TIPI7 &lt;dbl&gt;,
 #   ipsatized_TIPI8 &lt;dbl&gt;, ipsatized_TIPI9 &lt;dbl&gt;,
@@ -4496,9 +4496,9 @@ $data_raw
  8     8              4              5              6              2
  9     9              4              5              6              2
 10    10              1              6              3              1
-# … with 2,485 more rows, and 6 more variables: response_TIPI5 &lt;int&gt;,
-#   response_TIPI6 &lt;int&gt;, response_TIPI7 &lt;int&gt;, response_TIPI8 &lt;int&gt;,
-#   response_TIPI9 &lt;int&gt;, response_TIPI10 &lt;int&gt;</code></pre>
+# ... with 2,485 more rows, and 6 more variables:
+#   response_TIPI5 &lt;int&gt;, response_TIPI6 &lt;int&gt;, response_TIPI7 &lt;int&gt;,
+#   response_TIPI8 &lt;int&gt;, response_TIPI9 &lt;int&gt;, response_TIPI10 &lt;int&gt;</code></pre>
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>test2</span>
 </code></pre>
@@ -4507,17 +4507,17 @@ $data_raw
 # A tibble: 2,495 x 11
       id ipsatized_TIPI1 ipsatized_TIPI2 ipsatized_TIPI3
    &lt;int&gt;           &lt;dbl&gt;           &lt;dbl&gt;           &lt;dbl&gt;
- 1     1           0.5            -1.5              1.5 
- 2     2           1.10            2.10             1.10
- 3     3           0.4             0.4              0.4 
- 4     4           1               2                2   
- 5     5          -3.10           -1.10             2.9 
- 6     6          -0.2            -2.2              1.8 
- 7     7          -1.9             1.1              0.1 
- 8     8          -0.2             0.800            1.8 
- 9     9          -0.300           0.7              1.7 
-10    10          -3.5             1.5             -1.5 
-# … with 2,485 more rows, and 7 more variables:
+ 1     1           0.5            -1.5             1.5  
+ 2     2           1.1             2.1             1.1  
+ 3     3           0.400           0.400           0.400
+ 4     4           1               2               2    
+ 5     5          -3.1            -1.1             2.9  
+ 6     6          -0.200          -2.2             1.8  
+ 7     7          -1.9             1.1             0.100
+ 8     8          -0.200           0.8             1.8  
+ 9     9          -0.300           0.7             1.7  
+10    10          -3.5             1.5            -1.5  
+# ... with 2,485 more rows, and 7 more variables:
 #   ipsatized_TIPI4 &lt;dbl&gt;, ipsatized_TIPI5 &lt;dbl&gt;,
 #   ipsatized_TIPI6 &lt;dbl&gt;, ipsatized_TIPI7 &lt;dbl&gt;,
 #   ipsatized_TIPI8 &lt;dbl&gt;, ipsatized_TIPI9 &lt;dbl&gt;,
@@ -4537,9 +4537,9 @@ $data_raw
  8     8              4              5              6              2
  9     9              4              5              6              2
 10    10              1              6              3              1
-# … with 2,485 more rows, and 6 more variables: response_TIPI5 &lt;int&gt;,
-#   response_TIPI6 &lt;int&gt;, response_TIPI7 &lt;int&gt;, response_TIPI8 &lt;int&gt;,
-#   response_TIPI9 &lt;int&gt;, response_TIPI10 &lt;int&gt;</code></pre>
+# ... with 2,485 more rows, and 6 more variables:
+#   response_TIPI5 &lt;int&gt;, response_TIPI6 &lt;int&gt;, response_TIPI7 &lt;int&gt;,
+#   response_TIPI8 &lt;int&gt;, response_TIPI9 &lt;int&gt;, response_TIPI10 &lt;int&gt;</code></pre>
 </div>
 <ol start="5" type="1">
 <li>Create a list to organize the desired, final output</li>
@@ -4565,17 +4565,17 @@ $data_raw
 # A tibble: 2,495 x 11
       id ipsatized_TIPI1 ipsatized_TIPI2 ipsatized_TIPI3
    &lt;int&gt;           &lt;dbl&gt;           &lt;dbl&gt;           &lt;dbl&gt;
- 1     1           0.5            -1.5              1.5 
- 2     2           1.10            2.10             1.10
- 3     3           0.4             0.4              0.4 
- 4     4           1               2                2   
- 5     5          -3.10           -1.10             2.9 
- 6     6          -0.2            -2.2              1.8 
- 7     7          -1.9             1.1              0.1 
- 8     8          -0.2             0.800            1.8 
- 9     9          -0.300           0.7              1.7 
-10    10          -3.5             1.5             -1.5 
-# … with 2,485 more rows, and 7 more variables:
+ 1     1           0.5            -1.5             1.5  
+ 2     2           1.1             2.1             1.1  
+ 3     3           0.400           0.400           0.400
+ 4     4           1               2               2    
+ 5     5          -3.1            -1.1             2.9  
+ 6     6          -0.200          -2.2             1.8  
+ 7     7          -1.9             1.1             0.100
+ 8     8          -0.200           0.8             1.8  
+ 9     9          -0.300           0.7             1.7  
+10    10          -3.5             1.5            -1.5  
+# ... with 2,485 more rows, and 7 more variables:
 #   ipsatized_TIPI4 &lt;dbl&gt;, ipsatized_TIPI5 &lt;dbl&gt;,
 #   ipsatized_TIPI6 &lt;dbl&gt;, ipsatized_TIPI7 &lt;dbl&gt;,
 #   ipsatized_TIPI8 &lt;dbl&gt;, ipsatized_TIPI9 &lt;dbl&gt;,
@@ -4595,9 +4595,9 @@ $raw
  8     8              4              5              6              2
  9     9              4              5              6              2
 10    10              1              6              3              1
-# … with 2,485 more rows, and 6 more variables: response_TIPI5 &lt;int&gt;,
-#   response_TIPI6 &lt;int&gt;, response_TIPI7 &lt;int&gt;, response_TIPI8 &lt;int&gt;,
-#   response_TIPI9 &lt;int&gt;, response_TIPI10 &lt;int&gt;
+# ... with 2,485 more rows, and 6 more variables:
+#   response_TIPI5 &lt;int&gt;, response_TIPI6 &lt;int&gt;, response_TIPI7 &lt;int&gt;,
+#   response_TIPI8 &lt;int&gt;, response_TIPI9 &lt;int&gt;, response_TIPI10 &lt;int&gt;
 
 $correlation_matrix
                            id response_TIPI1 response_TIPI2
@@ -4657,17 +4657,17 @@ ipsatized_TIPI10    -0.06741043     0.941250723</code></pre>
 # A tibble: 2,495 x 11
       id ipsatized_TIPI1 ipsatized_TIPI2 ipsatized_TIPI3
    &lt;int&gt;           &lt;dbl&gt;           &lt;dbl&gt;           &lt;dbl&gt;
- 1     1           0.5            -1.5              1.5 
- 2     2           1.10            2.10             1.10
- 3     3           0.4             0.4              0.4 
- 4     4           1               2                2   
- 5     5          -3.10           -1.10             2.9 
- 6     6          -0.2            -2.2              1.8 
- 7     7          -1.9             1.1              0.1 
- 8     8          -0.2             0.800            1.8 
- 9     9          -0.300           0.7              1.7 
-10    10          -3.5             1.5             -1.5 
-# … with 2,485 more rows, and 7 more variables:
+ 1     1           0.5            -1.5             1.5  
+ 2     2           1.1             2.1             1.1  
+ 3     3           0.400           0.400           0.400
+ 4     4           1               2               2    
+ 5     5          -3.1            -1.1             2.9  
+ 6     6          -0.200          -2.2             1.8  
+ 7     7          -1.9             1.1             0.100
+ 8     8          -0.200           0.8             1.8  
+ 9     9          -0.300           0.7             1.7  
+10    10          -3.5             1.5            -1.5  
+# ... with 2,485 more rows, and 7 more variables:
 #   ipsatized_TIPI4 &lt;dbl&gt;, ipsatized_TIPI5 &lt;dbl&gt;,
 #   ipsatized_TIPI6 &lt;dbl&gt;, ipsatized_TIPI7 &lt;dbl&gt;,
 #   ipsatized_TIPI8 &lt;dbl&gt;, ipsatized_TIPI9 &lt;dbl&gt;,
@@ -4687,9 +4687,9 @@ $raw
  8     8              4              5              6              2
  9     9              4              5              6              2
 10    10              1              6              3              1
-# … with 2,485 more rows, and 6 more variables: response_TIPI5 &lt;int&gt;,
-#   response_TIPI6 &lt;int&gt;, response_TIPI7 &lt;int&gt;, response_TIPI8 &lt;int&gt;,
-#   response_TIPI9 &lt;int&gt;, response_TIPI10 &lt;int&gt;
+# ... with 2,485 more rows, and 6 more variables:
+#   response_TIPI5 &lt;int&gt;, response_TIPI6 &lt;int&gt;, response_TIPI7 &lt;int&gt;,
+#   response_TIPI8 &lt;int&gt;, response_TIPI9 &lt;int&gt;, response_TIPI10 &lt;int&gt;
 
 $correlation_matrix
                            id response_TIPI1 response_TIPI2
@@ -4766,17 +4766,17 @@ ipsatized_TIPI10    -0.06741043     0.941250723</code></pre>
 # A tibble: 2,495 x 11
       id ipsatized_TIPI1 ipsatized_TIPI2 ipsatized_TIPI3
    &lt;int&gt;           &lt;dbl&gt;           &lt;dbl&gt;           &lt;dbl&gt;
- 1     1           0.5            -1.5              1.5 
- 2     2           1.10            2.10             1.10
- 3     3           0.4             0.4              0.4 
- 4     4           1               2                2   
- 5     5          -3.10           -1.10             2.9 
- 6     6          -0.2            -2.2              1.8 
- 7     7          -1.9             1.1              0.1 
- 8     8          -0.2             0.800            1.8 
- 9     9          -0.300           0.7              1.7 
-10    10          -3.5             1.5             -1.5 
-# … with 2,485 more rows, and 7 more variables:
+ 1     1           0.5            -1.5             1.5  
+ 2     2           1.1             2.1             1.1  
+ 3     3           0.400           0.400           0.400
+ 4     4           1               2               2    
+ 5     5          -3.1            -1.1             2.9  
+ 6     6          -0.200          -2.2             1.8  
+ 7     7          -1.9             1.1             0.100
+ 8     8          -0.200           0.8             1.8  
+ 9     9          -0.300           0.7             1.7  
+10    10          -3.5             1.5            -1.5  
+# ... with 2,485 more rows, and 7 more variables:
 #   ipsatized_TIPI4 &lt;dbl&gt;, ipsatized_TIPI5 &lt;dbl&gt;,
 #   ipsatized_TIPI6 &lt;dbl&gt;, ipsatized_TIPI7 &lt;dbl&gt;,
 #   ipsatized_TIPI8 &lt;dbl&gt;, ipsatized_TIPI9 &lt;dbl&gt;,
@@ -4796,9 +4796,9 @@ $raw
  8     8              4              5              6              2
  9     9              4              5              6              2
 10    10              1              6              3              1
-# … with 2,485 more rows, and 6 more variables: response_TIPI5 &lt;int&gt;,
-#   response_TIPI6 &lt;int&gt;, response_TIPI7 &lt;int&gt;, response_TIPI8 &lt;int&gt;,
-#   response_TIPI9 &lt;int&gt;, response_TIPI10 &lt;int&gt;
+# ... with 2,485 more rows, and 6 more variables:
+#   response_TIPI5 &lt;int&gt;, response_TIPI6 &lt;int&gt;, response_TIPI7 &lt;int&gt;,
+#   response_TIPI8 &lt;int&gt;, response_TIPI9 &lt;int&gt;, response_TIPI10 &lt;int&gt;
 
 $correlation_matrix
                            id response_TIPI1 response_TIPI2
@@ -4857,17 +4857,17 @@ ipsatized_TIPI10    -0.06741043     0.941250723</code></pre>
 # A tibble: 2,495 x 11
       id ipsatized_TIPI1 ipsatized_TIPI2 ipsatized_TIPI3
    &lt;int&gt;           &lt;dbl&gt;           &lt;dbl&gt;           &lt;dbl&gt;
- 1     1           0.5            -1.5              1.5 
- 2     2           1.10            2.10             1.10
- 3     3           0.4             0.4              0.4 
- 4     4           1               2                2   
- 5     5          -3.10           -1.10             2.9 
- 6     6          -0.2            -2.2              1.8 
- 7     7          -1.9             1.1              0.1 
- 8     8          -0.2             0.800            1.8 
- 9     9          -0.300           0.7              1.7 
-10    10          -3.5             1.5             -1.5 
-# … with 2,485 more rows, and 7 more variables:
+ 1     1           0.5            -1.5             1.5  
+ 2     2           1.1             2.1             1.1  
+ 3     3           0.400           0.400           0.400
+ 4     4           1               2               2    
+ 5     5          -3.1            -1.1             2.9  
+ 6     6          -0.200          -2.2             1.8  
+ 7     7          -1.9             1.1             0.100
+ 8     8          -0.200           0.8             1.8  
+ 9     9          -0.300           0.7             1.7  
+10    10          -3.5             1.5            -1.5  
+# ... with 2,485 more rows, and 7 more variables:
 #   ipsatized_TIPI4 &lt;dbl&gt;, ipsatized_TIPI5 &lt;dbl&gt;,
 #   ipsatized_TIPI6 &lt;dbl&gt;, ipsatized_TIPI7 &lt;dbl&gt;,
 #   ipsatized_TIPI8 &lt;dbl&gt;, ipsatized_TIPI9 &lt;dbl&gt;,
@@ -4887,9 +4887,9 @@ $raw
  8     8              4              5              6              2
  9     9              4              5              6              2
 10    10              1              6              3              1
-# … with 2,485 more rows, and 6 more variables: response_TIPI5 &lt;int&gt;,
-#   response_TIPI6 &lt;int&gt;, response_TIPI7 &lt;int&gt;, response_TIPI8 &lt;int&gt;,
-#   response_TIPI9 &lt;int&gt;, response_TIPI10 &lt;int&gt;
+# ... with 2,485 more rows, and 6 more variables:
+#   response_TIPI5 &lt;int&gt;, response_TIPI6 &lt;int&gt;, response_TIPI7 &lt;int&gt;,
+#   response_TIPI8 &lt;int&gt;, response_TIPI9 &lt;int&gt;, response_TIPI10 &lt;int&gt;
 
 $correlation_matrix
                            id response_TIPI1 response_TIPI2

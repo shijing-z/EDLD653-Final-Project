@@ -201,7 +201,7 @@ Since we want each function to only do one task, we can first outline the indivi
 
 Now we can set out to make a function to complete each task. These functions don't ever have to be used on their own; in the end, they'll all be combined into a final, single function. This may seem like it's making work more complicated, but this approach enhances readability of your code and aids in troubleshooting errors.\
 Since we've done the majority of the problem solving already, we can essentially copy and paste our code from above, making sure to adapt as necessary to the function format. Luckily, for the current tutorial, these changes mostly consist of changing the name of the dataframe input to "df," which is the name of our only argument in this function.\
-After we build each function, we can test that it works with both our TIPI dataset and the `iris` dataset to ensure it can handle different data.
+After we build each function, we can test that it works by running it with a couple of datasets. Since we wrote this code with the TIPI dataset in mind, we can also test it with another dataset in order to catch any potential issues that may crop up when using different data. Though ipsatization is typically used in personality research, we'll use the `iris` dataset as our second test case for simplicity.
 
 1. Add an ID variable to the dataframe
 
