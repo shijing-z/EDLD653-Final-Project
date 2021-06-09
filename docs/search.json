@@ -5,14 +5,14 @@
       "title": "About this blog",
       "author": [],
       "contents": "\r\nThis blog was created for the final project of EDLD 653 Functional Programming at University of Oregon by Shijing Zhou, Vinita Vader, and Raleigh Goodwin.\r\nThe materials used in this blog are all publicly available on the internet; our data, the Generic Conspiracist Beliefs Scale Responses, was posted to kaggle by Lucas Greenwell.\r\n\r\n\r\n\r\n",
-      "last_modified": "2021-06-09T12:11:39-07:00"
+      "last_modified": "2021-06-09T12:14:34-07:00"
     },
     {
       "path": "index.html",
       "title": "Functional Programming in R",
       "author": [],
       "contents": "\r\n\r\n\r\n\r\n",
-      "last_modified": "2021-06-09T12:11:41-07:00"
+      "last_modified": "2021-06-09T12:14:35-07:00"
     }
   ],
   "collections": ["posts/posts.json"]
