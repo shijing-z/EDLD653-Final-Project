@@ -1,15 +1,12 @@
 ---
 title: "About this blog"
-description: |
-  Some additional details about the blog
+
 ---
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = FALSE)
 ```
 
-The blog is created for the final project of EDLD 653 Functional Programming at University of Oregon. The materials used in the blog are all publically available on the internet. 
-
-List of materials: 
-
-Data: [Generic Conspiracist Beliefs Scale Responses](https://www.kaggle.com/lucasgreenwell/generic-conspiracist-beliefs-scale-responses)
+This blog was created for the final project of EDLD 653 Functional Programming at University of Oregon by Shijing Zhou, Vinita Vader, and Raleigh Goodwin.\
+\
+The materials used in this blog are all publicly available on the internet; our data, the [Generic Conspiracist Beliefs Scale Responses](https://www.kaggle.com/lucasgreenwell/generic-conspiracist-beliefs-scale-responses), was posted to [kaggle](kaggle.com) by Lucas Greenwell.

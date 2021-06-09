@@ -1,7 +1,7 @@
 ---
 title: "1. Introduction to {purrr}"
 description: |
-  A basic introductory tutorial of some functions in `{purrr}`
+  A basic introductory tutorial of the `purrr::map()` family
 author:
   - name: Shijing Zhou
 date: 05-28-2021

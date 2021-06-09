@@ -1,7 +1,7 @@
 ---
 title: "2. Write a Function!"
 description: |
-  Demonstration of how to write a function with personality research data.
+  A tutorial for applying functional programming to personality research
 author:
   - name: Raleigh Goodwin, Vinita Vader
 date: 05-28-2021
