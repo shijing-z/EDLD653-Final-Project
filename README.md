@@ -12,7 +12,7 @@ Distill blog with tutorial posts was choosen to be the format of the final proje
 
 This is a dataset that contains people’s response to demographics questions, personality about themselves (The Ten Item Personality Inventory) and their conspiracist ideation (The Generic Conspiracist Beliefs Scale).
 
-## Requirement of the Project
+## Requirement Check
 
 ### More than one variant of `purrr::map` is used
 
