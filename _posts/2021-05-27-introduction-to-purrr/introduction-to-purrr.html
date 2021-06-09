@@ -115,7 +115,7 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
   <!--/radix_placeholder_rmarkdown_metadata-->
   
   <script type="text/json" id="radix-resource-manifest">
-  {"type":"character","attributes":{},"value":["introduction-to-purrr_files/anchor-4.2.2/anchor.min.js","introduction-to-purrr_files/bowser-1.9.3/bowser.min.js","introduction-to-purrr_files/distill-2.2.21/template.v2.js","introduction-to-purrr_files/header-attrs-2.7/header-attrs.js","introduction-to-purrr_files/jquery-1.11.3/jquery.min.js","introduction-to-purrr_files/popper-2.6.0/popper.min.js","introduction-to-purrr_files/tippy-6.2.7/tippy-bundle.umd.min.js","introduction-to-purrr_files/tippy-6.2.7/tippy-light-border.css","introduction-to-purrr_files/tippy-6.2.7/tippy.css","introduction-to-purrr_files/tippy-6.2.7/tippy.umd.min.js","introduction-to-purrr_files/webcomponents-2.0.0/webcomponents.js"]}
+  {"type":"character","attributes":{},"value":["introduction-to-purrr_files/anchor-4.2.2/anchor.min.js","introduction-to-purrr_files/bowser-1.9.3/bowser.min.js","introduction-to-purrr_files/distill-2.2.21/template.v2.js","introduction-to-purrr_files/header-attrs-2.7/header-attrs.js","introduction-to-purrr_files/header-attrs-2.8/header-attrs.js","introduction-to-purrr_files/jquery-1.11.3/jquery.min.js","introduction-to-purrr_files/popper-2.6.0/popper.min.js","introduction-to-purrr_files/tippy-6.2.7/tippy-bundle.umd.min.js","introduction-to-purrr_files/tippy-6.2.7/tippy-light-border.css","introduction-to-purrr_files/tippy-6.2.7/tippy.css","introduction-to-purrr_files/tippy-6.2.7/tippy.umd.min.js","introduction-to-purrr_files/webcomponents-2.0.0/webcomponents.js"]}
   </script>
   <!--radix_placeholder_navigation_in_header-->
   <!--/radix_placeholder_navigation_in_header-->
@@ -1478,21 +1478,59 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 
 <div class="d-article">
 <h1 id="what-is-purrr">What is <code>{purrr}</code>?</h1>
-<p><a href="https://purrr.tidyverse.org/"><code>{purrr}</code></a> is a handy package that provides a number of helpful functions often used for iteration with functions and vectors. In this tutorial, different uses of <code>purrr::map</code> and its variants are demonstrated.</p>
-<h2 id="what-can-you-do-with-purrrmap">What can you do with <code>purrr::map</code>?</h2>
-<p><code>purrr::map</code> and its variants allow you to transform their input by applying a function to each element of a list or atomic vector, and it will return an object of the same length as the input. The difference between <code>purrr::map</code> and its variants is that, <code>purrr::map()</code> always returns a list, but other variants return an atomic vector of the indicated type.</p>
-<p>Some commonly used variants includes:</p>
-<p><code>purrr::map_lgl()</code>: returning a logical type vector</p>
-<p><code>purrr::map_int()</code>: returning a integer type vector</p>
-<p><code>purrr::map_dbl()</code>: returning a double type vector</p>
-<p><code>purrr::map_char()</code>: returning a character type vector</p>
-<p><code>purrr::map_df()</code>: returning a data frame, often used for batch load data</p>
-<h2 id="lets-demontrate-purrrmap-with-a-few-example-with-real-data">Let’s demontrate <code>purrr::map</code> with a few example with real data</h2>
-<h3 id="load-package-and-data">Load package and data</h3>
-<p><a href="https://www.kaggle.com/lucasgreenwell/generic-conspiracist-beliefs-scale-responses">Conspiracy Theory</a> is a dataset that contains people’s response to demographics questions, personality about themselves using the Ten Item Personality Inventory and their conspiracist ideation using the Generic Conspiracist Beliefs Scale (GCBS).</p>
+<p><a href="https://purrr.tidyverse.org/"><code>{purrr}</code></a> is a handy package that provides a number of helpful functions often used for iteration with functions and vectors. In this tutorial, different uses of <code>purrr::map()</code> and its variants are demonstrated.</p>
+<h2 id="what-can-you-do-with-purrrmap">What can you do with <code>purrr::map()</code>?</h2>
+<p><code>purrr::map()</code> and its variants are functionals, meaning they are functions that take another function as input, apply that function to the specified data, and return the resulting vector as output. <code>purrr::map()</code> and its “family” of functions allow you to transform their input by applying a function to each element of a list or atomic vector, and it will return an object of the same length as the input. The difference between <code>purrr::map()</code> and its variants is that <code>purrr::map()</code> always returns a list, but other variants return an atomic vector of the indicated type.</p>
+<p>Some commonly used variants include:</p>
+<ul>
+<li><code>purrr::map_lgl()</code>: returns a logical type vector</li>
+<li><code>purrr::map_int()</code>: returns a integer type vector</li>
+<li><code>purrr::map_dbl()</code>: returns a double type vector</li>
+<li><code>purrr::map_char()</code>: returns a character type vector</li>
+<li><code>purrr::map_df()</code>: returns a data frame, often used for batch load data</li>
+</ul>
+<p>The <code>map()</code> family’s arguments are relatively simple, but it can take a while to get used to them. Its basic anatomy is as follows:</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
-<pre class="sourceCode r"><code class="sourceCode r"><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='op'>)</span> 
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>map</span><span class='op'>(</span><span class='va'>your_data</span>, <span class='va'>some_function_or_formula_or_vector</span>, <span class='va'>any_necessary_arguments_for_function</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<p>For example,</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>map_dbl</span><span class='op'>(</span><span class='va'>data</span>, <span class='va'>mean</span>, na.rm <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<p>would return a vector containing the mean (removing <code>NA</code>s) of each column of <code>data</code>.<br />
+Instead of supplying a function as input, you can also write equivalent code supplying a formula instead.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>map_dbl</span><span class='op'>(</span><span class='va'>data</span>, <span class='op'>~</span><span class='fu'><a href='https://rdrr.io/r/base/mean.html'>mean</a></span><span class='op'>(</span><span class='va'>.x</span>, na.rm <span class='op'>=</span> <span class='cn'>TRUE</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<p>You can also input “anonymous” functions</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>map_dbl</span><span class='op'>(</span><span class='va'>data</span>, <span class='kw'>function</span><span class='op'>(</span><span class='va'>x</span><span class='op'>)</span> <span class='va'>x</span> <span class='op'>+</span> <span class='fl'>2</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<p>and vectors for indexing.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>map</span><span class='op'>(</span><span class='va'>your_complex_list</span>, <span class='fu'><a href='https://rdrr.io/r/base/c.html'>c</a></span><span class='op'>(</span><span class='fl'>1</span>, <span class='fl'>4</span><span class='op'>)</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<h2 id="lets-demontrate-purrrmap-with-a-few-examples-from-real-data">Let’s demontrate <code>purrr::map()</code> with a few examples from real data</h2>
+<h3 id="load-package-and-data">Load package and data</h3>
+<p>For this tutorial, we will be utilizing an <a href="https://www.kaggle.com/lucasgreenwell/generic-conspiracist-beliefs-scale-responses">open dataset</a> that contains N=2495 individuals’ responses to a conspiracist ideation measure called the Generic Conspiracist Beliefs Scale (GCBS; <a href="https://www.frontiersin.org/articles/10.3389/fpsyg.2013.00279/full">Brotherton et al., 2013</a>), a personality measure called the Ten Item Personality Inventory (TIPI; <a href="https://psycnet.apa.org/record/2003-09807-003">Gosling, S. D., Rentfrow, P. J., &amp; Swann, W. B., Jr., 2003</a>), and various demographic and validity check items. For more information about the data, see <a href="https://shijing-z.github.io/EDLD653-Final-Project/posts/2021-05-28-write-a-function/">our second post</a>.</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='kw'><a href='https://rdrr.io/r/base/library.html'>library</a></span><span class='op'>(</span><span class='va'><a href='https://tidyverse.tidyverse.org'>tidyverse</a></span><span class='op'>)</span> <span class='co'># note: {purrr} is a {tidyverse} package</span>
 <span class='va'>conspiracy</span> <span class='op'>&lt;-</span> <span class='fu'>rio</span><span class='fu'>::</span><span class='fu'><a href='https://rdrr.io/pkg/rio/man/import.html'>import</a></span><span class='op'>(</span><span class='fu'>here</span><span class='fu'>::</span><span class='fu'><a href='https://here.r-lib.org//reference/here.html'>here</a></span><span class='op'>(</span><span class='st'>"content"</span>, <span class='st'>"dataCT.csv"</span><span class='op'>)</span><span class='op'>)</span>
 </code></pre>
 </div>
@@ -1577,8 +1615,8 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
  $ familysize  : int  1 1 2 3 2 2 2 3 2 3 ...
  $ major       : chr  &quot;ACTING&quot; &quot;&quot; &quot;philosophy&quot; &quot;history&quot; ...</code></pre>
 </div>
-<h3 id="using-purrrnest-along-with-purrrmap">Using <code>purrr::nest</code> along with <code>purrr:map</code></h3>
-<p>By looking at the dataset, you can tell it is pretty massive. What if you are interested in responses in different gender groups? You probably want to split the data. However, instead of using <code>split</code> from base r, <code>purrr::nest</code> can do the same thing.</p>
+<h3 id="using-purrrnest-along-with-purrrmap">Using <code>purrr::nest()</code> along with <code>purrr:map()</code></h3>
+<p>By looking at the dataset, you can tell it is pretty massive. What if you are interested in how responses differ by gender groups? You probably want to split the data. However, instead of using <code>split()</code> from base r, <code>purrr::nest()</code> can do the same thing.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>by_gender</span> <span class='op'>&lt;-</span> <span class='va'>conspiracy</span> <span class='op'>%&gt;%</span> 
@@ -1618,9 +1656,9 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 3      3 &lt;tibble [130 x 71]&gt;   &lt;int [1]&gt;
 4      0 &lt;tibble [6 x 71]&gt;     &lt;int [1]&gt;</code></pre>
 </div>
-<p>As you can see, <code>map</code> returned the number of observations as a list for each gender category, which is not convenient for us to read in order to obtain such simple information. In case like this, variants of <code>map</code> become handy.</p>
+<p>As you can see, <code>map()</code> returned the number of observations as a list for each gender category, which is not convenient for us to read in order to obtain such simple information. In case like this, variants of <code>map()</code> become handy.</p>
 <h3 id="using-purrrmap_dbl">Using <code>purrr::map_dbl()</code></h3>
-<p>To simplify the previous output, we probably want <code>map</code> to just return us a vector of double (i.e., numeric). It is a good time to use <code>purrr::map_dbl()</code> then.</p>
+<p>To simplify the previous output, we probably want <code>map()</code> to just return us a vector of double (i.e., numeric). It is a good time to use <code>purrr::map_dbl()</code> then.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>by_gender</span> <span class='op'>&lt;-</span> <span class='va'>conspiracy</span> <span class='op'>%&gt;%</span> 
@@ -1641,8 +1679,8 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 4      0 &lt;tibble [6 x 71]&gt;         6</code></pre>
 </div>
 <p>Is it much easier to read now?</p>
-<h3 id="do-some-more-complex-analysis-with-purrrmap">Do some more complex analysis with <code>purrr:map</code>!</h3>
-<p>Let’s say we are interested in the relationship between <em>education</em> (<code>education</code>) and personality of <em>open to new experiences, complex</em> (<code>TIPI5</code>). Is the level of education a good predictor of <em>open to new experiences</em> in different gender groups?</p>
+<h3 id="do-some-more-complex-analysis-with-purrrmap">Do some more complex analysis with <code>purrr:map()</code>!</h3>
+<p>Let’s say we are interested in the relationship between <em>education</em> (<code>education</code>) and participants’ self ratings for the <em>open to new experiences, complex</em> item (<code>TIPI5</code>). Is the level of education a good predictor of <em>open to new experiences</em> in different gender groups?</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>by_gender</span> <span class='op'>&lt;-</span> <span class='va'>by_gender</span> <span class='op'>%&gt;%</span> 
@@ -1680,8 +1718,15 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 </div>
 <p>From the outputs above, you can see that the results from two liner model are two separate columns, and the result for each gender is wrapped in list column with using <code>mutate()</code> after <code>nest()</code>, but how can do know which variable does better job predict the personality of open to new experiences?</p>
 <h2 id="parallel-iteration-with-purrrmap2">Parallel iteration with <code>purrr::map2()</code></h2>
-<p>As mentioned previously, <code>map</code> transforms the input by applying a function to each element of a list or atomic vector. However, {purrr} also provide function to iterates over two vectors concurrently, which is <code>purrr::map2()</code>. Using <code>purrr::map2()</code>, we can actually compare between models we created previously!</p>
-<p>Just as you would use <code>stats::anova</code> to compare two models, we can use <code>stats::anova</code> within <code>purrr::map2()</code> to compare two list columns of models.</p>
+<p>As mentioned previously, <code>map()</code> transforms the input by applying a function to each element of a list or atomic vector. However, {purrr} also provides a function to iterate over two vectors concurrently, <code>purrr::map2()</code>, which takes the following form:</p>
+<div class="layout-chunk" data-layout="l-body">
+<div class="sourceCode">
+<pre class="sourceCode r"><code class="sourceCode r"><span class='fu'>map2</span><span class='op'>(</span><span class='va'>vector1</span>, <span class='va'>vector2</span>, <span class='va'>a_function</span><span class='op'>/</span><span class='va'>formula</span><span class='op'>/</span><span class='va'>vector</span>, <span class='va'>arguments</span><span class='op'>)</span>
+</code></pre>
+</div>
+</div>
+<p>Using <code>purrr::map2()</code>, we can actually compare between models we created previously!<br />
+Just as you would use <code>stats::anova()</code> to compare two models, we can use <code>stats::anova()</code> within <code>purrr::map2()</code> to compare two list columns of models.</p>
 <div class="layout-chunk" data-layout="l-body">
 <div class="sourceCode">
 <pre class="sourceCode r"><code class="sourceCode r"><span class='va'>mods</span> <span class='op'>&lt;-</span> <span class='va'>by_gender</span> <span class='op'>%&gt;%</span>
@@ -1703,7 +1748,9 @@ code span.wa { color: #5e5e5e; font-style: italic; } /* Warning */
 3      3 &lt;tibble [130 x 71]&gt;     130 &lt;lm&gt;   &lt;lm&gt;       &lt;anova [2 x 6]&gt;
 4      0 &lt;tibble [6 x 71]&gt;         6 &lt;lm&gt;   &lt;lm&gt;       &lt;anova [2 x 6]&gt;</code></pre>
 </div>
-<p>Now we have model comparison for each gender group with list column! From there, you can extract any information you want.</p>
+<p>Now we have model comparison for each gender group with list column! From there, you can extract any information you want.<br />
+<br />
+This concludes our tutorial on the <code>purrr::map()</code> family. We hope you had fun with functionals!</p>
 <div class="sourceCode" id="cb8"><pre class="sourceCode r distill-force-highlighting-css"><code class="sourceCode r"></code></pre></div>
 <!--radix_placeholder_article_footer-->
 <!--/radix_placeholder_article_footer-->

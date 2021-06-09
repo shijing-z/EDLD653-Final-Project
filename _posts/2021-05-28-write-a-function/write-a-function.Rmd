@@ -96,7 +96,7 @@ data %>%
   glance(5)
 ```
 
-This works! Now we can move on to building something more complex.
+This works! If you'd like to read more about functions before continuing, [chapter 6](https://adv-r.hadley.nz/functions.html) of Hadley Wickham's [*Advanced R*](https://github.com/hadley/adv-r) is an incredibly useful resource. In this tutorial, we will now move on to writing something more complex, walking through an applied case of functional programming within personality research.
 
 ## Building Functions
 
@@ -112,7 +112,7 @@ __What is the goal of this function?__\
 Basically, what do we need this function to do? For the current tutorial, we are writing a function that ipsatizes any dataset, meaning that it will compute the means of the rows and subtract the mean from every score in the respective rows. Ideally, it will produce output in the form of a list containing the raw and transformed (i.e., ipsatized) data, along with a correlation matrix.
 
 __How can we achieve this goal for a specific dataset?__\
-As we learned in previous posts, when taking a functional programming approach to this problem, we should first attempt to solve it within a specific case. Once we've done so, we can then consider generalizing to a function. For this tutorial, we will be solving the problem first with the TIPI dataset, and then we can apply that solution to build the final function.
+When taking a functional programming approach to this problem, we should first attempt to solve it within a specific case. Once we've done so, we can then consider generalizing to a function. For this tutorial, we will be solving the problem first with the TIPI dataset, and then we can apply that solution to build the final function.
 
 __How can we break the function's goal into smaller tasks?__\
 Most likely, we aren't just going to be writing one function in this tutorial. Ideally, a function should complete exactly one task; therefore, when we are attempting to build a function to complete a complicated task like ipsatization, we will need to write multiple simple functions and combine them. Thus, it can be helpful to first outline and think through each step of the process and eventually create a function for each step.
@@ -231,7 +231,10 @@ It works! However, when looking at the output for the dataframe `iris`, you may 
 
 1.5. Select only numeric columns from dataframe
 
-We can accomplish this using the `map_lgl()` function from the `purrr` package, which maps the `is.numeric()` function to every column in the dataframe and is appropriate in this case because the output will be a logical vector. This will ensure that all the columns in the dataframe we are working with are numeric. First, we can try writing this code to solve the problem in the `iris` dataset specifically.
+We can accomplish this using the `map_lgl()` function from the `purrr` package, which maps the `is.numeric()` function to every column in the dataframe and is appropriate in this case because the output will be a logical vector. This will ensure that all the columns in the dataframe we are working with are numeric.\
+For more information about the `purrr::map()` family, see [our first post](https://shijing-z.github.io/EDLD653-Final-Project/posts/2021-05-27-introduction-to-purrr/).\
+\
+First, we can try writing this code to solve the problem in the `iris` dataset specifically.
 
 ```{r}
 iris[ , purrr::map_lgl(iris, is.numeric)] %>% 
@@ -462,10 +465,12 @@ TIPI_item1 <- data.frame(ipsdat$raw$response_TIPI1, ipsdat$ipsatized$ipsatized_T
 TIPI_item1 %>% 
   ggplot() +
   geom_density(aes(x = Item1, color = Data, fill = Data), alpha = .6) +
-  labs(x = "TIPI Item 1", y = "Density", title="Comparison of \n raw and ipsatized scores") +
+  labs(x = "TIPI Item 1", y = "Density", title="Comparison of Raw and Ipsatized Scores") +
   colorblindr::scale_color_OkabeIto() +
   colorblindr::scale_fill_OkabeIto() +
   theme_minimal()
 ```
 
-The correlation plot here indicates the multimodal nature of raw data which is reduced to a great extend in the ipsatized data. This helps to limit within person variability affecting the structural assessment of personality. 
+The correlation plot here indicates the multimodal nature of raw data which is reduced to a great extend in the ipsatized data. This helps to limit within person variability affecting the structural assessment of personality.\
+\
+This concludes our tutorial on writing complex functions using a functional programming approach.

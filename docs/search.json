@@ -6,14 +6,14 @@
       "description": "Some additional details about the blog",
       "author": [],
       "contents": "\r\nThe blog is created for the final project of EDLD 653 Functional Programming at University of Oregon. The materials used in the blog are all publically available on the internet.\r\nList of materials:\r\nData: Generic Conspiracist Beliefs Scale Responses\r\n\r\n\r\n\r\n",
-      "last_modified": "2021-06-09T10:41:32-07:00"
+      "last_modified": "2021-06-09T12:05:14-07:00"
     },
     {
       "path": "index.html",
       "title": "Functional Programming in R",
       "author": [],
       "contents": "\r\n\r\n\r\n\r\n",
-      "last_modified": "2021-06-09T10:41:33-07:00"
+      "last_modified": "2021-06-09T12:05:15-07:00"
     }
   ],
   "collections": ["posts/posts.json"]
